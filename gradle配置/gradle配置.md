@@ -61,4 +61,38 @@ allprojects{
 }
 ```
 - gradle 构建项目需要注意的地方
-- 初始化 gradle 项目之后
+<br> 初始化 gradle 项目之后，需要修改项目目录下 gradle 文件夹下 wrapper/gradle-wrapper.properties 文件 **distributionUrl** 的指向。
+```properties
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+#修改成本地 gradle.zip 路径
+distributionUrl=file:/home/insomnia/dev/environment/gradle/gradle-6.7-bin.zip 
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+```
+- gradle 初始化 java 项目 build.gradle 文件:
+```.gradle
+plugins {
+    id 'java'
+}
+
+group 'com.insomnia'
+version '1.0.1'
+
+repositories {
+ // mavenLocal() 一定要放在地一行。
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+ // 添加spring-mvc 依赖 测试下载速度。
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '5.2.0.RELEASE'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+```
