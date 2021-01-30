@@ -1,11 +1,9 @@
 "---------------------------------------------------------------------------------------
 
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-{
 	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
 	\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-}
 endif
 
 "---------------------------------------------------------------------------------------
@@ -18,24 +16,27 @@ Plug 'iamcco/markdown-preview.nvim',{'do': { -> mkdp#util#install() },'for': ['m
 " 文件管理插件 可以预览目录    
 Plug 'scrooloose/nerdtree'        
 
-"自动引号&括号补全插件 Plug jiangmiao/auto-pairs    
+"自动引号&括号补全插件
+Plug 'jiangmiao/auto-pairs' 
+
+" coc 
 Plug 'neoclide/coc.nvim',{'branch': 'release'}
 
 call plug#end() 
 
 "---------------------------------------------------------------------------------------
-
+"set mouse=a
 set number "显示行号
 set nocompatible "去掉有关vi一致性模式，避免以前版本的bug和局限
 filetype on "检测文件的类型
-set autoindent "vim使用自动对齐，也就是把当前行的对齐格式应用到下一行(自动缩进)
+set autoindent "vim 使用自动对齐，也就是把当前行的对齐格式应用到下一行(自动缩进)
 set ruler "在编辑过程中，在右下角显示光标位置的状态行
 set incsearch "设置自动匹配单词的位置
 set backspace=2
 syntax on "语法高亮 
 set ignorecase "查找时忽略大小写
 set nohlsearch "查找匹配到的所有单词不高亮显示，只高亮光标所在单词。
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif "记住vim退出时光标的位置
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif "记住vim 退出时光标的位置
 "---------------------------------------------------------------------------------------
 " :map 递归映射
 " :noremap 非递归映射
@@ -49,8 +50,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " :cnoremap 命令模式映射
 "
 nnoremap rs :source %<CR> 
-nnoremap k <Up>
-nnoremap j <Down>
 nnoremap <Up> <Nop>
 nnoremap <Down> <Nop>
 noremap <C-Left> <C-w><5
