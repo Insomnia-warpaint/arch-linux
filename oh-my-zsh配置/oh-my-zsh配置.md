@@ -43,7 +43,6 @@ normal 模式 搜索 plugins
 plugins=(    
         git    
         extract    
-        autojump    
         web-search    
         zsh-autosuggestions    
         zsh-syntax-highlighting    
