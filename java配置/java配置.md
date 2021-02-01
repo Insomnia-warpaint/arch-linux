@@ -1,5 +1,5 @@
 # Linux java 配置
-- 下载jdk:
+- jdk:
 ```bash
 pacman -S jdk jdk8-openjdk
 ```
