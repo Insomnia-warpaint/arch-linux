@@ -33,8 +33,8 @@ vim ~/.zshrc
 定位到 ZSH_THEME 设置主题
 /ZSH_THEME
 
-修改主题为 cloud ，网上有很多主题，可以自行百度下载
-ZSH_THEME='cloud'
+修改主题为 ys ，网上有很多主题，可以自行百度下载
+ZSH_THEME='ys'
 
 normal 模式 搜索 plugins
 <Esc> /plugins 
