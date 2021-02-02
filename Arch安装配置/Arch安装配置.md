@@ -1,13 +1,9 @@
-# Marjaro 安装配置
+# Arch 安装配置
 ## 一.下载镜像
 
-- manjaro镜像下载地址
-  - [https://manjaro.org/download/](https://manjaro.org/download/)
-- 然后选择自己想要下载的版本  **四选一进行下载**
-  - `XFCE`
-  - `KDE Plasma`
-  - `GNOME`
-  - `Architect  `
+- arch镜像下载地址
+  - [http://mirrors.163.com/archlinux/iso/](http://mirrors.163.com/archlinux/iso/)
+
 
 ## 二. 刻录镜像到U盘
 - Linux 下使用命令行将 iso 文件刻录到 u 盘
@@ -28,7 +24,7 @@ I/O 大小(最小/最佳)：512 字节 / 512 字节
 /dev/sda2       6300796 6308987    8192   4M ef EFI (FAT-12/16/32)
 
 
-if 后面是 manjaro 镜像文件的路径 of 后面是 U 盘的路径 
+if 后面是 Arch 镜像文件的路径 of 后面是 U 盘的路径 
 sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync
 bs=4M 指定一个较为合理的文件输入输出块大小。
 status=progress 用来输出刻录过程总的信息。
