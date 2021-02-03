@@ -57,7 +57,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 " :map 递归映射
 " :noremap 非递归映射
-" :nnoremap 正常模式映射
+" :nnoremap 正常模式映 
 " :vnoremap 可视模式和选择模式映射
 " :xnoremap 可视模式映射
 " :snoremap 选择模式映
@@ -86,7 +86,35 @@ nnoremap mk :MarkdownPreview<CR>
 nnoremap rs :source %<CR> 
 nnoremap <C-s> :w<CR>
 nnoremap tt :NERDTreeToggle<CR>
+nnoremap J <C-f>
+nnoremap K <C-b>
 nnoremap mg J
 nnoremap <F5> :!javac % && java %:r <CR>
 
 "
+let g:mapleader = ',' 
+let g:airline#extensions#tabline#enabled = 1 
+let g:airline#extensions#tabline#left_sep = ' ' 
+let g:airline#extensions#tabline#left_alt_sep = '|' 
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#show_close_button = 1 
+let g:airline#extensions#tabline#close_symbol='X'
+let g:airline_section_c = airline#section#create(['%t'])
+let g:airline_section_x = airline#section#create(['%Y'])
+let g:airline_section_y = ""
+let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l 行',"-",' %c 列'])
+let g:airline_section_error  = ""
+let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
+
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>0 <Plug>AirlineSelectTab0
+nmap <leader>p <Plug>AirlineSelectPrevTab
+nmap <leader>n <Plug>AirlineSelectNextTab
