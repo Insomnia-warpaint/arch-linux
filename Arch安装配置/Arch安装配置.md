@@ -2,7 +2,7 @@
 
 ## 一.下载镜像
 
-- Arch镜像下载地址
+- arch镜像下载地址
   - [http://mirrors.163.com/archlinux/iso/](http://mirrors.163.com/archlinux/iso/)
 
 ## 二. 刻录镜像到U盘
