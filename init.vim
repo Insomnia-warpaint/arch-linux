@@ -76,7 +76,7 @@ inoremap '<CR> <C-y>
 inoremap jk <Esc>
 "
 
-noremap H 0
+noremap H ^ 
 noremap <F3> :set number!<CR> 
 noremap L $
 nnoremap mk :MarkdownPreview<CR>
