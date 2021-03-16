@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.aigao.manager.config.Main" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-03-16T12:04:43" hostname="archlinux" time="0.005">
+  <properties/>
+  <testcase name="testMD5Utils" classname="com.aigao.manager.config.Main" time="0.005"/>
+  <system-out><![CDATA[2021-03-16 20:04:43,437 Test worker DEBUG Apache Log4j Core 2.14.0 initializing configuration org.apache.logging.log4j.core.config.properties.PropertiesConfiguration@7f535ed2
+2021-03-16 20:04:43,442 Test worker DEBUG Installed 1 script engine
+2021-03-16 20:04:43,592 Test worker DEBUG Oracle Nashorn version: 1.8.0_282, language: ECMAScript, threading: Not Thread Safe, compile: true, names: [nashorn, Nashorn, js, JS, JavaScript, javascript, ECMAScript, ecmascript], factory class: jdk.nashorn.api.scripting.NashornScriptEngineFactory
+2021-03-16 20:04:43,593 Test worker DEBUG PluginManager 'Core' found 122 plugins
+2021-03-16 20:04:43,593 Test worker DEBUG PluginManager 'Level' found 0 plugins
+2021-03-16 20:04:43,595 Test worker DEBUG Building Plugin[name=property, class=org.apache.logging.log4j.core.config.Property].
+2021-03-16 20:04:43,601 Test worker DEBUG PluginManager 'TypeConverter' found 26 plugins
+2021-03-16 20:04:43,605 Test worker DEBUG createProperty(name="ConsoleLogLevel", value="info")
+2021-03-16 20:04:43,606 Test worker DEBUG Building Plugin[name=properties, class=org.apache.logging.log4j.core.config.PropertiesPlugin].
+2021-03-16 20:04:43,609 Test worker DEBUG configureSubstitutor(={ConsoleLogLevel=info}, Configuration(PropertiesConfig))
+2021-03-16 20:04:43,609 Test worker DEBUG PluginManager 'Lookup' found 16 plugins
+2021-03-16 20:04:43,610 Test worker DEBUG Building Plugin[name=AppenderRef, class=org.apache.logging.log4j.core.config.AppenderRef].
+2021-03-16 20:04:43,611 Test worker DEBUG createAppenderRef(ref="STDOUT", level="null", Filter=null)
+2021-03-16 20:04:43,611 Test worker DEBUG Building Plugin[name=root, class=org.apache.logging.log4j.core.config.LoggerConfig$RootLogger].
+2021-03-16 20:04:43,612 Test worker DEBUG createLogger(additivity="null", level="INFO", includeLocation="null", ={STDOUT}, ={}, Configuration(PropertiesConfig), Filter=null)
+2021-03-16 20:04:43,614 Test worker DEBUG Building Plugin[name=loggers, class=org.apache.logging.log4j.core.config.LoggersPlugin].
+2021-03-16 20:04:43,614 Test worker DEBUG createLoggers(={root})
+2021-03-16 20:04:43,615 Test worker DEBUG Building Plugin[name=filter, class=org.apache.logging.log4j.core.filter.ThresholdFilter].
+2021-03-16 20:04:43,616 Test worker DEBUG createFilter(level="INFO", onMatch="null", onMismatch="null")
+2021-03-16 20:04:43,617 Test worker DEBUG Building Plugin[name=layout, class=org.apache.logging.log4j.core.layout.PatternLayout].
+2021-03-16 20:04:43,620 Test worker DEBUG PatternLayout$Builder(pattern="%d{yyyy-MM-dd HH:mm:ss} [%p] %c >> %msg%n", PatternSelector=null, Configuration(PropertiesConfig), Replace=null, charset="null", alwaysWriteExceptions="null", disableAnsi="null", noConsoleNoAnsi="null", header="null", footer="null")
+2021-03-16 20:04:43,621 Test worker DEBUG PluginManager 'Converter' found 44 plugins
+2021-03-16 20:04:43,628 Test worker DEBUG Building Plugin[name=appender, class=org.apache.logging.log4j.core.appender.ConsoleAppender].
+2021-03-16 20:04:43,633 Test worker DEBUG ConsoleAppender$Builder(target="null", follow="null", direct="null", bufferedIo="null", bufferSize="null", immediateFlush="null", ignoreExceptions="null", PatternLayout(%d{yyyy-MM-dd HH:mm:ss} [%p] %c >> %msg%n), name="STDOUT", Configuration(PropertiesConfig), ThresholdFilter(INFO), ={})
+2021-03-16 20:04:43,634 Test worker DEBUG Starting OutputStreamManager SYSTEM_OUT.false.false
+2021-03-16 20:04:43,634 Test worker DEBUG Building Plugin[name=appenders, class=org.apache.logging.log4j.core.config.AppendersPlugin].
+2021-03-16 20:04:43,635 Test worker DEBUG createAppenders(={STDOUT})
+2021-03-16 20:04:43,635 Test worker DEBUG Building Plugin[name=filter, class=org.apache.logging.log4j.core.filter.ThresholdFilter].
+2021-03-16 20:04:43,635 Test worker DEBUG createFilter(level="DEBUG", onMatch="null", onMismatch="null")
+2021-03-16 20:04:43,636 Test worker DEBUG Configuration org.apache.logging.log4j.core.config.properties.PropertiesConfiguration@7f535ed2 initialized
+2021-03-16 20:04:43,636 Test worker DEBUG Starting configuration org.apache.logging.log4j.core.config.properties.PropertiesConfiguration@7f535ed2
+2021-03-16 20:04:43,636 Test worker DEBUG Started configuration org.apache.logging.log4j.core.config.properties.PropertiesConfiguration@7f535ed2 OK.
+2021-03-16 20:04:43,637 Test worker DEBUG Shutting down OutputStreamManager SYSTEM_OUT.false.false-1
+2021-03-16 20:04:43,637 Test worker DEBUG OutputStream closed
+2021-03-16 20:04:43,638 Test worker DEBUG Shut down OutputStreamManager SYSTEM_OUT.false.false-1, all resources released: true
+2021-03-16 20:04:43,638 Test worker DEBUG Appender DefaultConsole-1 stopped with status true
+2021-03-16 20:04:43,638 Test worker DEBUG Stopped org.apache.logging.log4j.core.config.DefaultConfiguration@2aa643b8 OK
+2021-03-16 20:04:43,670 Test worker DEBUG Registering MBean org.apache.logging.log4j2:type=73d16e93
+2021-03-16 20:04:43,671 Test worker DEBUG Registering MBean org.apache.logging.log4j2:type=73d16e93,component=StatusLogger
+2021-03-16 20:04:43,672 Test worker DEBUG Registering MBean org.apache.logging.log4j2:type=73d16e93,component=ContextSelector
+2021-03-16 20:04:43,673 Test worker DEBUG Registering MBean org.apache.logging.log4j2:type=73d16e93,component=Loggers,name=
+2021-03-16 20:04:43,674 Test worker DEBUG Registering MBean org.apache.logging.log4j2:type=73d16e93,component=Appenders,name=STDOUT
+2021-03-16 20:04:43,675 Test worker DEBUG org.apache.logging.log4j.core.util.SystemClock does not support precise timestamps.
+2021-03-16 20:04:43,676 Test worker DEBUG Reconfiguration complete for context[name=73d16e93] at URI /home/insomnia/IdeaProjects/aigao-manager/build/resources/main/log4j2.properties (org.apache.logging.log4j.core.LoggerContext@3a85f5be) with optional ClassLoader: null
+2021-03-16 20:04:43,676 Test worker DEBUG Shutdown hook enabled. Registering a new one.
+2021-03-16 20:04:43,677 Test worker DEBUG LoggerContext[name=73d16e93, org.apache.logging.log4j.core.LoggerContext@3a85f5be] started OK.
+2021-03-16 20:04:43 [INFO] org.springframework.test.context.support.DefaultTestContextBootstrapper >> Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2021-03-16 20:04:43 [INFO] org.springframework.test.context.support.DefaultTestContextBootstrapper >> Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@194e85ad, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@46bde73e, org.springframework.test.context.support.DirtiesContextTestExecutionListener@beaf53a, org.springframework.test.context.event.EventPublishingTestExecutionListener@2025a220]
+2021-03-16 20:04:43 [INFO] com.aigao.manager.config.Main >> FF330B238CCD5A78FF9222B9AD4479AC
+2021-03-16 20:04:43 [INFO] com.aigao.manager.config.Main >> ff330b238ccd5a78ff9222b9ad4479ac
+2021-03-16 20:04:43 [INFO] com.aigao.manager.config.Main >> true
+]]></system-out>
+  <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+]]></system-err>
+</testsuite>
