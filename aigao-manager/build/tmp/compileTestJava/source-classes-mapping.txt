@@ -1,2 +1,0 @@
-com/aigao/manager/config/Main.java
- com.aigao.manager.config.Main
