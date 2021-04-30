@@ -1,8 +1,8 @@
 "
 
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
+if empty(glob('~/.vim/autoload/plug.vim'))
 
-	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs 
+	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs 
 		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 
@@ -10,10 +10,10 @@ endif
 
 "
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.vim/plugged')
 
 "Markdown 插件    
-Plug 'iamcco/markdown-preview.nvim',{'do': { -> mkdp#util#install() },'for': ['markdown', 'vim-plug']}
+Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['markdown', 'vim-plug']}
 
 " 文件管理插件 可以预览目录    
 Plug 'scrooloose/nerdtree'        
