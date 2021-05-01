@@ -11,4 +11,3 @@ sudo archlinux-java status
 sudo archlinux-java set java-8-openjdk
 java -version
 ```
-###### ps：Arch 仓库提供了 JDK 就不去自己下辣，麻烦。
