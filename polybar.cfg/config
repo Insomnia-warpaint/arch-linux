@@ -38,7 +38,7 @@ foreground = ${colors.foreground}
 
 font-0=Source Han Mono SC:size=12;5
 
-#modules-left =  i3
+modules-left =  i3
 modules-center = date
 
 
