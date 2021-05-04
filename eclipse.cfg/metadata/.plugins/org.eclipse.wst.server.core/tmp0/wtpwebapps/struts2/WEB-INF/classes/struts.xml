@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE struts SYSTEM "http://struts.apache.org/dtds/struts-2.3.dtd" >
-<struts>
-	<include file="struts/basic/basic-struts.xml"></include>
-	<include file="struts/admin/admin-struts.xml"></include>
-	<include file="struts/upload/upload-struts.xml"></include>
-	<include file="struts/welcome/welcome-struts.xml"></include>
-</struts> 
