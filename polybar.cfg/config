@@ -37,14 +37,14 @@ foreground = ${colors.foreground}
 
 
 font-0=Source Han Mono SC:size=12;5
+font-1 = FontAwesome:size=24;1
 
 modules-left =  i3
 modules-center = date
-
+modules-right = eth
 
 [module/i3]
 type = internal/i3
-
 
 [module/date]
 type = internal/date
@@ -54,3 +54,11 @@ date = "%Y-%m-%d%"
 time = "%H:%M"
 
 label = "%date% %time%"
+
+[module/eth]
+type = internal/network
+interface = wlan0
+interval = 3.0
+label-connected = 上传: %upspeed:3%  下载: %downspeed:3%
+format-disconnected = <label-disconnected>
+label-disconnected = not connected
