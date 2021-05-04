@@ -1,0 +1,16 @@
+{
+    "workbench.colorTheme": "Atom One Light",
+    "workbench.sideBar.location": "right",
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 18,
+    "editor.fontFamily": "'Source Han Mono Sc', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.wordWrap": "on",
+    "editor.cursorBlinking": "expand",
+    "editor.cursorWidth": 6,
+    "editor.cursorSmoothCaretAnimation": true,
+    "powermode.enabled": true,
+    "powermode.enableShake": false,
+    "powermode.presets": "flames",
+    "git.enableSmartCommit": true,
+    "git.autofetch": true
+}
