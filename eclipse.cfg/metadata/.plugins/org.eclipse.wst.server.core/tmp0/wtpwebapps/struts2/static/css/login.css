@@ -1,0 +1,13 @@
+* {
+    /*清除内外边距*/
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+
+    /* 让页面占浏览器可视区域高度*/
+    height: 100vh;
+    background-color: rgb(108, 184, 255)
+}

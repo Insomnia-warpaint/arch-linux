@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts SYSTEM "http://struts.apache.org/dtds/struts-2.3.dtd" >
+<struts>
+	<package name="com.insomnia.struts2.action.upload"   namespace="/" extends="json-default">
+	</package>
+</struts> 

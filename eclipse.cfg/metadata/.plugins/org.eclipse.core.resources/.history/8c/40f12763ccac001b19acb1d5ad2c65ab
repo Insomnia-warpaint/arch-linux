@@ -1,0 +1,22 @@
+package com.insomnia.struts2.action.admin;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.insomnia.struts2.action.basic.BasicAction;
+
+public class Administrator extends BasicAction
+{
+	
+	private static final Logger LOG = LogManager.getLogger(Administrator.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7781861180344403437L;
+	
+	public String login(){
+			LOG.info("进入login方法");
+			
+		return SUCCESS;
+	}
+}

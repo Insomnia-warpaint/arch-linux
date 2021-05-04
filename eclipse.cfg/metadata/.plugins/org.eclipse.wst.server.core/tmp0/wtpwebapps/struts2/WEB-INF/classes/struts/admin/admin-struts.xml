@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts SYSTEM "http://struts.apache.org/dtds/struts-2.3.dtd" >
+<struts>
+	<package name="com.insomnia.struts2.action.admin"   namespace="/admin" extends="json-default">
+		<action name="" class="com.insomnia.struts2.action.admin.Administrator" method="login">
+			<result name = "success" type="freemarker">/WEB-INF/view/admin.ftl</result>
+		</action>
+		
+		<action name="login" class="com.insomnia.struts2.action.admin.Administrator" method="login">
+			<result name = "success" type="freemarker">/WEB-INF/view/admin.ftl</result>
+		</action>
+		
+	</package>
+</struts> 

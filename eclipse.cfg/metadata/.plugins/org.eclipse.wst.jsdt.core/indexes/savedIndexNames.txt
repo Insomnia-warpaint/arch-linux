@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+/home/insomnia/.Workspaces/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+1424551654.index
+2780411716.index
+2178383247.index
+1216967370.index
+2234866341.index
+2452318235.index
