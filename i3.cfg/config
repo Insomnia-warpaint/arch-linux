@@ -202,5 +202,5 @@ new_window pixel 0
 hide_edge_borders none
 
 # window padding 14px margin 0px
-gaps inner 14
+gaps inner 24
 gaps outer 0

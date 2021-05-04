@@ -41,7 +41,7 @@ font-1 = FontAwesome:size=24;1
 
 modules-left =  i3
 modules-center = date
-modules-right = memory cpu volume  eth
+modules-right = memory cpu volume eth 
 module-margin-right = 3
 
 [module/i3]
@@ -136,4 +136,3 @@ type = internal/memory
 ;   %gb_swap_used%
 
 label = RAM %gb_used%/%gb_total%
-
