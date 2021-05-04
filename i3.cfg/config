@@ -88,7 +88,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+#bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -193,7 +193,7 @@ exec_always --no-startup-id compton --config ~/.config/compton/compton.conf
 # wallpaper
 exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1002.jpg
 
-#albert
+# albert
 exec_always --no-startup-id albert
 
 #  
@@ -204,3 +204,7 @@ hide_edge_borders none
 # window padding 14px margin 0px
 gaps inner 24
 gaps outer 0
+
+
+# flameshot
+bindsym $mod+s exec --no-startup-id flameshot  gui
