@@ -41,10 +41,36 @@ font-1 = FontAwesome:size=24;1
 
 modules-left =  i3
 modules-center = date
-modules-right = eth
+modules-right = memory cpu volume  eth
+module-margin-right = 3
 
 [module/i3]
 type = internal/i3
+label-mode = %mode%
+label-mode-background = #e60053
+
+label-focused = %index%
+label-focused-foreground = #ffffff
+label-focused-background = #3f3f3f
+label-focused-underline = #fba922
+label-focused-padding = 1 
+
+label-unfocused = %index%
+label-unfocused-padding = 1
+
+label-visible = %index%
+label-visible-underline = #555555
+label-visible-padding = 1
+
+label-urgent = %index%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 1
+
+; Separator in between workspaces
+label-separator-padding = 0
+label-separator-foreground = #ffb52a
+
 
 [module/date]
 type = internal/date
@@ -55,6 +81,13 @@ time = "%H:%M"
 
 label = "%date% %time%"
 
+[module/volume]
+type = internal/pulseaudio
+format-volume = 声音: <label-volume>
+e-ui-max = true
+label-muted = muted
+label-muted-foreground = #666
+
 [module/eth]
 type = internal/network
 interface = wlan0
@@ -62,3 +95,45 @@ interval = 3.0
 label-connected = 上传: %upspeed:3%  下载: %downspeed:3%
 format-disconnected = <label-disconnected>
 label-disconnected = not connected
+
+
+[module/cpu]
+type = internal/cpu
+
+interval = 0.5
+label = CPU %percentage%%
+
+
+[module/memory]
+type = internal/memory
+; Available tags:
+;   <label> (default)
+;   <bar-used>
+;   <bar-free>
+;   <ramp-used>
+;   <ramp-free>
+;   <bar-swap-used>
+;   <bar-swap-free>
+;   <ramp-swap-used>
+;   <ramp-swap-free>
+
+; Available tokens:
+;   %percentage_used% (default)
+;   %percentage_free%
+;   %gb_used%
+;   %gb_free%
+;   %gb_total%
+;   %mb_used%
+;   %mb_free%
+;   %mb_total%
+;   %percentage_swap_used%
+;   %percentage_swap_free%
+;   %mb_swap_total%
+;   %mb_swap_free%
+;   %mb_swap_used%
+;   %gb_swap_total%
+;   %gb_swap_free%
+;   %gb_swap_used%
+
+label = RAM %gb_used%/%gb_total%
+
