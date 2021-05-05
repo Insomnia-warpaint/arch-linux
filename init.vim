@@ -68,8 +68,8 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 "
 
-inoremap <Up> <C-p>
-inoremap <Down> <C-n>
+"inoremap <Up> <C-p>
+"inoremap <Down> <C-n>
 "inoremap <Left> <Nop>
 "inoremap <Right> <Nop>
 inoremap jk <Esc>

@@ -196,7 +196,6 @@ exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1002.jpg
 # albert
 exec_always --no-startup-id albert
 
-#  
 for_window [class="^.*"] border pixel 0
 new_window pixel 0
 hide_edge_borders none
@@ -208,3 +207,6 @@ gaps outer 0
 
 # flameshot
 bindsym $mod+s exec --no-startup-id flameshot  gui
+
+# screenkey
+bindsym $mod+Shift+b exec --no-startup-id ~/.config/screenkey/screenkey.sh &
