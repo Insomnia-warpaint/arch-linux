@@ -106,10 +106,10 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
+set $ws1 "1:Terminal"
+set $ws2 "2:Browser"
+set $ws3 "3:Dev"
+set $ws4 "4:Other"
 set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
@@ -181,6 +181,15 @@ bindsym $mod+r mode "resize"
 #        status_command i3status
 #}
 
+
+#  for_window move container to workspace 
+for_window [class="Alacritty"] move container to workspace $ws1
+for_window [class="Google-chrome"] move container to workspace $ws2
+for_window [class="firefox"] move container to workspace $ws2
+for_window [class="Eclipse"] move container to workspace $ws3
+for_window [class="jetbrains-idea"] move container to workspace $ws3
+for_window [class="Code"] move container to workspace $ws3
+
 # fcitx5
 exec_always fcitx5
 
@@ -196,7 +205,14 @@ exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1002.jpg
 # albert
 exec_always --no-startup-id albert
 
-for_window [class="^.*"] border pixel 0
+# startup
+exec --no-startup-id alacritty
+
+#exec --no-startup-id code
+
+#exec --no-startup-id google-chrome-stable
+
+for_window [class="^.*"] border pixel 1
 new_window pixel 0
 hide_edge_borders none
 

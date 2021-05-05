@@ -46,29 +46,53 @@ module-margin-right = 3
 
 [module/i3]
 type = internal/i3
-label-mode = %mode%
+label-mode = %name%
 label-mode-background = #e60053
 
-label-focused = %index%
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-focused = %name%
 label-focused-foreground = #ffffff
 label-focused-background = #3f3f3f
 label-focused-underline = #fba922
-label-focused-padding = 1 
+label-focused-padding = 2
 
-label-unfocused = %index%
-label-unfocused-padding = 1
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-unfocused = %name%
+label-unfocused-padding = 2
 
-label-visible = %index%
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-visible = %name%
 label-visible-underline = #555555
-label-visible-padding = 1
+label-visible-padding = 2
 
-label-urgent = %index%
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-urgent = %name%
 label-urgent-foreground = #000000
 label-urgent-background = #bd2c40
-label-urgent-padding = 1
+label-urgent-padding = 2
 
 ; Separator in between workspaces
-label-separator-padding = 0
+label-separator-padding = 2
 label-separator-foreground = #ffb52a
 
 
