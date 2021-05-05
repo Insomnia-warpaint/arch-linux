@@ -11,7 +11,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
     # 运行 mysql:8.0 
     sudo docker run -tid --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD = [PASSWORD]  mysql:8.0
     # 设置 容器自动启动
-    sudo docker update --restart=always [CONTAINER ID] # 容器ida
+    sudo docker update --restart=always [CONTAINER ID] # 容器id
     # 进入 mysql 命令行
     sudo docker exec -it mysql /bin/bash
     # 登陆 mysql
@@ -30,7 +30,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
     sudo docker run -tid --name oracle -p 1521:1521  deepdiver/docker-oracle-xe-11g
 
     # 设置 容器自动启动
-    sudo docker update --restart=always [CONTAINER ID] # 容器ida
+    sudo docker update --restart=always [CONTAINER ID] # 容器id
 
     # 进入 Oracle 命令行
     sudo docker exec -it oracle /bin/bash
