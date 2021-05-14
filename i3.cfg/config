@@ -188,6 +188,7 @@ for_window [class="Google-chrome"] move container to workspace $ws2
 for_window [class="firefox"] move container to workspace $ws2
 for_window [class="Eclipse"] move container to workspace $ws3
 for_window [class="jetbrains-idea"] move container to workspace $ws3
+for_window [class="jetbrains-clion"] move container to workspace $ws3
 for_window [class="Code"] move container to workspace $ws3
 
 # fcitx5
@@ -200,7 +201,7 @@ exec_always --no-startup-id ~/.config/polybar/launch.sh &
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf
 
 # wallpaper
-exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1002.jpg
+exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1008.png
 
 # albert
 exec_always --no-startup-id albert
