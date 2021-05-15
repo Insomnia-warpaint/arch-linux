@@ -225,7 +225,7 @@ gaps outer 0
 
 
 # flameshot
-bindsym $mod+s exec --no-startup-id flameshot  gui
+#bindsym $mod+s exec --no-startup-id flameshot  gui
 
 # screenkey
 bindsym $mod+Shift+b exec --no-startup-id ~/.config/screenkey/screenkey.sh &
