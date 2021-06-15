@@ -201,7 +201,7 @@ exec_always --no-startup-id ~/.config/polybar/launch.sh &
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf
 
 # wallpaper
-exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1008.png
+exec_always --no-startup-id feh  --bg-fill ~/.wallpaper/wallpaper-1003.jpg
 
 
 #utools
