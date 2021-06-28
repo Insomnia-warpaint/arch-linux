@@ -19,34 +19,41 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
 ```
 
 ## Docker Oracle
+拉取 oralce docker github 到本地
 ```bash
-    # 搜索 Oracle 镜像
-    sudo docker search docker-oracle-xe-11g
+git clone https://github.com/oracle/docker-images.git 
+```
+进入 oracledatabase SingleInstance 目录
+```bash
+cd ./docker-images/OracleDatabase/SingleInstance
+```
+点击 readme.md 中的[`Oracle Technology Network`](https://www.oracle.com/database/technologies/oracle-database-software-downloads.htmla)下载 对应版本的二进制文件放入 dockerFile 对应版本的文件夹中
+运行 ./buildContainerImage.sh -h
+```bash
+./buildContainerImage.sh -h
 
-    # 拉取 Oracle 镜像
-    sudo docker pull deepdiver/docker-oracle-xe-11g
+./buildContainerImage.sh -e -v 19.3.0 -o '--build-arg SLIMMING=false'
+```
+等待oracle安装完成，再运行oracle
+```bash
+docker run --name oracle \
+-p 1521:1521 -p 5500:5500 \
+-e ORACLE_SID=orcl \
+-e ORACLE_PWD=<your database passwords> \
+oracle/database:19.3.0-ee
+```
+运行成功之后进入 oracle 容器命令行，使用 sqlplus 登陆数据库创建用户
+```bash
+sudo docker exec -it [container name] /bin/bash
+#有三种连接方式
+#SID 是oracle 启动时 设置的SID ，也有默认的SID , 最好自己设置
+# 密码也是 oracle 启动是设置的密码 也有默认密码，最好自己设置
+sqlplus sys/<your password>@//localhost:1521/<your SID> as sysdba
+sqlplus system/<your password>@//localhost:1521/<your SID>
+sqlplus pdbadmin/<your password>@//localhost:1521/<Your PDB name>
+#创建用户 SCOTT
+create user c##SCOTT identified by final;
 
-    # 运行 Oracle 
-    sudo docker run -tid --name oracle -p 1521:1521  deepdiver/docker-oracle-xe-11g
-
-    # 设置 容器自动启动
-    sudo docker update --restart=always [CONTAINER ID] # 容器id
-
-    # 进入 Oracle 命令行
-    sudo docker exec -it oracle /bin/bash
-
-    #登陆 Oracle
-    sqlplus system/oracle
-
-    #查看用户
-    select username, password from dba_users;
-
-    #创建用户 SCOTT
-    create user SCOTT identified by final;
-
-    #查看是否有 SCOTT 用户
-    select * from all_users;
-
-    #给新用户授权
-    grant connect,resource to SCOTT;
+#给新用户授权
+grant dba,connect,resource to c##SCOTT;
 ```
