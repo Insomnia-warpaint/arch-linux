@@ -114,7 +114,7 @@ label-muted-foreground = #666
 
 [module/eth]
 type = internal/network
-interface = wlan0
+interface = wlp0s20f3
 interval = 3.0
 label-connected = 上传: %upspeed:3%  下载: %downspeed:3%
 format-disconnected = <label-disconnected>
