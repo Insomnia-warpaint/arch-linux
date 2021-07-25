@@ -39,7 +39,7 @@ foreground = ${colors.foreground}
 font-0=Source Han Mono SC:size=12;5
 font-1 = FontAwesome:size=24;1
 
-modules-left =  i3
+modules-left =  i3 menu-apps
 modules-center = date
 modules-right = memory cpu volume eth 
 module-margin-right = 3
@@ -160,3 +160,16 @@ type = internal/memory
 ;   %gb_swap_used%
 
 label = RAM %gb_used%/%gb_total%
+
+
+[module/menu-apps]
+type = custom/menu
+
+; If true, <label-toggle> will be to the left of the menu items (default).
+; If false, it will be on the right of all the items.
+expand-right = false
+
+; "menu-LEVEL-N" has the same properties as "label-NAME" with
+; the additional "exec" property
+;
+; Commands will be executed using "/bin/sh -c $COMMAND"
