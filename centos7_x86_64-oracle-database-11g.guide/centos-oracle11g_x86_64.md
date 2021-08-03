@@ -184,7 +184,7 @@ cd ~/oracle11g_install/database
 # 没有切换到 root 用户 执行命令前面需要加 sudo
 yum groupinstall "KDE Plasma Workspaces"
 ```
-#####安装完成后
+##### 安装完成后
 
 1.  Logout(左上角点击) 
 2.  选择 oracle 用户 然后点击小齿轮
