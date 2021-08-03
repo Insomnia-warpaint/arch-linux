@@ -38,7 +38,7 @@ yum install java-1.8.0-openjdk.x86_64
 yum -y install binutils* compat-libcap1* compat-libstdc++* gcc* gcc-c++* glibc* glibc-devel* ksh* libaio* libaio-devel* libgcc* libstdc++* libstdc++-devel* libXi* libXtst* make* sysstat* elfutils* unixODBC*
 ```
 
-- 创建 `oracle` 用户 `oinstall` 用户组 和 `dba` 用户组
+- 创建 `oracle` 用户 `oinstall` 用户组, `oper` 用户组 和 `dba` 用户组
 
 ```bash
 groupadd oinstall
