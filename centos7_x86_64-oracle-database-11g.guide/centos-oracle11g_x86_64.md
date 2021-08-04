@@ -186,11 +186,11 @@ yum groupinstall "KDE Plasma Workspaces"
 ```
 ##### 安装完成后
 
-1.  Logout(左上角点击) 
+1.  `logout`(桌面右上角点击登出) 
 2.  选择 oracle 用户 然后点击小齿轮
 3.  选择 `kde plasma workspaces`
 4.  输入密码
-5.  打开 `konsole`  终端 (对着桌面右键)
+5.  打开 `konsole`  终端 (对着桌面右键,选择 konsole )
 
 ```bash
 cd ~/oracle11g_install/database
