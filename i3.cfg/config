@@ -188,6 +188,7 @@ for_window [class="Google-chrome"] move container to workspace $ws2
 for_window [class="firefox"] move container to workspace $ws2
 for_window [class="Eclipse"] move container to workspace $ws3
 for_window [class="jetbrains-idea"] move container to workspace $ws3
+for_window [class="jetbrains-datagrip"] move container to workspace $ws3
 for_window [class="jetbrains-clion"] move container to workspace $ws3
 for_window [class="Code"] move container to workspace $ws3
 

@@ -175,7 +175,7 @@ cd ~/oracle11g_install/database
 
 ---
 
-### 安装过程中遇到的问题
+### 6.安装过程中遇到的问题
 1. 设置完密码之后安装程序卡住了, 安装窗口变成一条竖线
  - 安装程序弹窗很小的原因是 GNOME 桌面的原因,换一个桌面系统就可以了,亲测 KDE 没有问题.
 - 安装 `KDE plasma workspaces`  
@@ -195,4 +195,131 @@ yum groupinstall "KDE Plasma Workspaces"
 ```bash
 cd ~/oracle11g_install/database
 ./runInstaller
+```
+---
+### 7.连接 oracle 数据库
+- 开启1521端口
+
+```bash
+firewall-cmd --zone=public --add-port=1521/tcp --permanent
+# 重新加载
+firewall-cmd --reload
+# 查看开放的端口
+firewall-cmd --list-ports
+# 开启成功后会显示
+1521/tcp
+```
+- 启动监听
+
+```bash
+lsnrctl start
+# 查看状态
+lsnrctl status
+# 开启成功 The command completed successfully
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 11.2.0.4.0 - Production
+Start Date                03-AUG-2021 23:19:48
+Uptime                    0 days 0 hr. 29 min. 41 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /home/oracle/database/oracle11g/diag/tnslsnr/localhost/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+    (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521)))
+Services Summary...
+Service "orcl" has 1 instance(s).
+Instance "orcl", status READY, has 1 handler(s) for this service...
+Service "orclXDB" has 1 instance(s).
+Instance "orcl", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+# oralc 网络配置图形化界面
+netmgr 
+```
+
+- 启动数据库
+
+```bash
+sqlplus sys/[passwd] as sysdba  # sys 用户以 dba 方式登陆 sqlplus 
+# 登陆成功之后 启动数据库
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area 1586708480 bytes
+Fixed Size		    2253624 bytes
+Variable Size		  989859016 bytes
+Database Buffers	  587202560 bytes
+Redo Buffers		    7393280 bytes
+Database mounted.
+Database opened.
+
+# 关闭数据库
+SQL> shut
+atabase closed.
+Database dismounted.
+ORACLE instance shut down.
+
+```
+
+---
+
+### 8.开机自动启动 oracle 数据库
+- 执行 root.sh 
+
+```bash
+cd $ORACLE_HOME
+sudo sh root.sh
+```
+- 修改 $ORACLE_HOME 目录下 bin 文件夹下的 dbstart 文件
+
+```bash
+cd $ORACLE_HOME
+vim ./bin/dbstart
+# 找到 `ORACLE_HOME_LISTNER` 变量,将 `$1` 改成 `$ORACLE_HOME`
+ORACLE_HOME_LISTNER=$ORACLE_HOME
+```
+
+- 修改 $ORACLE_HOME 目录下 install 文件夹下的 oratab 文件
+
+```bash
+cd $ORACLE_HOME
+vim ./install/oratab
+# 将 N 改为 Y
+orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
+
+```
+
+- 修改 /etc/oratab 文件
+
+```bash
+sudo vim /etc/oratbl
+# 将 N 改为 Y
+orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
+
+```
+
+- 修改 /etc/rc.d/rc.local
+
+```bash
+# 在内核初始化的时候后 init.d 文件夹下的配置
+# 在系统初始化的时候会去读取 rc.d 文件夹下的配置
+sudo vim /etc/rc.d/rc.loacl
+
+# 切换用户 开启监听
+su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/lsnrctl start
+# 切换用户 启动数据库
+su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/dbstart
+
+# 保存完之后 赋予- rc.local 可执行权限
+sudo chmod +x /etc/rc.d/rc.local
+```
+
+###### 重启
+
+```bash
+reboot
 ```
