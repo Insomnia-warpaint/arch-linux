@@ -316,6 +316,9 @@ su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/dbstar
 
 # 保存完之后 赋予- rc.local 可执行权限
 sudo chmod +x /etc/rc.d/rc.local
+# 查看本机 ip 
+ifconfig
+
 ```
 
 ###### 重启
