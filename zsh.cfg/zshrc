@@ -114,4 +114,5 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
   alias .polybar="vim ~/.config/polybar/config"
   alias .compton="vim ~/.config/compton/compton.conf"
   alias .alacritty="vim ~/.config/alacritty/alacritty.yml"
-  alias .arch="cd ~/.local/my.git/ArchLinux"
+  alias .arch="cd ~/.local/my.git/arch-linux"
+  alias .work="cd ~/.local/my.git/work"

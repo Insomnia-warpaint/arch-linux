@@ -110,9 +110,10 @@ mkdir -p ~/database/oracle11g/product/11.2.0/dbhome_1
 vim ~/.bash_profile
 
 export ORACLE_BASE=$HOME/database/oracle11g
-export ORACLE_HOME=$ORACLE_HOME/product/11.2.0/dbhome_1
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
 export ORACLE_SID=orcl
-export PATH=$PATH:$ORACLE_HOME/bin:$ORACLE_HOME/lib64
+PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ORACLE_HOME/bin:$ORACLE_HOME/lib64
+export PATH
 
 ```
 
@@ -177,7 +178,7 @@ cd ~/oracle11g_install/database
 
 ### 6.安装过程中遇到的问题
 1. 设置完密码之后安装程序卡住了, 安装窗口变成一条竖线
- - 安装程序弹窗很小的原因是 GNOME 桌面的原因,换一个桌面系统就可以了,亲测 KDE 没有问题.
+ - 安装程序弹窗很小是 GNOME 桌面的原因,换一个桌面系统就可以了,亲测 KDE 没有问题.
 - 安装 `KDE plasma workspaces`  
 
 ```bash
