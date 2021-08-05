@@ -328,6 +328,5 @@ reboot
 lsnrctl status
 # 查看本机 ip 
 ifconfig
-# 用ip连接数据库
 ...
 ```
