@@ -1,4 +1,4 @@
-# Centos7 Oracle 11g x86_64 安装手册
+# Centos7 Oracle 11g x86_64 安装使用手册
 
 #### 系统&文档&安装包
 - [Centos7.9.2009x86_64阿里云下载地址](http://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/)
@@ -6,10 +6,12 @@
 - [oracle11g-linux_x86_64某盘链接
 提取码:t883](https://pan.baidu.com/s/1rNo8Qkx6xBUed-zLB57Uzw)
 
+
 ### 1. 先决条件
 - Centos7 操作系统
 - oracle11g-linux_x86_64官方文档
 - oracle11g-x86_64数据库安装包
+
 
 ### 2.搭建环境
 
@@ -101,6 +103,8 @@ net.core.wmem_default = 262144
 net.core.wmem_max = 1048576
 
 ```
+---
+
 ### 4.配置用户环境变量 (下面操作均为 oracle 用户)
 - 创建 oracle11g 的安装目录  **`目录没有强制要求,根目录(/)下或者自己的家目录(/home/oracle/)下都可以`** **环境变量设置正确就可以了**
 
@@ -143,8 +147,6 @@ source ~/.bash_profile
 # 查看环境变量
 export
 ```
-
-### 5.安装数据库
 - 解压安装包
  - 新建文件夹放安装包
  
@@ -197,7 +199,7 @@ yum groupinstall "KDE Plasma Workspaces"
 cd ~/oracle11g_install/database
 ./runInstaller
 ```
----
+
 ### 7.连接 oracle 数据库
 - 开启1521端口
 
@@ -266,8 +268,6 @@ ORACLE instance shut down.
 
 ```
 
----
-
 ### 8.开机自动启动 oracle 数据库
 - 执行 root.sh 
 
@@ -328,5 +328,191 @@ reboot
 lsnrctl status
 # 查看本机 ip 
 ifconfig
-...
+# ip地址为 192.168.43.252  
+ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.43.252  netmask 255.255.255.0  broadcast 192.168.43.255
+        inet6 fe80::ce93:84b9:b6d0:b94  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:84:e4:e5  txqueuelen 1000  (Ethernet)
+        RX packets 170  bytes 181802 (177.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 177  bytes 17160 (16.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 233  bytes 21973 (21.4 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 233  bytes 21973 (21.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+virbr0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.122.1  netmask 255.255.255.0  broadcast 192.168.122.255
+        ether 52:54:00:46:62:3d  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+```
+- PLSQL连接配置
+
+```bash
+vmware_centos_oracle =  # 配置的名称,自定义
+  (DESCRIPTION =
+    (ADDRESS_LIST =  # host 为 oracle 数据库ip地址, prot 为数据库端口
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.43.252)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = orcl) # 服务名称为安装时配置的名称
+    )
+  )
+
+```
+
+### 9.用户的创建与修改
+- 登陆 `sys` 用户以 `sysdba` 的身份
+- 查看用户
+
+```sql
+-- 语法
+-- select [字段名,*代表所有字段] from [表名或者视图名]
+SELECT * FROM USER$; 
+```
+- 创建用户
+
+```sql
+-- 语法
+-- create user [用户名称] identified [密码]
+CREATE USER GARBAGE IDENTIFIED final；
+```
+- 修改用户密码
+
+```sql
+-- 语法
+-- alter user [用户名称] identified [密码]
+ALTER USER SCOTT IDENTIFIED BY final; 
+```
+
+###  10.角色的赋予和表空间的创建
+
+```sql
+-- 语法
+-- grant [权限名] to [用户名] with admin option 能够使被授予角色的用户将权限赋予其他角色 
+GRANT CONNECT,RESOURCE,DBA TO SCOTT WITH ADMIN OPTION;
+```
+
+- 创建表空间
+
+```sql
+-- 语法
+/*
+create tablespace [表空间名]
+datafile '[表空间物理文件位置(数据库所在电脑)]'
+size [大小(单位MB)] autoextend on next [自动增长大小MB] maxsize unlimited
+*/
+-- autoextend on next 表空间不足时自动增长
+-- maxsize 最大限制 
+-- unlimited 无限制
+CREATE TABLESPACE SCOTT_SPACE
+DATAFILE '/home/oracle/database/oracle11g/oradata/orcl/scott_space.dbf'
+SIZE 500M AUTOEXTEND ON NEXT 20M MAXSIZE UNLIMITED;
+```
+
+- 修改用户默认表空间
+
+```sql
+-- 语法
+-- alter user [用户名] default tablespace [表空间名]
+ALTER USER SCOTT DEFAULT TABLESPACE SCOTT_SPACE;
+```
+
+- 查看默认表空间
+
+```sql
+SELECT USERNAME,DEFAULT_TABLESPACE FROM SYS.DBA_USERS;
+```
+
+|USERNAME |DEFAULT_TABLESPACE |
+| :----------: | :-----------: |
+|SCOTT|SCOTT_SPACE|
+|ORACLE_OCM|USERSO|
+|...|...|
+
+
+### 11.数据的导入和导出
+#### `exp`&`imp`
+- 使用`exp`导出用户下的所有数据
+
+```bash
+# 语法
+# exp [用户名]/[密码]@[服务名] file=[导出文件路径和文件名] log=[日志文件路径和文件名] owner=[所有者] buffer=[缓冲区大小] recordlength=[最大64KB] direct=y
+exp scott/final@orcl file=/home/oracle/oracle/backup/dmp/scott_bak.dmp log=/home/oracle/oracle/backup/log/scott_bak.log owner=scott buffer=20480000 recordlength=65535 direct=y
+```
+
+- 使用`imp`导入数据到用户
+
+```bash
+# 语法
+# imp [用户名]/[密码]@[服务名] full=y (全部) file=[文件名] tablespaces=[表空间名]
+imp garbage/final@orcl full=y  file=scott_bak.dmp tablespaces=scott_space
+```
+
+**注意: 使用`exp`导出的`.dmp`文件中,会导出表空间名称,在`imp`导入的时候必须使用导出时的表空间,不然无法导入! **
+
+**解决方案:**
+- 替换`.dmp` 文件中所指定的表空间
+
+```bash
+# 语法
+# sed -i 's/TABLESPACE "DATA_OLD"/TABLESPACE "DATA_NEW"/g'  file.dmp
+# 解释: 将文件 scott_bak.dmp 中,所有的 TABLESPACE "USERSO" 替换为 TABLESPACE "SCOTT_SPACE"
+# s 替换
+# g 全局
+sed -i 's/TABLESPACE "USERSO"/TABLESPACE "SCOTT_SPACE"' scott_bak.dmp
+```
+
+--- 
+#### `expdp`&`impdp`
+- 使用`expdp`导出数据库
+
+```sql
+# 创建 文件夹路径
+CREATE OR REPLACE DIRECTORY dmp_dir AS '/home/oracle/backup/dmp';
+# 将读写文件夹的权限赋予 scott 用户
+GRANT READ, WRITE ON DIRECTORY dmp_dir TO scott
+# 查询文件夹路径
+SELECT * FROM DBA_DIRECTORIES;
+```
+**若要自己指定导出文件夹,则需要执行上面的语句去指定文件夹,可以不指定 directory 参数的值**
+
+```bash
+# 导出数据
+# expdp 
+# expdp [用户名]/[密码]@[服务名] full=Y directory=[文件夹名] dumpfile=[导出的文件名] logfile=[日志文件名]
+expdp scott/final@orcl full=Y directory=dmp_dir dumpfile=scott_bak.dmp logfile=scott_bak.log
+```
+
+- 使用`impdp`导入数据
+
+```bash
+# impdp [用户名]/[密码]@[服务名] full=Y directory=[文件夹名] dumpfile=[导入的文件名] logfile=[日志文件名]
+impdp garbage/final@orcl full=Y directory=dmp_dir dumpfile=scott_bak.dmp logfile=scott_imp.log
+```
+**用`exp`导出的数据只能用`imp`导入, `expdp`导出的数据只能用`impdp`导入,一定要一一对应**
+
+### 12.开启`DBA`可视化客户端
+
+```bash
+emctl start dbconsole
+# 启动成功 访问网址 http://localhost:1158/em/console/aboutApplication
+# 登陆成功之后可视化监控数据库性能 查看表空间等...
+Oracle Enterprise Manager 11g Database Control Release 11.2.0.4.0
+Copyright (c) 1996, 2013 Oracle Corporation.  All rights reserved.
+http://localhost:1158/em/console/aboutApplication
+Starting Oracle Enterprise Manager 11g Database Control .... started.
+------------------------------------------------------------------
+Logs are generated in directory /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/localhost_orcl/sysman/log
+
 ```

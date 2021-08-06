@@ -1,0 +1,1 @@
+sed -i 's/TABLESPACE "DATA_OLD"/TABLESPACE "DATA_NEW"/g'  file.dmp
