@@ -166,10 +166,10 @@ swapon /dev/nvme0n1p2
 
 ```bash
 mount /dev/nvme0n1p3 /mnt
-mkdir /mnt/home
-mount /dev/nvme0n1p4  /mnt/home
 mkdir -p /mnt/boot/EFI
 mount /dev/nvme0n1p1  /mnt/boot/EFI
+mkdir /mnt/home
+mount /dev/nvme0n1p4  /mnt/home
 ```
 
 ### 12.安装系统
@@ -293,8 +293,8 @@ pacman -S intel-ucode
 
 ```bash
 
+mkinitcpio -p linux
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
-
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 

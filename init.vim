@@ -22,9 +22,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" coc 语法提示 
-Plug 'neoclide/coc.nvim',{'branch': 'release'}
-
 call plug#end() 
 
 "
