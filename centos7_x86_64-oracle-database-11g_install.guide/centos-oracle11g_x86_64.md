@@ -106,6 +106,7 @@ net.core.wmem_max = 1048576
 ---
 
 ### 4.配置用户环境变量 (下面操作均为 oracle 用户)
+-  ** 登陆到oracle 用户,不要用 su oracle (从root切换过去) **
 - 创建 oracle11g 的安装目录  **`目录没有强制要求,根目录(/)下或者自己的家目录(/home/oracle/)下都可以`** **环境变量设置正确就可以了**
 
 ```bash
@@ -226,7 +227,7 @@ As a root user, execute the following script(s):
  - 下方配置文件是笔者经过可视化安装后保存的配置
    - 全局数据库名 对应`listener`中的`service_name`服务名
    - SID 对应`listerer` 中的`listener_name`监听名
-   - 改配置的时候连个名称最好一致
+   - 改配置的时候两个名称最好一致
 
 | 属性 | 释义 |
 | :--: |:--:|
@@ -733,11 +734,11 @@ AUTOUPDATES_MYORACLESUPPORT_PASSWORD=
 - 开启1521端口
 
 ```bash
-firewall-cmd --zone=public --add-port=1521/tcp --permanent
+sudo irewall-cmd --zone=public --add-port=1521/tcp --permanent
 # 重新加载
-firewall-cmd --reload
+sudo firewall-cmd --reload
 # 查看开放的端口
-firewall-cmd --list-ports
+sudo firewall-cmd --list-ports
 # 开启成功后会显示
 1521/tcp
 ```
@@ -809,7 +810,7 @@ sudo sh root.sh
 ```bash
 cd $ORACLE_HOME
 vim ./bin/dbstart
-# 找到 `ORACLE_HOME_LISTNER` 变量,将 `$1` 改成 `$ORACLE_HOME`
+# 找到 ORACLE_HOME_LISTNER 变量,将 $1 改成 $ORACLE_HOME
 ORACLE_HOME_LISTNER=$ORACLE_HOME
 ```
 
@@ -826,7 +827,7 @@ orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
 - 修改 /etc/oratab 文件
 
 ```bash
-sudo vim /etc/oratbl
+sudo vim /etc/oratab
 # 将 N 改为 Y
 orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
 
@@ -839,9 +840,9 @@ orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
 # 在系统初始化的时候会去读取 rc.d 文件夹下的配置
 sudo vim /etc/rc.d/rc.loacl
 
-# 切换用户 开启监听
+# 命令的目的:切换用户 开启监听
 su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/lsnrctl start
-# 切换用户 启动数据库
+# 命令的目的:切换用户 启动数据库
 su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/dbstart
 
 # 保存完之后 赋予- rc.local 可执行权限
@@ -914,7 +915,7 @@ SELECT * FROM USER$;
 ```sql
 -- 语法
 -- create user [用户名称] identified [密码]
-CREATE USER GARBAGE IDENTIFIED final；
+CREATE USER SCOTT IDENTIFIED final；
 ```
 - 修改用户密码
 
@@ -999,7 +1000,7 @@ imp garbage/final@orcl full=y  file=scott_bak.dmp tablespaces=scott_space
 # 解释: 将文件 scott_bak.dmp 中,所有的 TABLESPACE "USERSO" 替换为 TABLESPACE "SCOTT_SPACE"
 # s 替换
 # g 全局
-sed -i 's/TABLESPACE "USERSO"/TABLESPACE "SCOTT_SPACE"' scott_bak.dmp
+sed -i 's/TABLESPACE "USERSO"/TABLESPACE "SCOTT_SPACE"/g' scott_bak.dmp
 ```
 
 --- 
