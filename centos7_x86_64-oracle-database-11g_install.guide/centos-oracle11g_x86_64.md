@@ -106,7 +106,7 @@ net.core.wmem_max = 1048576
 ---
 
 ### 4.配置用户环境变量 (下面操作均为 oracle 用户)
--  ** 登陆到oracle 用户,不要用 su oracle (从root切换过去) **
+-  **登陆到oracle 用户,不要用 su oracle (从root切换过去)**
 - 创建 oracle11g 的安装目录  **`目录没有强制要求,根目录(/)下或者自己的家目录(/home/oracle/)下都可以`** **环境变量设置正确就可以了**
 
 ```bash
@@ -840,9 +840,11 @@ orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
 # 在系统初始化的时候会去读取 rc.d 文件夹下的配置
 sudo vim /etc/rc.d/rc.loacl
 
-# 命令的目的:切换用户 开启监听
+# 将下面两行命令复制到 rc.local 文件中,然后保存
+
+# 以 oracle 用户执行开启监听命令
 su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/lsnrctl start
-# 命令的目的:切换用户 启动数据库
+# 以 oracle 用户执行启动数据库命令
 su oracle -lc /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/bin/dbstart
 
 # 保存完之后 赋予- rc.local 可执行权限
