@@ -916,14 +916,14 @@ SELECT * FROM USER$;
 
 ```sql
 -- 语法
--- create user [用户名称] identified [密码]
-CREATE USER SCOTT IDENTIFIED final；
+-- create user [用户名称] identified by [密码]
+CREATE USER SCOTT IDENTIFIED BY final；
 ```
 - 修改用户密码
 
 ```sql
 -- 语法
--- alter user [用户名称] identified [密码]
+-- alter user [用户名称] identified by [密码]
 ALTER USER SCOTT IDENTIFIED BY final; 
 ```
 
