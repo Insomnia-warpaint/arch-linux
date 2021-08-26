@@ -733,7 +733,7 @@ AUTOUPDATES_MYORACLESUPPORT_PASSWORD=
 - 静默安装遇到的问题
  -	oracle 运行内存设置过大
    - 错误如下:
-     - 概要: 配置文件中所设置的`startdb.memoryLimit`值过大,系统的共享内存总共只有1884MB 
+     - 概要: 配置文件中所设置的`startdb.memoryLimit`值过大,系统的共享内存总共只有`809`MB 
 ```bash
 [FATAL] [INS-35172] Target database memory 1508(MB) exceeds the systems available shared memory ({0}MB)
 CAUSE: The total available shared memory on the system (809 MB) was less than the chosen target database memory (1508 MB).
