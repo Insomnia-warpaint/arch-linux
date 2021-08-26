@@ -178,6 +178,8 @@ cd ~/oracle11g_install/database
 ./runInstaller
 ```
 
+#### 接下来跟着引导程序走就可以完成安装了!
+
 -  可视化安装过程中遇到的问题
  1. 设置完密码之后安装程序卡住了, 安装窗口变成一条竖线
  - 安装程序弹窗很小是 GNOME 桌面的原因,换一个桌面系统就可以了,亲测 KDE 没有问题.
@@ -198,7 +200,9 @@ yum groupinstall "KDE Plasma Workspaces"
  ```bash
 cd ~/oracle11g_install/database
 ./runInstaller
- ```
+```
+
+---
 
 - 静默安装
 
@@ -726,7 +730,19 @@ AUTOUPDATES_MYORACLESUPPORT_PASSWORD=
 
 ```
 
-#### 接下来跟着引导程序走就可以完成安装了!
+- 静默安装遇到的问题
+ -	oracle 运行内存设置过大
+   - 错误如下:
+     - 概要: 配置文件中所设置的`startdb.memoryLimit`值过大,系统的共享内存总共只有1884MB 
+```bash
+[FATAL] [INS-35172] Target database memory 65536(MB) exceeds the systems available shared memory ({0}MB)
+CAUSE: The total available shared memory on the system (1884 MB) was less than the chosen target database memory (65536 MB).
+ ACTION: Enter a value for target database memory that is less than 1884 MB.
+```
+
+  - 解决方案：
+      - 编辑配置文件,将`startdb.memoreyLimit`的值修改为`1884`即可
+
 
 ---
 
