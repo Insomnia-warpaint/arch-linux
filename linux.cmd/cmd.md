@@ -5,7 +5,6 @@
 
 	```bash
 	ifconfig
-	
 	```
 	2. 查看路由表
 
