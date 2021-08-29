@@ -26,6 +26,7 @@
 		- **配置文件中没有的属性自行添加**
 		
 	```bash
+	sudo vim /etc/sysconfig/network-script/ifcfg-[网卡名]
 	BOOTPROTO="static" # 将 dncp 改成 static
 	IPADDR=190.168.11.222 # ip地址必须在路由表中正在使用的网卡所对应的网段内
 	GATEWAY=0.0.0.0 # 网关是路由表中正在使用的网卡所对应的网关
