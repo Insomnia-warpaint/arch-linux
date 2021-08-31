@@ -751,7 +751,7 @@ CAUSE: The total available shared memory on the system (809 MB) was less than th
 - 开启1521端口
 
 ```bash
-sudo irewall-cmd --zone=public --add-port=1521/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=1521/tcp --permanent
 # 重新加载
 sudo firewall-cmd --reload
 # 查看开放的端口
