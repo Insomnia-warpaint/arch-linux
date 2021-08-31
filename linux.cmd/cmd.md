@@ -61,8 +61,6 @@ cp file1 dir1/
 ```bash
 # rename [重命名]
 # 将 名称为 dir_name1 的文件,重命名为 dir_name2;
-# 第三个参数名与第一个参数名一样,是为了确认,修改文件是否是需要修改的文件名
-# 形象记忆: 我告诉 rename 命令, 叫它去把 dir_name1 去改成 dir_name2,然后告诉它,我要改的文件确实是 dir_name1 不用找我确认了, 直接修改吧！
 rename dir_name1 dir_name2 dir_name1
 ```
 
