@@ -190,9 +190,9 @@ linux 系统中,权限分为三种:
 # 权限	  硬链接数  文件创建者     所属组   文件大小       时间       文件夹名
 drwxr-x--x   3     insomnia    insomnia   4096    8月 31 22:03    dir1
 drwxr-x--x   3     insomnia    insomnia   4096    8月 31 23:10    dir2
-使用命令 ls -ll 显示出当前文件夹下的文件详情:<br>
+使用命令 ls -ll 显示出当前文件夹下的文件详情:
 drwxr-x--x 可以分为四部分:
-d, rwx, r-x, --x <br>
+d, rwx, r-x, --x
 1. 第一部分`d`:
 	- d(directory) 表示这是一个目录
 2. 第二部分	`rwx`表示创建者对文件夹的操作权限
