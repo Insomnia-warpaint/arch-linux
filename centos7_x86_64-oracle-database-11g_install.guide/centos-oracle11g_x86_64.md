@@ -148,18 +148,19 @@ source ~/.bash_profile
 # 查看环境变量
 export
 ```
-- 解压安装包
- - 新建文件夹放安装包
+- 新建文件夹放安装包
  
  ```bash
  mkdir ~/oracle11g_install
  ```
- - 移动下载到的2个安装包到 oracle 的用户目录 
+- 移动下载到的2个安装包到 oracle 的用户目录 
  
  ```bash
  mv [安装包1.zip] ~/oracle11g_install/
  mv [安装包2.zip] ~/oracle11g_install/
  ```
+
+- 解压安装包
 
 ```bash
 cd ~/oracle11g_insall
@@ -206,27 +207,6 @@ cd ~/oracle11g_install/database
 
 - 静默安装
 
-```bash
-# 静默安装是指安装时读取自定义配置文件进行安装
-./runInstaller -silent -responseFile /home/oracle/oracle11g_install/database/db.rsp -ignorePrereq
-
-# 安装时命令行日志如下(日志内容根据实际情况而定) 若安装有错误，命令行会显示错误日志或者去查看错误日志文件
-Starting Oracle Universal Installer...
-Checking Temp space: must be greater than 120 MB.   Actual 63576 MB    Passed
-Checking swap space: must be greater than 150 MB.   Actual 3968 MB    Passed
-Preparing to launch Oracle Universal Installer from /tmp/OraInstall2021-08-21_10-40-37PM. Please wait ...[oracle@localhost database]$ [WARNING] [INS-30011] The ADMIN password entered does not conform to the Oracle recommended standards.
-   CAUSE: Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
-   ACTION: Provide a password that conforms to the Oracle recommended standards.
-You can find the log of this install session at:
- /home/oracle/database/oraInventory/logs/installActions2021-08-21_10-40-37PM.log
-The installation of Oracle Database 11g was successful.
-Please check '/home/oracle/database/oraInventory/logs/silentInstall2021-08-21_10-40-37PM.log' for more details.
-
-As a root user, execute the following script(s):
-	1. /home/oracle/database/oraInventory/orainstRoot.sh
-	2. /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/root.sh
-
-```
 - 配置文件内容如下
  - 下方配置文件是笔者经过可视化安装后保存的配置
    - 全局数据库名 对应`listener`中的`service_name`服务名
@@ -730,6 +710,35 @@ AUTOUPDATES_MYORACLESUPPORT_PASSWORD=
 
 ```
 
+- 进入安装目录,执行静默安装
+
+  - `responseFile`后面是配置文件的路径
+  - `runInstaller`是Oracle11g的安装程序,类似于`Windows`中的`.exe`文件
+  - `./` 可以执行安装程序,但是必须进入安装程序目录才有效果,也可以使用`sh`,后面直接带安装文件的绝对路径来进行安装
+
+```bash
+cd ~/oracle11g_install/database
+# 静默安装是指安装时读取自定义配置文件进行安装
+./runInstaller -silent -responseFile /home/oracle/oracle11g_install/database/db.rsp -ignorePrereq
+
+# 安装时命令行日志如下(日志内容根据实际情况而定) 若安装有错误，命令行会显示错误日志或者去查看错误日志文件
+Starting Oracle Universal Installer...
+Checking Temp space: must be greater than 120 MB.   Actual 63576 MB    Passed
+Checking swap space: must be greater than 150 MB.   Actual 3968 MB    Passed
+Preparing to launch Oracle Universal Installer from /tmp/OraInstall2021-08-21_10-40-37PM. Please wait ...[oracle@localhost database]$ [WARNING] [INS-30011] The ADMIN password entered does not conform to the Oracle recommended standards.
+   CAUSE: Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9].
+   ACTION: Provide a password that conforms to the Oracle recommended standards.
+You can find the log of this install session at:
+ /home/oracle/database/oraInventory/logs/installActions2021-08-21_10-40-37PM.log
+The installation of Oracle Database 11g was successful.
+Please check '/home/oracle/database/oraInventory/logs/silentInstall2021-08-21_10-40-37PM.log' for more details.
+
+As a root user, execute the following script(s):
+	1. /home/oracle/database/oraInventory/orainstRoot.sh
+	2. /home/oracle/database/oracle11g/product/11.2.0/dbhome_1/root.sh
+
+```
+
 - 静默安装遇到的问题
  -	oracle 运行内存设置过大
    - 错误如下:
@@ -808,7 +817,7 @@ Database mounted.
 Database opened.
 
 # 关闭数据库
-SQL> shut
+SQL> shut immediate
 atabase closed.
 Database dismounted.
 ORACLE instance shut down.
