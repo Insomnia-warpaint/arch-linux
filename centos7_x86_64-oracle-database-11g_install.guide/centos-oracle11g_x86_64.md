@@ -3,8 +3,7 @@
 #### 系统&文档&安装包
 - [Centos7.9.2009x86_64阿里云下载地址](http://mirrors.aliyun.com/centos/7.9.2009/isos/x86_64/)
 - [oracle11g-linux_x86_64官方文档](https://docs.oracle.com/cd/E11882_01/install.112/e24326/toc.htm#CEGIHDBF)
-- [oracle11g-linux_x86_64某盘链接
-提取码:t883](https://pan.baidu.com/s/1rNo8Qkx6xBUed-zLB57Uzw)
+- [oracle11g-linux_x86_64安装包阿里云盘地址](https://www.aliyundrive.com/s/8dcLLas4xpZ)
 
 
 ### 1. 先决条件
