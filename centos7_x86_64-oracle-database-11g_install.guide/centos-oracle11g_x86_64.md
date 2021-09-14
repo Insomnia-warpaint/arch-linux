@@ -855,7 +855,7 @@ orcl:/home/oracle/database/oracle11g/product/11.2.0/dbhome_1:Y
 ```bash
 # 在内核初始化的时候后 init.d 文件夹下的配置
 # 在系统初始化的时候会去读取 rc.d 文件夹下的配置
-sudo vim /etc/rc.d/rc.loacl
+sudo vim /etc/rc.d/rc.local
 
 # 将下面两行命令复制到 rc.local 文件中,然后保存
 
