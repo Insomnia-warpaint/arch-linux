@@ -346,3 +346,28 @@ visudo
 sudo pacman -S openssh
 ssh-keygen -t rsa -C "your_email@example.com"
 ```
+
+- 创建`Wine`快捷方式
+
+```desktop
+[Desktop Entry]
+Categories=Wine-Programs;
+Comment[zh_CN]=
+Comment=
+Exec=env WINEPREFIX="/home/insomnia/.wine" wine "C:\\Program Files (x86)\\Tencent\\TIM\\Bin\\TIM.exe"
+GenericName[zh_CN]=TIM
+GenericName=TIM
+Icon=/home/insomnia/.wine/drive_c/Program Files (x86)/Tencent/TIM/TIMUninst.ico
+MimeType=
+Name=TIM
+Path=/home/insomnia/.wine/drive_c/Program Files (x86)/Tencent/TIM
+StartupNotify=true
+StartupWMClass=Wine
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+```
