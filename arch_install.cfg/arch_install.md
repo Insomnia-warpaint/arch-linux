@@ -352,22 +352,31 @@ ssh-keygen -t rsa -C "your_email@example.com"
 ```desktop
 [Desktop Entry]
 Categories=Wine-Programs;
-Comment[zh_CN]=
-Comment=
-Exec=env WINEPREFIX="/home/insomnia/.wine" wine "C:\\Program Files (x86)\\Tencent\\TIM\\Bin\\TIM.exe"
+Comment[zh_CN]=TIM
+Comment=TIM
+Exec=env WINEPREFIX="/home/insomnia/.wine" wine "C:\\Program Files\\Tencent\\TIM\\Bin\\TIM.exe"
 GenericName[zh_CN]=TIM
 GenericName=TIM
-Icon=/home/insomnia/.wine/drive_c/Program Files (x86)/Tencent/TIM/TIMUninst.ico
-MimeType=
+Icon=/home/insomnia/.wine/drive_c/Program Files/Tencent/TIM/TIMUninst.ico
 Name=TIM
-Path=/home/insomnia/.wine/drive_c/Program Files (x86)/Tencent/TIM
-StartupNotify=true
-StartupWMClass=Wine
-Terminal=false
-TerminalOptions=
+Path=/home/insomnia/.wine/drive_c/Program Files/Tencent/TIM
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 ```
+- CrossOver 安装PLSQL
+ - 设置 sqlplus 客户端路径
+```txt
+C:\Program Files\PLSQL Developer\instantclient_12_1\
+C:\Program Files\PLSQL Developer\instantclient_12_1\oci.dll
+```
+ - plsql 中文乱码问题
+ - 查询服务器的字符集
+ ```sql
+	select userenv('language') from dual;
+ ```
+ - 将客户端的字符集和服务端的字符集同步
+ >编辑注册表 
+ >>HKEY_CURRENT_USER
+ >>>Envirorment
+ >>>右键新建字符串值
+ >>>>NLS_LANG:SIMPLIFIED CHINESE_CHINA.ZHS16GBK
+ - **若正确配置环境变量后还是乱码,则需要设置电脑的语言为中文.**
