@@ -312,7 +312,7 @@ reboot
 ```
 
 
-### 14.创建用户 配置图形化界面
+### 14.创建用户 安装`KDE`桌面
 
 - 创建用户
 
@@ -336,10 +336,60 @@ visudo
 %wheel ALL=(ALL) ALL
 ```
 - 配置 `pacman.conf` 文件
+
+```bash
+sudo vim /etc/pacman.conf
+# 在文件最末尾加上[multilib]和[archlinuxcn]
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+
+[archlinuxcn]
+SigLevel = Optional TrustAll
+Server = https://mirrors.aliyun.com/archlinuxcn/$arch
+```
+
 - 更新系统
+
+```bash
+sudo pacman -Syu
+```
 - 下载 `KDE Plasma meta`
+
+```bash
+sudo pacman -S plasma-meta dolphin konsole
+```
 - 开启 `sddm`
+
+```bash
+systemctl enable sddm
+```
+- 重启后进入KDE桌面
+
+```bash
+reboot
+```
+## 15. 安装输入法
 - 下载输入法
+  - [fcitx5-wiki](https://wiki.archlinux.org/title/Fcitx5)
+  - `Ctrl`+`T` 打开 konsole
+```bash
+# 输入法:fcitx5-im 中文引擎:fcitx5-chinese-addons 皮肤:fcitx5-nord 
+sudo pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-nord
+```
+- 编辑配置文件
+```bash
+sudo vim /etc/environment
+#添加配置
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+```
+- 配置输入法自动启动
+ - 系统设置-开机与关机-自启动,然后将Fcitx5添加到列表中
+
+## 16.常用软件的安装
+
+
 - 配置ssh
 
 ```bash
