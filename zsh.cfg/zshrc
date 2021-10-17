@@ -116,4 +116,4 @@ export LANG=en_US.UTF-8
   alias .alacritty="vim ~/.config/alacritty/alacritty.yml"
   alias .arch="cd ~/.local/my.git/arch-linux"
   alias .work="cd ~/.local/my.git/work"
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk/
+  alias scrcpy="scrcpy --turn-screen-off --stay-awake"

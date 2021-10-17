@@ -18,7 +18,10 @@ Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['ma
 " 文件管理插件 可以预览目录    
 Plug 'scrooloose/nerdtree'        
 
-
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'jackguo380/vim-lsp-cxx-highlight'
+Plug 'skywind3000/asyncrun.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -41,6 +44,7 @@ set nohlsearch "查找匹配到的所有单词不高亮显示，只高亮光标�
 set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
+set t_Co=256
 set ts=4
 set sw=4
 
@@ -48,6 +52,7 @@ set sw=4
 
 filetype on "检测文件的类型
 syntax enable "语法高亮 
+colorscheme onehalfdark
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif "记住vim 退出时光标的位置
 
 "
@@ -65,10 +70,10 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 "
 
-"inoremap <Up> <C-p>
-"inoremap <Down> <C-n>
-"inoremap <Left> <Nop>
-"inoremap <Right> <Nop>
+inoremap <Up> <C-p>
+inoremap <Down> <C-n>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
 inoremap jk <Esc>
 "
 
@@ -85,7 +90,6 @@ nnoremap tt :NERDTreeToggle<CR>
 nnoremap J <C-f>
 nnoremap K <C-b>
 nnoremap mg J
-nnoremap <F5> :!javac % && java %:r <CR>
 
 "
 let g:mapleader = ',' 
@@ -101,6 +105,7 @@ let g:airline_section_y = ""
 let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l 行',"-",' %c 列'])
 let g:airline_section_error  = ""
 let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
+let g:airline_theme='onehalfdark'
 
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
