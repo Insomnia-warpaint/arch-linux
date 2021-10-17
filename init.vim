@@ -17,11 +17,8 @@ Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['ma
 
 " 文件管理插件 可以预览目录    
 Plug 'scrooloose/nerdtree'        
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
-Plug 'rakr/vim-one'
 Plug 'chriskempson/base16-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -80,6 +77,11 @@ inoremap <Down> <C-n>
 inoremap <Left> <Nop>
 inoremap <Right> <Nop>
 inoremap jk <Esc>
+inoremap " ""<ESC>i
+inoremap < <><ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+"  
 "
 
 noremap H ^ 
