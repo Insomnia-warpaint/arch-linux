@@ -17,9 +17,12 @@ Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['ma
 
 " 文件管理插件 可以预览目录    
 Plug 'scrooloose/nerdtree'        
+" 主题插件
 Plug 'chriskempson/base16-vim'
+" 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/asyncrun.vim'
+" 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -88,7 +91,8 @@ noremap H ^
 noremap <F3> :set number!<CR> 
 noremap L $
 nnoremap mk :MarkdownPreview<CR>
-
+" JSON Format
+nnoremap <Leader>jf :%!jp %<CR>
 "
 
 nnoremap rs :source %<CR> 
