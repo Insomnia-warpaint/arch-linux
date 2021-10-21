@@ -20,19 +20,23 @@ Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/asyncrun.vim'
+"Plug 'jayli/vim-easycomplete'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rafalbromirski/vim-airlineish'
 Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'webastien/vim-ctags'
 " 主题插件
 Plug 'morhetz/gruvbox'
 Plug 'jiangmiao/auto-pairs' " 符号补全
 Plug 'cdelledonne/vim-cmake'
 
 call plug#end() 
-
 
 "
 
