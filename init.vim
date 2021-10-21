@@ -20,18 +20,16 @@ Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/asyncrun.vim'
-" 状态栏
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-Plug 'itchyny/vim-gitbranch'
-" 主题插件
 Plug 'itchyny/lightline.vim'
+" 状态栏
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'rafalbromirski/vim-airlineish'
 Plug 'edkolev/promptline.vim'
+Plug 'tpope/vim-fugitive'
 " 主题插件
 Plug 'morhetz/gruvbox'
-" 翻译插件
-"Plug 'voldikss/vim-translate-me'
-
+Plug 'jiangmiao/auto-pairs' " 符号补全
 Plug 'cdelledonne/vim-cmake'
 
 call plug#end() 
@@ -44,6 +42,8 @@ colorscheme gruvbox
 let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
 "
+set helplang=cn
+set ambiwidth=double
 set number
 set background=dark
 set autoindent "vim 使用自动对齐，也就是把当前行的对齐格式应用到下一行(自动缩进)
@@ -55,10 +55,10 @@ set nohlsearch "查找匹配到的所有单词不高亮显示，只高亮光标�
 set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
-"set t_Co=256
+set t_Co=256
 set ts=4
 set sw=4
-
+set encoding=utf8
 "
 
 filetype on "检测文件的类型
@@ -113,60 +113,58 @@ nnoremap mg J
 
 "
 let g:mapleader = ',' 
+"let g:promptline_powerline_symbols = 1
 
-let g:promptline_powerline_symbols = 1
-
-let g:promptline_symbols = {
-      \ 'left'           : '',
-      \ 'right'          : '',
-      \ 'left_alt'       : '>',
-      \ 'right_alt'      : '<',
-      \ 'dir_sep'        : ' / ',
-      \ 'truncation'     : '...',
-      \ 'vcs_branch'     : '',
-      \ 'battery'        : '',
-      \ 'space'          : ' '}
+"let g:Powerline_symbols= 'unicode'
 
 
 "
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \ }
+let g:airline#extensions#tabline#enabled = 1 
+let g:airline#extensions#branch#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'airlineish'
+"let g:airline_theme = 'gruvbox'
 
+if !exists('g:airline_symbols')
+let g:airline_symbols = {}
+endif
 
-"let g:airline#extensions#tabline#enabled = 1 
-"let g:airline#extensions#branch#enabled = 1
-"let g:airline#extensions#promptline#enabled = 1
-"let g:airline#extensions#tabline#left_sep = ' ' 
-"let g:airline#extensions#tabline#left_alt_sep = '|' 
-"let g:airline#extensions#tabline#fnamemod = ':t'
-"let g:airline#extensions#tabline#show_close_button = 1 
-"let g:airline#extensions#tabline#close_symbol='X'
+let g:airline_symbols.linenr = ' '
+let g:airline_symbols.maxlinenr = ' '
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = '☰'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.dirty= '⚡'
+let g:airline_section_b = '%{fugitive#head()}'
+let g:airline_section_x = '%{&filetype}'
 "let g:airline_section_c = airline#section#create(['%t'])
-"let g:airline_section_x = airline#section#create(['%Y'])
-"let g:airline_section_y = \""
-"let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
-"let g:airline_section_error  = \""
+let g:airline_section_x = airline#section#create(['%Y'])
+"let g:airline_section_y = ""
+let g:airline_section_d = ""
+let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
+let g:airline_section_error  = ''
 "let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
-"let g:airline_section_warning = airline#section#create([strftime('%F')])
+let g:airline_section_warning = ''
 "let g:airline_theme = 'dark'
-
-"nmap <leader>1 <Plug>AirlineSelectTab1
-"nmap <leader>2 <Plug>AirlineSelectTab2
-"nmap <leader>3 <Plug>AirlineSelectTab3
-"nmap <leader>4 <Plug>AirlineSelectTab4
-"nmap <leader>5 <Plug>AirlineSelectTab5
-"nmap <leader>6 <Plug>AirlineSelectTab6
-"nmap <leader>7 <Plug>AirlineSelectTab7
-"nmap <leader>8 <Plug>AirlineSelectTab8
-"nmap <leader>9 <Plug>AirlineSelectTab9
-"nmap <leader>0 <Plug>AirlineSelectTab0
-"nmap <leader>p <Plug>AirlineSelectPrevTab
-"nmap <leader>n <Plug>AirlineSelectNextTab
+"let g:airline_section_a = ''       
+"let g:airline_section_c = ''  
+"let g:airline_section_y = ''
+"let g:airline_section_z = ''      
+								 
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>0 <Plug>AirlineSelectTab0
+nmap <leader>p <Plug>AirlineSelectPrevTab
+nmap <leader>n <Plug>AirlineSelectNextTab
