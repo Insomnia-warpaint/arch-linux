@@ -20,7 +20,6 @@ Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/asyncrun.vim'
-Plug 'itchyny/lightline.vim'
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -119,9 +118,11 @@ let g:mapleader = ','
 
 
 "
-let g:airline#extensions#tabline#enabled = 1 
-let g:airline#extensions#branch#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#branch#enabled = 1
 let g:airline_theme = 'airlineish'
 "let g:airline_theme = 'gruvbox'
 
@@ -143,7 +144,7 @@ let g:airline_symbols.dirty= '⚡'
 let g:airline_section_b = '%{fugitive#head()}'
 let g:airline_section_x = '%{&filetype}'
 "let g:airline_section_c = airline#section#create(['%t'])
-let g:airline_section_x = airline#section#create(['%Y'])
+"let g:airline_section_x = airline#section#create(['%F'])
 "let g:airline_section_y = ""
 let g:airline_section_d = ""
 let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
@@ -154,8 +155,9 @@ let g:airline_section_warning = ''
 "let g:airline_section_a = ''       
 "let g:airline_section_c = ''  
 "let g:airline_section_y = ''
-"let g:airline_section_z = ''      
-								 
+"let g:airline_section_z = ''
+"let g:airline#extensions#coc#enabled = 1
+
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
