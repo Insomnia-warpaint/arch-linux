@@ -23,6 +23,8 @@ Plug 'skywind3000/asyncrun.vim'
 "Plug 'jayli/vim-easycomplete'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+" icon
+Plug 'ryanoasis/vim-devicons'
 
 " 状态栏
 Plug 'vim-airline/vim-airline'
@@ -62,6 +64,7 @@ set t_Co=256
 set ts=4
 set sw=4
 set encoding=utf8
+set guifont=Fantasque\ Sans\ Mono\ 12
 "
 
 filetype on "检测文件的类型
