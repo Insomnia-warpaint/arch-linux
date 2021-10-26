@@ -51,6 +51,7 @@ let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
 "
 set mouse=a
+set textwidth=80
 set helplang=cn
 set ambiwidth=double
 set number
