@@ -26,6 +26,9 @@ Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
 
+" debug 
+Plug 'puremourning/vimspector'
+
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -47,6 +50,7 @@ colorscheme gruvbox
 let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
 "
+set mouse=a
 set helplang=cn
 set ambiwidth=double
 set number
@@ -63,8 +67,11 @@ set cursorline
 set t_Co=256
 set ts=4
 set sw=4
-set encoding=utf8
-set guifont=Fantasque\ Sans\ Mono\ 12
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,gb18030,cp936,latin1
+"set guifont=DroidSansMono\ Nerd\ Font\ 11
+"set guifont=Dejavu\ Sans\ Mono\ Nerd\ Font\ 12
+set guifont=Fantasque\ Sans\ Mono\ Nerd\ Font\ 12
 "
 
 filetype on "检测文件的类型
@@ -106,7 +113,7 @@ noremap <F3> :set number!<CR>
 noremap L $
 nnoremap mk :MarkdownPreview<CR>
 " JSON Format
-nnoremap <Leader>jf :%!jp %<CR>
+nnoremap <Leader>jf :%!jq .<CR>
 "
 
 nnoremap rs :source %<CR> 
