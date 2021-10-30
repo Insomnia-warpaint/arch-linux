@@ -68,6 +68,12 @@
       "filetypes": [
         "vim"
       ]
+    },
+    "lua": {
+      "command": "lua-language-server",
+      "filetypes": [
+        "lua"
+      ]
     }
   }
 }

@@ -2,7 +2,7 @@
 
 if empty(glob('~/.vim/autoload/plug.vim'))
 
-	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs 
+	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
 		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 
@@ -12,11 +12,11 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-"Markdown 插件    
+"Markdown 插件
 Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['markdown', 'vim-plug']}
 
-" 文件管理插件 可以预览目录    
-Plug 'scrooloose/nerdtree'        
+" 文件管理插件 可以预览目录
+Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'skywind3000/asyncrun.vim'
@@ -26,9 +26,10 @@ Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
 
-" debug 
+" debug
 Plug 'puremourning/vimspector'
 
+Plug 'rhysd/open-pdf.vim'
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -41,19 +42,25 @@ Plug 'morhetz/gruvbox'
 Plug 'jiangmiao/auto-pairs' " 符号补全
 Plug 'cdelledonne/vim-cmake'
 
-call plug#end() 
+call plug#end()
 
 "
 
+let g:vimspector_base_dir=expand('$HOME/.vim/vimspector-config')
 let g:mapleader = ","
 colorscheme gruvbox
 let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
 "
-set mouse=a
+set showcmd
+"set virtualedit=all
+set linebreak
+set guioptions+=b " 底部显示滑块
+set fileformats=unix,dos,mac
 set textwidth=80
 set helplang=cn
 set ambiwidth=double
+set showmatch
 set number
 set background=dark
 set autoindent "vim 使用自动对齐，也就是把当前行的对齐格式应用到下一行(自动缩进)
@@ -65,25 +72,35 @@ set nohlsearch "查找匹配到的所有单词不高亮显示，只高亮光标�
 set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
-set t_Co=256
+set autowrite
+set t_co=256
+set list
+set listchars=tab:>-,trail:- "显示tab和space"
 set ts=4
 set sw=4
+set display=truncate "如果末行被截短，显示 @@@ 而不是隐藏整行
+set nrformats-=octal
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,gb18030,cp936,latin1
-"set guifont=DroidSansMono\ Nerd\ Font\ 11
-"set guifont=Dejavu\ Sans\ Mono\ Nerd\ Font\ 12
-set guifont=Fantasque\ Sans\ Mono\ Nerd\ Font\ 12
+"set guifont=droidsansmono\ nerd\ font\ 11
+"set guifont=dejavu\ sans\ mono\ nerd\ font\ 12
+set guifont=fantasque\ sans\ mono\ nerd\ font\ 12
+
+
+if(has('mouse'))
+	set mouse=a
+endif
 "
 
 filetype on "检测文件的类型
-syntax enable "语法高亮 
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif "记住vim 退出时光标的位置
+syntax enable "语法高亮
+au bufreadpost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif "记住vim 退出时光标的位置
 
 "
 
 " :map 递归映射
 " :noremap 非递归映射
-" :nnoremap 正常模式映 
+" :nnoremap 正常模式映
 " :vnoremap 可视模式和选择模式映射
 " :xnoremap 可视模式映射
 " :snoremap 选择模式映
@@ -94,39 +111,46 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 "
 
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-inoremap <Left> <Nop>
-inoremap <Right> <Nop>
-inoremap jk <Esc>
-"inoremap \" \"\"<ESC>i
-"inoremap < <><ESC>i
-"inoremap ( ()<ESC>i
-"inoremap [ []<ESC>i
-inoremap <Leader>/ <C-p>
-inoremap <Leader>. <C-n>
 
-"  
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+inoremap jk <esc>
+"inoremap \" \"\"<esc>i
+"inoremap < <><esc>i
+"inoremap ( ()<esc>i
+"inoremap [ []<esc>i
+inoremap <leader>/ <c-p>
+inoremap <leader>. <c-n>
+
+"
 "
 
-noremap H ^ 
-noremap <F3> :set number!<CR> 
+"noremap h ^
+noremap <F3> :set number!<CR>
 noremap L $
+noremap <UP> gk
+noremap <DOWN> gj
+noremap k gk
+noremap j gj
 nnoremap mk :MarkdownPreview<CR>
 " JSON Format
 nnoremap <Leader>jf :%!jq .<CR>
 "
 
-nnoremap rs :source %<CR> 
+nnoremap rs :source %<CR>
 nnoremap <C-s> :w<CR>
 nnoremap tt :NERDTreeToggle<CR>
 let NERDTreeWinPos=1
-nnoremap J <C-f>
-nnoremap K <C-b>
-nnoremap mg J
+"nnoremap J <C-f>
+"nnoremap K <C-b>
+nnoremap J <Nop>
+nnoremap K <Nop>
+"nnoremap mg J
 
 "
-let g:mapleader = ',' 
+let g:mapleader = ','
 "let g:promptline_powerline_symbols = 1
 
 "let g:Powerline_symbols= 'unicode'
@@ -167,8 +191,8 @@ let g:airline_section_error  = ''
 "let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
 let g:airline_section_warning = ''
 "let g:airline_theme = 'dark'
-"let g:airline_section_a = ''       
-"let g:airline_section_c = ''  
+"let g:airline_section_a = ''
+"let g:airline_section_c = ''
 "let g:airline_section_y = ''
 "let g:airline_section_z = ''
 "let g:airline#extensions#coc#enabled = 1
