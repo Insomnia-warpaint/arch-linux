@@ -1,11 +1,18 @@
 "
+if empty(glob('~/.config/nvim/autoload/plug.vim'))&&has('nvim')
 
-if empty(glob('~/.vim/autoload/plug.vim'))
+	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+
+elseif empty(glob('~/.vim/autoload/plug.vim'))
 
 	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
 		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 
+else
+	finish
 endif
 
 "
@@ -73,7 +80,6 @@ set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
 set autowrite
-set t_co=256
 set list
 set listchars=tab:>-,trail:- "显示tab和space"
 set ts=4
@@ -190,6 +196,7 @@ let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '
 let g:airline_section_error  = ''
 "let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
 let g:airline_section_warning = ''
+:
 "let g:airline_theme = 'dark'
 "let g:airline_section_a = ''
 "let g:airline_section_c = ''
