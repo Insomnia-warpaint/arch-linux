@@ -11,8 +11,6 @@ elseif empty(glob('~/.vim/autoload/plug.vim'))
 		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 
-else
-	finish
 endif
 
 "
@@ -32,10 +30,8 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
-
 " debug
 Plug 'puremourning/vimspector'
-
 Plug 'rhysd/open-pdf.vim'
 " 状态栏
 Plug 'vim-airline/vim-airline'
@@ -52,7 +48,8 @@ Plug 'cdelledonne/vim-cmake'
 call plug#end()
 
 "
-
+set clipboard+=unnamedplus
+let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_base_dir=expand('$HOME/.vim/vimspector-config')
 let g:mapleader = ","
 colorscheme gruvbox
@@ -196,7 +193,6 @@ let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '
 let g:airline_section_error  = ''
 "let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
 let g:airline_section_warning = ''
-:
 "let g:airline_theme = 'dark'
 "let g:airline_section_a = ''
 "let g:airline_section_c = ''
