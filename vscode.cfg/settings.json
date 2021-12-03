@@ -2,8 +2,8 @@
     "workbench.colorTheme": "Atom One Dark",
     "workbench.sideBar.location": "right",
     "files.autoSave": "afterDelay",
-    "editor.fontSize": 18,
-    "editor.fontFamily": "'Source Han Mono Sc', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 16,
+    "editor.fontFamily": "'FantasqueSansMono Nerd Font Mono','Source Han Mono Sc'",
     "editor.wordWrap": "on",
     "editor.cursorBlinking": "expand",
     "editor.cursorWidth": 6,
@@ -13,14 +13,6 @@
     "powermode.presets": "flames",
     "git.enableSmartCommit": true,
     "git.autofetch": true,
-    "java.project.importOnFirstTimeStartup": "automatic",
-    "files.exclude": {
-        "**/.classpath": true,
-        "**/.project": true,
-        "**/.settings": true,
-        "**/.factorypath": true
-    },
     "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "workbench.iconTheme": "vscode-great-icons"
 }
