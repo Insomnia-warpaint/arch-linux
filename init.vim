@@ -52,7 +52,7 @@ set clipboard+=unnamedplus
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_base_dir=expand('$HOME/.vim/vimspector-config')
 let g:mapleader = ","
-colorscheme gruvbox
+"colorscheme gruvbox
 let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
 "

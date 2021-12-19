@@ -14,5 +14,20 @@
     "git.enableSmartCommit": true,
     "git.autofetch": true,
     "editor.suggestSelection": "first",
-    "workbench.iconTheme": "vscode-great-icons"
+    "workbench.iconTheme": "vscode-great-icons",
+    "C_Cpp.updateChannel": "Insiders",
+    "code-runner.runInTerminal": true,
+    "bracketPairColorizer.depreciation-notice": false,
+    "files.exclude": {
+        "**/.classpath": false,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "java.import.gradle.java.home": "/usr/lib/jvm/java-11-openjdk/",
+    "java.import.gradle.version": "7.2",
+    "java.import.gradle.wrapper.enabled": false,
+    "java.import.gradle.home": "/usr/share/java/gradle/",
+    "explorer.compactFolders": false
+
 }
