@@ -155,7 +155,6 @@ nnoremap K <Nop>
 "
 let g:mapleader = ','
 "let g:promptline_powerline_symbols = 1
-
 "let g:Powerline_symbols= 'unicode'
 
 
@@ -185,20 +184,10 @@ let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty= '⚡'
 let g:airline_section_b = '%{fugitive#head()}'
 let g:airline_section_x = '%{&filetype}'
-"let g:airline_section_c = airline#section#create(['%t'])
-"let g:airline_section_x = airline#section#create(['%F'])
-"let g:airline_section_y = ""
 let g:airline_section_d = ""
 let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
 let g:airline_section_error  = ''
-"let g:airline_section_warning = airline#section#create([strftime('%F'),"|",strftime('%R')])
 let g:airline_section_warning = ''
-"let g:airline_theme = 'dark'
-"let g:airline_section_a = ''
-"let g:airline_section_c = ''
-"let g:airline_section_y = ''
-"let g:airline_section_z = ''
-"let g:airline#extensions#coc#enabled = 1
 
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
