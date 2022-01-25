@@ -77,8 +77,8 @@ set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
 set autowrite
-set list
-set listchars=tab:>-,trail:- "显示tab和space"
+"set list
+"set listchars=tab:>-,trail:- "显示tab和space"
 set ts=4
 set sw=4
 set display=truncate "如果末行被截短，显示 @@@ 而不是隐藏整行

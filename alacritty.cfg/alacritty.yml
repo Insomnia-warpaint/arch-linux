@@ -1,7 +1,7 @@
 font:
   normal:
     family: Fantasque Sans Mono Nerd Font
-    style: Regular
+    style: Bold
   
   bold:
     family: Fantasque Sans Mono Nerd Font
@@ -10,7 +10,7 @@ font:
   italic:
     family: Fantasque Sans Mono Nerd Font
     style: Italic
-  size: 8
+  size: 10
 
 colors:
     # Default colors
@@ -37,5 +37,6 @@ colors:
       magenta: '0xd3869b'
       cyan:    '0x8ec07c'
       white:   '0xebdbb2'
-background_opacity: 0.8
+
+-- window.opacity: 0.4
 
