@@ -1,42 +1,53 @@
 --- dwm.c
 +++ dwm.c
-@@ -1673,26 +1673,29 @@ tagmon(const Arg *arg)
- void
- tile(Monitor *m)
- {
--	unsigned int i, n, h, mw, my, ty;
-+	unsigned int i, n, h, mw, my, ty, ns;
- 	Client *c;
- 
- 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
- 	if (n == 0)
- 		return;
- 
--	if (n > m->nmaster)
-+	if (n > m->nmaster) {
- 		mw = m->nmaster ? m->ww * m->mfact : 0;
--	else
-+		ns = m->nmaster > 0 ? 2 : 1;
-+	} else {
- 		mw = m->ww;
--	for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
-+		ns = 1;
-+	}
-+	for(i = 0, my = ty = gappx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
- 		if (i < m->nmaster) {
--			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
--			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
--			my += HEIGHT(c);
-+			h = (m->wh - my) / (MIN(n, m->nmaster) - i) - gappx;
-+			resize(c, m->wx + gappx, m->wy + my, mw - (2*c->bw) - gappx*(5-ns)/2, h - (2*c->bw), False);
-+			my += HEIGHT(c) + gappx;
- 		} else {
--			h = (m->wh - ty) / (n - i);
--			resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
--			ty += HEIGHT(c);
-+			h = (m->wh - ty) / (n - i) - gappx;
-+			resize(c, m->wx + mw + gappx/ns, m->wy + ty, m->ww - mw - (2*c->bw) - gappx*(5-ns)/2, h - (2*c->bw), False);
-+			ty += HEIGHT(c) + gappx;
- 		}
- }
- 
+@@ -1564,7 +1572,8 @@ setup(void)
+ 	sw = DisplayWidth(dpy, screen);
+ 	sh = DisplayHeight(dpy, screen);
+ 	root = RootWindow(dpy, screen);
+-	drw = drw_create(dpy, screen, root, sw, sh);
++	xinitvisual();
++	drw = drw_create(dpy, screen, root, sw, sh, visual, depth, cmap);
+ 	drw_load_fonts(drw, fonts, LENGTH(fonts));
+ 	if (!drw->fontcount)
+ 		die("no fonts could be loaded.\n");
+@@ -1588,12 +1597,12 @@ setup(void)
+ 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
+ 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
+ 	/* init appearance */
+-	scheme[SchemeNorm].border = drw_clr_create(drw, normbordercolor);
+-	scheme[SchemeNorm].bg = drw_clr_create(drw, normbgcolor);
+-	scheme[SchemeNorm].fg = drw_clr_create(drw, normfgcolor);
+-	scheme[SchemeSel].border = drw_clr_create(drw, selbordercolor);
+-	scheme[SchemeSel].bg = drw_clr_create(drw, selbgcolor);
+-	scheme[SchemeSel].fg = drw_clr_create(drw, selfgcolor);
++	scheme[SchemeNorm].border = drw_clr_create(drw, normbordercolor, borderalpha);
++	scheme[SchemeNorm].bg = drw_clr_create(drw, normbgcolor, baralpha);
++	scheme[SchemeNorm].fg = drw_clr_create(drw, normfgcolor, OPAQUE);
++	scheme[SchemeSel].border = drw_clr_create(drw, selbordercolor, borderalpha);
++	scheme[SchemeSel].bg = drw_clr_create(drw, selbgcolor, baralpha);
++	scheme[SchemeSel].fg = drw_clr_create(drw, selfgcolor, OPAQUE);
+ 	/* init bars */
+ 	updatebars();
+ 	updatestatus();
+@@ -1806,15 +1815,17 @@ updatebars(void)
+ 	Monitor *m;
+ 	XSetWindowAttributes wa = {
+ 		.override_redirect = True,
+-		.background_pixmap = ParentRelative,
++		.background_pixel = 0,
++		.border_pixel = 0,
++		.colormap = cmap,
+ 		.event_mask = ButtonPressMask|ExposureMask
+ 	};
+ 	for (m = mons; m; m = m->next) {
+ 		if (m->barwin)
+ 			continue;
+-		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
+-		                          CopyFromParent, DefaultVisual(dpy, screen),
+-		                          CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
++		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, m->ww, bh, 0, depth,
++		                          InputOutput, visual,
++		                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
+ 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
+ 		XMapRaised(dpy, m->barwin);
+ 	}
