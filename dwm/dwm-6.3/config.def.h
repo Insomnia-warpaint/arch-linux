@@ -1,11 +1,16 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
+static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL  };
+static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL  };
+static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL  };
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int gappx     = 3;        /* gaps between windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const int user_bh            = 22;        /* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
 static const char *fonts[]          = { "fantasque sans mono nerd font:size=10" };
 static const char dmenufont[]       = "fantasque sans mono nerd font:size=10";
 static const char col_gray1[]       = "#222222";
@@ -68,6 +73,9 @@ static const char *termcmd[]  = { "alacritty", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ 0,                       XF86XK_AudioLowerVolume, spawn, {.v = downvol }  },
+	{ 0,                       XF86XK_AudioMute, spawn, {.v = mutevol }  },
+	{ 0,                       XF86XK_AudioRaiseVolume, spawn, {.v = upvol   }  },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
