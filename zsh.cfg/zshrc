@@ -129,5 +129,6 @@ export PATH="$PATH:$GEM_HOME/bin"
   alias .arch="cd ~/.local/my.git/arch-linux"
   alias .work="cd ~/.local/my.git/work"
   alias scrcpy="scrcpy --turn-screen-off --stay-awake"
+  alias .dwm="cd ~/.dwm"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
