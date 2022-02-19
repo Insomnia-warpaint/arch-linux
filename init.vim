@@ -24,25 +24,25 @@ Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['ma
 Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'skywind3000/asyncrun.vim'
+"Plug 'skywind3000/asyncrun.vim'
 "Plug 'jayli/vim-easycomplete'
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
 " debug
-Plug 'puremourning/vimspector'
-Plug 'rhysd/open-pdf.vim'
+"Plug 'puremourning/vimspector'
+"Plug 'rhysd/open-pdf.vim'
 " 状态栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rafalbromirski/vim-airlineish'
 Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'webastien/vim-ctags'
+"Plug 'webastien/vim-ctags'
 " 主题插件
 Plug 'morhetz/gruvbox'
-Plug 'jiangmiao/auto-pairs' " 符号补全
+"Plug 'jiangmiao/auto-pairs' " 符号补全
 Plug 'cdelledonne/vim-cmake'
 
 call plug#end()
@@ -77,6 +77,7 @@ set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
 set autowrite
+set nrformats "把所有的数字当理解成十进制 00 or 0x
 "set list
 "set listchars=tab:>-,trail:- "显示tab和space"
 set ts=4
@@ -124,22 +125,26 @@ inoremap jk <esc>
 "inoremap < <><esc>i
 "inoremap ( ()<esc>i
 "inoremap [ []<esc>i
-inoremap <leader>/ <c-p>
-inoremap <leader>. <c-n>
+"inoremap <A-k> <c-p>
+"inoremap <A-j> <c-n>
 
 "
 "
 
 "noremap h ^
 noremap <F3> :set number!<CR>
-noremap L $
-noremap <UP> gk
-noremap <DOWN> gj
-noremap k gk
-noremap j gj
+"noremap L $
+"noremap <UP> gk
+"noremap <DOWN> gj
+"noremap k gk
+"noremap j gj
 nnoremap mk :MarkdownPreview<CR>
 " JSON Format
 nnoremap <Leader>jf :%!jq .<CR>
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
 "
 
 nnoremap rs :source %<CR>
@@ -153,7 +158,7 @@ nnoremap K <Nop>
 "nnoremap mg J
 
 "
-let g:mapleader = ','
+let g:mapleader = '\'
 "let g:promptline_powerline_symbols = 1
 "let g:Powerline_symbols= 'unicode'
 
