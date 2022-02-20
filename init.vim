@@ -207,3 +207,54 @@ nmap <leader>0 <Plug>AirlineSelectTab0
 nmap <leader>p <Plug>AirlineSelectPrevTab
 nmap <leader>n <Plug>AirlineSelectNextTab
 
+
+autocmd BufNewFile * call AutoAppendHeader()
+
+
+" 
+func! AutoAppendHeader()
+	let suffix = strcharpart(bufname(), strridx(bufname(),'.') + 1, strlen(bufname()))
+	if 'c' == tolower(suffix)
+		call append(line('$'),'/*')
+		call append(line('$'),' *')
+		call append(line('$'),' * Created on: ' . $USER)
+		call append(line('$'),' * Date: ' . strftime("%Y-%m-%d %H:%M:%S"))
+		call append(line('$'),' *')
+		call append(line('$'),' */')
+		call append(line('$'),'')
+		call append(line('$'),'')
+		call append(line('$'),'')
+		call append(line('$'),'#include <stdio.h>')
+		call append(line('$'),'#include <stdbool.h>')
+		call append(line('$'),'')
+
+	elseif 'h' == tolower(suffix)
+		let h_classic = '_INCLUDE_' . substitute(toupper(strcharpart(bufname(), strridx(bufname(), '/') + 1, strlen(bufname()))), '\.', '_', '')
+		call append(line('$'),'/*')
+		call append(line('$'),' *')
+		call append(line('$'),' * Created on: ' . $USER)
+		call append(line('$'),' * Date: ' . strftime("%Y-%m-%d %H:%M:%S"))
+		call append(line('$'),' *')
+		call append(line('$'),' */')
+		call append(line('$'),'')
+		call append(line('$'),'')
+		call append(line('$'),'')
+	"	call append(line('$'),'#ifndef ' . h_classic)
+	"	call append(line('$'),'#define ' . h_classic)
+	"	call append(line('$'),'')
+	"	call append(line('$'),'')
+	"	call append(line('$'),'')
+	"	call append(line('$'),'#endif')
+	endif
+	execute ':$'
+endfunction
+
+
+func! GetCharIndexOf()
+
+endfunction
+
+
+
+
+			
