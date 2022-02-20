@@ -24,14 +24,14 @@ Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['ma
 Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'skywind3000/asyncrun.vim'
-"Plug 'jayli/vim-easycomplete'
-"Plug 'SirVer/ultisnips'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'jayli/vim-easycomplete'
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
 " debug
-"Plug 'puremourning/vimspector'
+Plug 'puremourning/vimspector'
 "Plug 'rhysd/open-pdf.vim'
 " 状态栏
 Plug 'vim-airline/vim-airline'
@@ -77,7 +77,7 @@ set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
 set autowrite
-set nrformats "把所有的数字当理解成十进制 00 or 0x
+set nrformats= "把所有的数字当理解成十进制 00 or 0x
 "set list
 "set listchars=tab:>-,trail:- "显示tab和space"
 set ts=4
@@ -114,7 +114,7 @@ au bufreadpost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " :cnoremap 命令模式映射
 
 "
-
+"noremap
 
 inoremap <up> <nop>
 inoremap <down> <nop>
@@ -206,3 +206,4 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 nmap <leader>0 <Plug>AirlineSelectTab0
 nmap <leader>p <Plug>AirlineSelectPrevTab
 nmap <leader>n <Plug>AirlineSelectNextTab
+
