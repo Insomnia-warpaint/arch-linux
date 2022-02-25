@@ -249,12 +249,31 @@ func! AutoAppendHeader()
 	execute ':$'
 endfunction
 
+" 获取字符在字符串中的位置
+function! GetCharIndexOf(str, ch, idx)
+  let l:len = strlen(a:str)
+  let l:idx = 0
+  let l:total = 0
+  let l:i = 0
 
-func! GetCharIndexOf()
-
+  while l:i < l:len
+	
+  endwhile
 endfunction
 
 
+function! ConvertStrToArray(str)
+ let i = 0
+ let l:str = a:str
+ let strlen = len(a:str)
+ 
+ for i in range(strlen)
+	let l:ch =  strgetchar(l:str)
+	let l:arr = '{' . l:ch
+ endfor
 
+
+
+endfunction
 
 			
