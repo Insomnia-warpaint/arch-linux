@@ -229,7 +229,7 @@ func! AutoAppendHeader()
 		call append(line('$'),'')
 
 	elseif 'h' == tolower(suffix)
-		let h_classic = '_INCLUDE_' . substitute(toupper(strcharpart(bufname(), strridx(bufname(), '/') + 1, strlen(bufname()))), '\.', '_', '_')
+		let h_classic = '_INCLUDE_' . substitute(toupper(strcharpart(bufname(), strridx(bufname(), '/') + 1, strlen(bufname()))), '\.', '_', '') . '_'
 		call append(line('$'),'/*')
 		call append(line('$'),' *')
 		call append(line('$'),' * Created on: ' . $USER)
@@ -249,31 +249,62 @@ func! AutoAppendHeader()
 	execute ':$'
 endfunction
 
-" 获取字符在字符串中的位置
-function! GetCharIndexOf(str, ch, idx)
-  let l:len = strlen(a:str)
-  let l:idx = 0
-  let l:total = 0
-  let l:i = 0
 
-  while l:i < l:len
+function! CharIndexOf(str, ch, idx)
+	let str = a:str
+	let ridx = a:idx
+	let idx = 0
+
+	let strlen = strlen(str)
+
+	for i in range(strlen)
+		
+	endfor
+endfunction
+
+
+function! StrToCharList(str)
+
+ let nStr = a:str
+ let nStrLen = len(a:str)
+ let nList = ''
+ let comma = ','
+
+ for i in range(nStrLen)
 	
-  endwhile
-endfunction
+	let nList .=  nr2char(strgetchar(nStr, i))
 
+	if nStrLen - 1 != i 
+		let nList .= comma
+	endif
 
-function! ConvertStrToArray(str)
- let i = 0
- let l:str = a:str
- let strlen = len(a:str)
- 
- for i in range(strlen)
-	let l:ch =  strgetchar(l:str)
-	let l:arr = '{' . l:ch
  endfor
-
-
+ 
+ let nList = split(nList, comma)
+ 
+ return nList
 
 endfunction
 
-			
+
+
+function! FlipStr(str)
+	
+	let str = a:str
+	let limit = strlen(str) - 1
+	let sIdx = 0
+	let eIdx = limit
+	let aList = str2list(str)
+	
+	while sIdx <= limit / 2
+		let tmpItm = aList[sIdx]
+		let aList[sIdx] = aList[eIdx]
+		let aList[eIdx] = tmpItm
+		let sIdx += 1
+		let eIdx -= 1
+	endwhile
+	
+	let str = list2str(aList)
+	return aList
+
+endfunction	
