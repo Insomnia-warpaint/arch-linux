@@ -263,6 +263,23 @@ function! CharIndexOf(str, ch, idx)
 endfunction
 
 
+function! Str2CharList(str)
+	let str = a:str
+	let nrList = str2list(str)
+	let limit = len(nrList)
+	let sIdx = 0	
+	while sIdx < limit
+		
+		let nrList[sIdx] = nr2char(nrList[sIdx])
+		let sIdx += 1
+
+	endwhile
+	
+	return nrList
+
+endfunction
+
+
 function! StrToCharList(str)
 
  let nStr = a:str
