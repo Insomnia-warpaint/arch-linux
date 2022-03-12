@@ -212,7 +212,7 @@ autocmd BufNewFile * call AutoAppendHeader()
 
 
 " 
-func! AutoAppendHeader()
+function! AutoAppendHeader()
 	let suffix = strcharpart(bufname(), strridx(bufname(),'.') + 1, strlen(bufname()))
 	if 'c' == tolower(suffix)
 		call append(line('$'),'/*')
@@ -325,3 +325,45 @@ function! FlipStr(str)
 	return aList
 
 endfunction	
+
+:function! Count_words() range
+: let lnum = a:firstline
+: let n = 0
+: while lnum <= a:lastline
+:	let n = n + len(split(getline(lnum)))
+:	let n = n + 1
+: endwhile
+: echo "found" . n . "words"
+:endfunction
+
+
+
+:function! Min(x, y)
+: try
+:	 let x = a:x
+:	 let y = a:y
+:	 if x < y
+:		return x
+: 	 else
+:		return y
+: 	 endif
+: catch '.*'
+:	 return 'Please type a number'
+: endtry
+:endfunction
+
+
+
+
+function! ThrowException()
+	throw 'This is my first exception'
+endfunction
+
+
+function! TryCatchMyExp()
+	try 
+		call ThrowException()
+	catch '^This is my first exception'
+		return 'capture a exception.'
+	endtry
+endfunction
