@@ -73,22 +73,23 @@ set incsearch "设置自动匹配单词的位置
 set backspace=2
 set ignorecase "查找时忽略大小写
 set nohlsearch "查找匹配到的所有单词不高亮显示，只高亮光标所在单词。
+"set hlsearch
 set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
 set autowrite
 set nrformats= "把所有的数字当理解成十进制 00 or 0x
-"set list
-"set listchars=tab:>-,trail:- "显示tab和space"
-set ts=4
-set sw=4
+set ts=4 sw=4 expandtab
 set display=truncate "如果末行被截短，显示 @@@ 而不是隐藏整行
 set nrformats-=octal
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,gb18030,cp936,latin1
+set guifont=fantasque\ sans\ mono\ nerd\ font\ 12
+set history=200
 "set guifont=droidsansmono\ nerd\ font\ 11
 "set guifont=dejavu\ sans\ mono\ nerd\ font\ 12
-set guifont=fantasque\ sans\ mono\ nerd\ font\ 12
+"set list
+"set listchars=tab:>-,trail:- "显示tab和space"
 
 
 if(has('mouse'))
@@ -132,7 +133,8 @@ inoremap jk <esc>
 "
 
 "noremap h ^
-noremap <F3> :set number!<CR>
+noremap <F2> :set number!<CR>
+noremap <F3> :set hls!<CR>
 "noremap L $
 "noremap <UP> gk
 "noremap <DOWN> gj
@@ -156,6 +158,14 @@ let NERDTreeWinPos=1
 nnoremap J <Nop>
 nnoremap K <Nop>
 "nnoremap mg J
+
+
+" cnoremap 命令模式映射
+cnoremap <C-p> <Up> 
+cnoremap <C-n> <Down>
+
+
+
 
 "
 let g:mapleader = '\'
@@ -364,6 +374,6 @@ function! TryCatchMyExp()
 	try 
 		call ThrowException()
 	catch '^This is my first exception'
-		return 'capture a exception.'
+		return 'capture the exception.'
 	endtry
 endfunction
