@@ -18,32 +18,32 @@ endif
 call plug#begin('~/.vim/plugged')
 
 "Markdown 插件
-Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['markdown', 'vim-plug']}
+"Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['markdown', 'vim-plug']}
 
 " 文件管理插件 可以预览目录
 Plug 'scrooloose/nerdtree'
 " 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'skywind3000/asyncrun.vim'
-Plug 'jayli/vim-easycomplete'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+"Plug 'skywind3000/asyncrun.vim'
+"Plug 'jayli/vim-easycomplete'
+"Plug 'SirVer/ultisnips'
+"Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
 " debug
-Plug 'puremourning/vimspector'
+"Plug 'puremourning/vimspector'
 "Plug 'rhysd/open-pdf.vim'
 " 状态栏
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'rafalbromirski/vim-airlineish'
-Plug 'edkolev/promptline.vim'
-Plug 'tpope/vim-fugitive'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+"Plug 'rafalbromirski/vim-airlineish'
+"Plug 'edkolev/promptline.vim'
+"Plug 'tpope/vim-fugitive'
 "Plug 'webastien/vim-ctags'
 " 主题插件
 Plug 'morhetz/gruvbox'
 "Plug 'jiangmiao/auto-pairs' " 符号补全
-Plug 'cdelledonne/vim-cmake'
+"Plug 'cdelledonne/vim-cmake'
 
 call plug#end()
 
@@ -86,15 +86,17 @@ set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,gb18030,cp936,latin1
 set guifont=fantasque\ sans\ mono\ nerd\ font\ 12
 set history=200
+set splitright
+set splitbelow
 "set guifont=droidsansmono\ nerd\ font\ 11
 "set guifont=dejavu\ sans\ mono\ nerd\ font\ 12
 "set list
 "set listchars=tab:>-,trail:- "显示tab和space"
 
 
-if(has('mouse'))
-	set mouse=a
-endif
+"if(has('mouse'))
+"	set mouse=a
+"endif
 "
 
 filetype on "检测文件的类型
@@ -174,49 +176,61 @@ let g:mapleader = '\'
 
 
 "
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
-let g:airline#extensions#branch#enabled = 1
-let g:airline_theme = 'airlineish'
+"let g:airline_powerline_fonts = 1
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#left_sep = ''
+"let g:airline#extensions#tabline#left_alt_sep = ''
+"let g:airline#extensions#branch#enabled = 1
+"let g:airline_theme = 'airlineish'
 "let g:airline_theme = 'gruvbox'
 
-if !exists('g:airline_symbols')
-let g:airline_symbols = {}
-endif
+"if !exists('g:airline_symbols')
+"let g:airline_symbols = {}
+"endif
 
-let g:airline_symbols.linenr = ' '
-let g:airline_symbols.maxlinenr = ' '
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = '☰'
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.dirty= '⚡'
-let g:airline_section_b = '%{fugitive#head()}'
-let g:airline_section_x = '%{&filetype}'
-let g:airline_section_d = ""
-let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
-let g:airline_section_error  = ''
-let g:airline_section_warning = ''
+"let g:airline_symbols.linenr = ' '
+"let g:airline_symbols.maxlinenr = ' '
+"let g:airline_left_sep = ''
+"let g:airline_left_alt_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_right_alt_sep = ''
+"let g:airline_symbols.branch = ''
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.linenr = '☰'
+"let g:airline_symbols.maxlinenr = ''
+"let g:airline_symbols.dirty= '⚡'
+"let g:airline_section_b = '%{fugitive#head()}'
+"let g:airline_section_x = '%{&filetype}'
+"let g:airline_section_d = ""
+"let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
+"let g:airline_section_error  = ''
+"let g:airline_section_warning = ''
 
-nmap <leader>1 <Plug>AirlineSelectTab1
-nmap <leader>2 <Plug>AirlineSelectTab2
-nmap <leader>3 <Plug>AirlineSelectTab3
-nmap <leader>4 <Plug>AirlineSelectTab4
-nmap <leader>5 <Plug>AirlineSelectTab5
-nmap <leader>6 <Plug>AirlineSelectTab6
-nmap <leader>7 <Plug>AirlineSelectTab7
-nmap <leader>8 <Plug>AirlineSelectTab8
-nmap <leader>9 <Plug>AirlineSelectTab9
-nmap <leader>0 <Plug>AirlineSelectTab0
-nmap <leader>p <Plug>AirlineSelectPrevTab
-nmap <leader>n <Plug>AirlineSelectNextTab
+"nmap <leader>1 <Plug>AirlineSelectTab1
+"nmap <leader>2 <Plug>AirlineSelectTab2
+"nmap <leader>3 <Plug>AirlineSelectTab3
+"nmap <leader>4 <Plug>AirlineSelectTab4
+"nmap <leader>5 <Plug>AirlineSelectTab5
+"nmap <leader>6 <Plug>AirlineSelectTab6
+"nmap <leader>7 <Plug>AirlineSelectTab7
+"nmap <leader>8 <Plug>AirlineSelectTab8
+"nmap <leader>9 <Plug>AirlineSelectTab9
+"nmap <leader>0 <Plug>AirlineSelectTab0
+"nmap <leader>p <Plug>AirlineSelectPrevTab
+"nmap <leader>n <Plug>AirlineSelectNextTab
 
+nmap <leader>1 :tabn 1 <CR>
+nmap <leader>2 :tabn 2 <CR>
+nmap <leader>3 :tabn 3 <CR>
+nmap <leader>4 :tabn 4 <CR>
+nmap <leader>5 :tabn 5 <CR>
+nmap <leader>6 :tabn 6 <CR>
+nmap <leader>7 :tabn 7 <CR>
+nmap <leader>8 :tabn 8 <CR>
+nmap <leader>9 :tabn 9 <CR>
+nmap <leader>0 :tabn 0 <CR>
+nmap <leader>p :tabprevious <CR>
+nmap <leader>n :tabnext <CR>
 
 autocmd BufNewFile * call AutoAppendHeader()
 
