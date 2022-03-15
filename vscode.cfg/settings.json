@@ -9,7 +9,6 @@
     "editor.cursorWidth": 6,
     "editor.cursorSmoothCaretAnimation": true,
     "powermode.enabled": true,
-    "powermode.enableShake": false,
     "powermode.presets": "flames",
     "git.enableSmartCommit": true,
     "git.autofetch": true,
@@ -28,6 +27,7 @@
     "java.import.gradle.version": "7.2",
     "java.import.gradle.wrapper.enabled": false,
     "java.import.gradle.home": "/usr/share/java/gradle/",
-    "explorer.compactFolders": false
+    "explorer.compactFolders": false,
+    "powermode.shake.enabled": false
 
 }

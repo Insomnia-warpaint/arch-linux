@@ -152,7 +152,7 @@ nnoremap <right> <nop>
 "
 
 nnoremap rs :source %<CR>
-nnoremap <C-s> :w<CR>
+nnoremap ss :w<CR>
 nnoremap tt :NERDTreeToggle<CR>
 let NERDTreeWinPos=1
 "nnoremap J <C-f>
