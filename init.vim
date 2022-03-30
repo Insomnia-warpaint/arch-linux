@@ -149,10 +149,11 @@ nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
-"
+
+"j k 操作屏幕行，gj gk 操作文本行
 
 nnoremap rs :source %<CR>
-nnoremap ss :w<CR>
+nnoremap <C-s> :w<CR>
 nnoremap tt :NERDTreeToggle<CR>
 let NERDTreeWinPos=1
 "nnoremap J <C-f>
