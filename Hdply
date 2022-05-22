@@ -1,0 +1,577 @@
+#!/usr/bin/python3
+import os as __sys__
+import re as __regx__
+import shutil as __sh_util__
+import tarfile as __tar__
+import subprocess as __sh__
+import time as __time__
+import zipfile as __zip__
+
+# install_dir = "/home/insomnia/soft"
+username = "hdkj"
+password = "Hdkj123!"
+install_dir = "/home"
+soft_dir = "soft"
+temp_dir = "/tmp/temp_of_pkg"
+mongo_data_dir = "mongo_data"
+mongo_log_dir = "mongo_logs"
+mongo_client_port = "27017"
+influxdb_config = "influxdb.config"
+influxdb_meta_dir = "meta"
+influxdb_data_dir = "data"
+influxdb_wal_dir = "wal"
+influxdb_http_port = "8086"
+
+
+def get_list_of_soft_path():
+    list_of_pkg_name = __sys__.listdir(soft_dir)
+    current_path = __sys__.path.dirname(__sys__.path.abspath(__file__))
+    __list_of_pkg_path = []
+    for pkg_name in list_of_pkg_name:
+        __list_of_pkg_path.append(__sys__.path.join(current_path, soft_dir, pkg_name))
+    return __list_of_pkg_path
+
+
+def extractive_pkg(filename, pkg_name):
+    soft_home_dir = __sys__.path.join(install_dir, pkg_name)
+    if not __sys__.path.exists(temp_dir):
+        __sys__.mkdir(temp_dir)
+
+    if __sys__.path.exists(soft_home_dir):
+        return soft_home_dir
+
+    tar = __tar__.open(filename)
+    tar.extractall(temp_dir)
+    tar.close()
+
+    list_of_temp_dir = __sys__.listdir(temp_dir)
+
+    for soft_dir_of_temp in list_of_temp_dir:
+        soft_path = __sys__.path.join(temp_dir, soft_dir_of_temp)
+        __sh_util__.move(soft_path, soft_home_dir)
+
+    return soft_home_dir
+
+
+def __compile__(soft_home_dir, pkg_name):
+    print(soft_home_dir)
+    if __regx__.compile("(otp|erlang)", __regx__.IGNORECASE).search(soft_home_dir):
+
+        command = "cd " + soft_home_dir + " && ./configure && make && make install"
+
+        __sh__.call(command, shell=True)
+
+    elif __regx__.compile("(nginx)", __regx__.IGNORECASE).search(soft_home_dir):
+        nginx_rc = "nginx_rc"
+        nginx_rc_home = __sys__.path.join(soft_home_dir, nginx_rc)
+
+        if not __sys__.path.exists(nginx_rc_home):
+            __sys__.mkdir(nginx_rc_home)
+
+        command = "cd " + soft_home_dir + " && ls -1 | grep -v " + nginx_rc + " | xargs -I {} mv {} ./" + nginx_rc
+
+        __sh__.call(command, shell=True)
+
+        command = "cd " + nginx_rc_home + " && ./configure " \
+                                          " --user=nginx --group=nginx " \
+                                          "--prefix=" + soft_home_dir + " --pid-path=" + soft_home_dir + "/nginx.pid && " \
+                                                                                                         "make && make install"
+        __sh__.call(command, shell=True)
+
+    return True
+
+
+def create_user(user):
+    command = "useradd -M -s /usr/bin/false " + user + " 2> /dev/null"
+    __sh__.call(command, shell=True)
+    return True
+
+
+def change_owner(soft_home_dir, user):
+    command = "chown -R " + user + ":" + user + " " + soft_home_dir
+    __sh__.call(command, shell=True)
+    return True
+
+
+def generate_mongodb_config(soft_home_dir, pkg_name):
+    mongo_data_dir_path = __sys__.path.join(soft_home_dir, mongo_data_dir)
+    mongo_log_dir_path = __sys__.path.join(soft_home_dir, mongo_log_dir)
+    if not __sys__.path.exists(mongo_data_dir_path):
+        __sys__.mkdir(mongo_data_dir_path)
+
+    if not __sys__.path.exists(mongo_log_dir_path):
+        __sys__.mkdir(mongo_log_dir_path)
+    mongo_config = pkg_name + ".yml"
+    mongo_config_path = __sys__.path.join(soft_home_dir, mongo_config)
+    config = open(mongo_config_path, 'w')
+    config.write("systemLog:\n")
+    config.write("   destination: file\n")
+    config.write("   path: \"" + mongo_log_dir_path + "/mongodb.log\"\n")
+    config.write("   quiet: true\n")
+    config.write("   logAppend: true\n")
+    config.write("storage:\n")
+    config.write("   journal:\n")
+    config.write("      enabled: true\n")
+    config.write("   dbPath: \"" + mongo_data_dir_path + "\"\n")
+    config.write("   engine: \"wiredTiger\"\n")
+    config.write("processManagement:\n")
+    config.write("   fork: false\n")
+    config.write("net:\n")
+    config.write("   bindIpAll: true\n")
+    config.write("   port: " + mongo_client_port + "\n")
+    config.write("security:\n")
+    config.write("   authorization: \"enabled\"\n")
+    config.close()
+    return mongo_config_path
+
+
+def generate_influxdb_config(soft_home_dir, pkg_name):
+    influxdb_meta_dir_path = __sys__.path.join(soft_home_dir, influxdb_meta_dir)
+    influxdb_data_dir_path = __sys__.path.join(soft_home_dir, influxdb_data_dir)
+    influxdb_wal_dir_path = __sys__.path.join(soft_home_dir, influxdb_wal_dir)
+    influxdb_config_path = __sys__.path.join(soft_home_dir, influxdb_config)
+
+    if not __sys__.path.exists(influxdb_meta_dir_path):
+        __sys__.mkdir(influxdb_meta_dir_path)
+    elif not __sys__.path.exists(influxdb_data_dir_path):
+        __sys__.mkdir(influxdb_data_dir_path)
+    elif not __sys__.path.exists(influxdb_wal_dir_path):
+        __sys__.mkdir(influxdb_wal_dir_path)
+
+    config = open(influxdb_config_path, 'w')
+    config.write("bind-address = \"127.0.0.1:8088\"\n")
+    config.write("\n")
+    config.write("[meta]\n")
+    config.write("  dir = \"" + influxdb_meta_dir_path + "\"\n")
+    config.write("  retention-autocreate = true\n")
+    config.write("  logging-enabled = true\n")
+    config.write("\n")
+    config.write("[data]\n")
+    config.write("  dir = \"" + influxdb_data_dir_path + "\"\n")
+    config.write("  index-version = \"inmem\"\n")
+    config.write("  wal-dir = \"" + influxdb_wal_dir_path + "\"\n")
+    config.write("  wal-fsync-delay = \"0s\"\n")
+    config.write("  validate-keys = false\n")
+    config.write("  query-log-enabled = true\n")
+    config.write("  cache-max-memory-size = 1073741824\n")
+    config.write("  cache-snapshot-memory-size = 26214400\n")
+    config.write("  cache-snapshot-write-cold-duration = \"10m0s\"\n")
+    config.write("  compact-full-write-cold-duration = \"4h0m0s\"\n")
+    config.write("  compact-throughput = 50331648\n")
+    config.write("  compact-throughput-burst = 50331648\n")
+    config.write("  max-series-per-database = 1000000\n")
+    config.write("  max-values-per-tag = 100000\n")
+    config.write("  max-concurrent-compactions = 0\n")
+    config.write("  max-index-log-file-size = 1048576\n")
+    config.write("  series-id-set-cache-size = 100\n")
+    config.write("  series-file-max-concurrent-snapshot-compactions = 0\n")
+    config.write("  trace-logging-enabled = false\n")
+    config.write("  tsm-use-madv-willneed = false\n")
+    config.write("\n")
+    config.write("[coordinator]\n")
+    config.write("  write-timeout = \"10s\"\n")
+    config.write("  max-concurrent-queries = 0\n")
+    config.write("  query-timeout = \"0s\"\n")
+    config.write("  log-queries-after = \"0s\"\n")
+    config.write("  max-select-point = 0\n")
+    config.write("  max-select-series = 0\n")
+    config.write("  max-select-buckets = 0\n")
+    config.write("\n")
+    config.write("[retention]\n")
+    config.write("  enabled = true\n")
+    config.write("  check-interval = \"30m0s\"\n")
+    config.write("\n")
+    config.write("[shard-precreation]\n")
+    config.write("  enabled = true\n")
+    config.write("  check-interval = \"10m0s\"\n")
+    config.write("  advance-period = \"30m0s\"\n")
+    config.write("\n")
+    config.write("[monitor]\n")
+    config.write("  store-enabled = true\n")
+    config.write("  store-database = \"_internal\"\n")
+    config.write("  store-interval = \"10s\"\n")
+    config.write("\n")
+    config.write("[subscriber]\n")
+    config.write("  enabled = true\n")
+    config.write("  http-timeout = \"30s\"\n")
+    config.write("  insecure-skip-verify = false\n")
+    config.write("  ca-certs = \"\"\n")
+    config.write("  write-concurrency = 40\n")
+    config.write("  write-buffer-size = 1000\n")
+    config.write("\n")
+    config.write("[http]\n")
+    config.write("  enabled = true\n")
+    config.write("  bind-address = \":" + influxdb_http_port + "\"\n")
+    config.write("  auth-enabled = false\n")
+    config.write("  log-enabled = true\n")
+    config.write("  suppress-write-log = false\n")
+    config.write("  write-tracing = false\n")
+    config.write("  flux-enabled = false\n")
+    config.write("  flux-log-enabled = false\n")
+    config.write("  pprof-enabled = true\n")
+    config.write("  pprof-auth-enabled = false\n")
+    config.write("  debug-pprof-enabled = false\n")
+    config.write("  ping-auth-enabled = false\n")
+    config.write("  prom-read-auth-enabled = false\n")
+    config.write("  https-enabled = false\n")
+    config.write("  https-certificate = \"/etc/ssl/influxdb.pem\"\n")
+    config.write("  https-private-key = \"\"\n")
+    config.write("  max-row-limit = 0\n")
+    config.write("  max-connection-limit = 0\n")
+    config.write("  shared-secret = \"\"\n")
+    config.write("  realm = \"InfluxDB\"\n")
+    config.write("  unix-socket-enabled = false\n")
+    config.write("  unix-socket-permissions = \"0777\"\n")
+    config.write("  bind-socket = \"/var/run/influxdb.sock\"\n")
+    config.write("  max-body-size = 25000000\n")
+    config.write("  access-log-path = \"\"\n")
+    config.write("  max-concurrent-write-limit = 0\n")
+    config.write("  max-enqueued-write-limit = 0\n")
+    config.write("  enqueued-write-timeout = 30000000000\n")
+    config.write("\n")
+    config.write("[logging]\n")
+    config.write("  format = \"auto\"\n")
+    config.write("  level = \"info\"\n")
+    config.write("  suppress-logo = false\n")
+    config.write("\n")
+    config.write("[[graphite]]\n")
+    config.write("  enabled = false\n")
+    config.write("  bind-address = \":2003\"\n")
+    config.write("  database = \"graphite\"\n")
+    config.write("  retention-policy = \"\"\n")
+    config.write("  protocol = \"tcp\"\n")
+    config.write("  batch-size = 5000\n")
+    config.write("  batch-pending = 10\n")
+    config.write("  batch-timeout = \"1s\"\n")
+    config.write("  consistency-level = \"one\"\n")
+    config.write("  separator = \".\"\n")
+    config.write("  udp-read-buffer = 0\n")
+    config.write("\n")
+    config.write("[[collectd]]\n")
+    config.write("  enabled = false\n")
+    config.write("  bind-address = \":25826\"\n")
+    config.write("  database = \"collectd\"\n")
+    config.write("  retention-policy = \"\"\n")
+    config.write("  batch-size = 5000\n")
+    config.write("  batch-pending = 10\n")
+    config.write("  batch-timeout = \"10s\"\n")
+    config.write("  read-buffer = 0\n")
+    config.write("  typesdb = \"/usr/share/collectd/types.db\"\n")
+    config.write("  security-level = \"none\"\n")
+    config.write("  auth-file = \"/etc/collectd/auth_file\"\n")
+    config.write("  parse-multivalue-plugin = \"split\"\n")
+    config.write("\n")
+    config.write("[[opentsdb]]\n")
+    config.write("  enabled = false\n")
+    config.write("  bind-address = \":4242\"\n")
+    config.write("  database = \"opentsdb\"\n")
+    config.write("  retention-policy = \"\"\n")
+    config.write("  consistency-level = \"one\"\n")
+    config.write("  tls-enabled = false\n")
+    config.write("  certificate = \"/etc/ssl/influxdb.pem\"\n")
+    config.write("  batch-size = 1000\n")
+    config.write("  batch-pending = 5\n")
+    config.write("  batch-timeout = \"1s\"\n")
+    config.write("  log-point-errors = true\n")
+    config.write("\n")
+    config.write("[[udp]]\n")
+    config.write("  enabled = false\n")
+    config.write("  bind-address = \":8089\"\n")
+    config.write("  database = \"udp\"\n")
+    config.write("  retention-policy = \"\"\n")
+    config.write("  batch-size = 5000\n")
+    config.write("  batch-pending = 10\n")
+    config.write("  read-buffer = 0\n")
+    config.write("  batch-timeout = \"1s\"\n")
+    config.write("  precision = \"\"\n")
+    config.write("\n")
+    config.write("[continuous_queries]\n")
+    config.write("  log-enabled = true\n")
+    config.write("  enabled = true\n")
+    config.write("  query-stats-enabled = false\n")
+    config.write("  run-interval = \"1s\"\n")
+    config.write("\n")
+    config.write("[tls]\n")
+    config.write("  min-version = \"\"\n")
+    config.write("  max-version = \"\"\n")
+    config.close()
+    return influxdb_config_path
+
+
+def generate_configuration(soft_home_dir, pkg_name):
+    config_path = ""
+    if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
+
+        config_path = generate_mongodb_config(soft_home_dir, pkg_name)
+
+    elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_influxdb_config(soft_home_dir, pkg_name)
+
+    return config_path
+
+
+def generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                             systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                             systemd_service_dir, systemd_service_file):
+    create_user_sh = open(create_user_sh_file_path, 'w')
+    create_user_sh.write("#!/usr/bin/bash\n")
+    create_user_sh.write(soft_home_dir + "/bin/mongo 127.0.0.1:" + mongo_client_port + "<< EOF\n")
+    create_user_sh.write("use admin;\n")
+    create_user_sh.write("db.createUser({\n")
+    create_user_sh.write("   user: \"" + username + "\",\n")
+    create_user_sh.write("   pwd: \"" + password + "\",\n")
+    create_user_sh.write("   roles: [{ role : \"root\", db : \"admin\"}]\n")
+    create_user_sh.write("});\n")
+    create_user_sh.write("db.auth(\"" + username + "\", \"" + password + "\");\n")
+    create_user_sh.write("EOF")
+    create_user_sh.close()
+
+    repair_sh_file = user + "-repair.sh"
+    repair_sh_file_path = __sys__.path.join(soft_home_dir, repair_sh_file)
+    repair_sh = open(repair_sh_file_path, 'w')
+    repair_sh.write("#!/usr/bin/bash\n")
+    repair_sh.write("chown -R " + user + ":" + user + " " + soft_home_dir)
+    repair_sh.write("chown -R " + user + ":" + user + " /tmp/mongodb-" + mongo_client_port + ".sock")
+    repair_sh.close()
+
+    mongo_data_dir_path = __sys__.path.join(soft_home_dir, mongo_data_dir)
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/bin/mongod --config " + config_path + " --fork &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/bin/mongod -shutdown --dbpath= " + mongo_data_dir_path)
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=" + user + "\n")
+    service.write("Group=" + user + "\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + soft_home_dir + "/bin/mongod --config " + config_path + " --fork\n")
+    service.write("ExecStop=" + soft_home_dir + "/bin/mongod -shutdown --dbpath= " + mongo_data_dir_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3} {4} {5}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                    systemd_restart_sh_path, repair_sh_file_path,
+                                                    systemd_service_file_path, create_user_sh_file_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_influxdb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                              systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                              , systemd_service_dir, systemd_service_file):
+    create_user_sh = open(create_user_sh_file_path, 'w')
+    create_user_sh.write("#!/usr/bin/bash\n")
+    create_user_sh.write(soft_home_dir + "/usr/bin/influx -host '127.0.0.1' -port '" + influxdb_http_port + "'<< EOF\n")
+    create_user_sh.write("CREATE USER " + username + " WITH PASSWORD '" + password + "' WITH ALL PRIVILEGES;\n")
+    create_user_sh.write("SHOW USERS;\n")
+    create_user_sh.write("EOF")
+    create_user_sh.close()
+
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/usr/bin/influxd -config " + config_path + " &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=" + user + "\n")
+    service.write("Group=" + user + "\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3} {4}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                    systemd_restart_sh_path, systemd_service_file_path,
+                                                    create_user_sh_file_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_service(soft_home_dir, user, config_path):
+    systemd_service_dir = "/usr/lib/systemd/system"
+    systemd_service_file = user + ".service"
+    systemd_service_file_path = __sys__.path.join(soft_home_dir, systemd_service_file)
+    systemd_start_sh_file = user + "-systemd-start.sh"
+    systemd_start_sh_path = __sys__.path.join(soft_home_dir, systemd_start_sh_file)
+    systemd_restart_sh_file = user + "-systemd-restart.sh"
+    systemd_restart_sh_path = __sys__.path.join(soft_home_dir, systemd_restart_sh_file)
+    systemd_stop_sh_file = user + "-systemd-stop.sh"
+    systemd_stop_sh_path = __sys__.path.join(soft_home_dir, systemd_stop_sh_file)
+    pid_file = user + ".pid"
+    pid_file_path = __sys__.path.join(soft_home_dir, pid_file)
+    create_user_sh_file = user + "-create_user.sh"
+    create_user_sh_file_path = __sys__.path.join(soft_home_dir, create_user_sh_file)
+
+    if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
+
+        generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                 systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                                 , systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_influxdb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                  systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                                  , systemd_service_dir, systemd_service_file)
+    return True
+
+
+def create_mongodb_soft_link(soft_home_dir, destination_dir):
+    mongo_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(mongo_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(mongo_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
+def create_influxdb_soft_link(soft_home_dir, destination_dir):
+    mongo_bin_source_dir = soft_home_dir + "/usr/bin"
+    list_of_binary_file = __sys__.listdir(mongo_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(mongo_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
+def create_soft_link(soft_home_dir, pkg_name):
+    destination_dir = "/usr/bin"
+    if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
+
+        create_mongodb_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_influxdb_soft_link(soft_home_dir, destination_dir)
+
+
+def remove_mongodb_soft_link(soft_home_dir, destination_dir):
+    mongo_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(mongo_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
+def remove_influxdb_soft_link(soft_home_dir, destination_dir):
+    mongo_bin_source_dir = soft_home_dir + "/usr/bin"
+    list_of_binary_file = __sys__.listdir(mongo_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
+def remove_soft_link(soft_home_dir, pkg_name):
+    destination_dir = "/usr/bin"
+
+    if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
+
+        remove_mongodb_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
+        remove_influxdb_soft_link(soft_home_dir, destination_dir)
+
+
+def create_soft_user(soft_home_dir, user):
+    create_user_sh_file = user + "-create_user.sh"
+    create_user_sh_file_path = __sys__.path.join(soft_home_dir, create_user_sh_file)
+    command = "sh " + create_user_sh_file_path
+    __sh__.call(command, shell=True)
+
+
+def reload_systemd(user):
+    systemd_service_file = user + ".service"
+    command = "systemctl daemon-reload && systemctl start " + systemd_service_file
+    __sh__.call(command, shell=True)
+
+
+def start_program(soft_home_dir, user):
+    create_user(user)
+    change_owner(soft_home_dir, user)
+    reload_systemd(user)
+    __time__.sleep(5)
+    create_soft_user(soft_home_dir, user)
+    create_soft_link(soft_home_dir, user)
+
+    return True
+
+
+def install(__soft):
+    __list_of_pkg_path = []
+    for __list_of_pkg_path in get_list_of_soft_path():
+        if __regx__.compile("%s" % __soft, __regx__.IGNORECASE).search(__list_of_pkg_path):
+            soft_home_dir = extractive_pkg(__list_of_pkg_path, __soft)
+
+            __compile__(soft_home_dir, __soft)
+
+            config_path = generate_configuration(soft_home_dir, __soft)
+
+            generate_service(soft_home_dir, __soft, config_path)
+
+            start_program(soft_home_dir, __soft)
