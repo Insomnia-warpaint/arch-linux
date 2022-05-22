@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import os as __sys__
 import re as __regx__
 import shutil as __sh_util__
@@ -21,6 +20,7 @@ influxdb_meta_dir = "meta"
 influxdb_data_dir = "data"
 influxdb_wal_dir = "wal"
 influxdb_http_port = "8086"
+list_of_mysql_port = ["3306"]
 
 
 def get_list_of_soft_path():
@@ -298,6 +298,53 @@ def generate_influxdb_config(soft_home_dir, pkg_name):
     return influxdb_config_path
 
 
+def generate_mysql_config(soft_home_dir, pkg_name):
+    mysql_system_conf_dir = "/etc"
+    mysql_data_dir = "data"
+    mysql_config = "my.cnf"
+    mysql_home_conf_path = __sys__.path.join(soft_home_dir, mysql_config)
+    mysql = open(mysql_home_conf_path, "w")
+    mysql.write("[mysqld]\n")
+    mysql.write("user=" + user + "\n")
+    mysql.write("basedir=" + soft_home_dir + "\n")
+    mysql.write("\n")
+    mysql.write("[mysqld_multi]\n")
+    mysql.write("mysqld=" + soft_home_dir + "/bin/mysqld_safe\n")
+    mysql.write("mysqladmin=" + soft_home_dir + "/bin/mysqladmin\n")
+    mysql.write("log=" + soft_home_dir + "/mysqld_multi.log\n")
+    mysql.write("user=root\n")
+    mysql.write("pass=" + password + "\n")
+
+    for mysql_port in list_of_mysql_port:
+        mysql_base_dir_path = __sys__.path.join(soft_home_dir, mysql_port)
+        if not __sys__.path.exists(mysql_base_dir_path):
+            __sys__.mkdir(mysql_base_dir_path)
+
+        mysql_data_dir_path = __sys__.path.join(mysql_base_dir_path, mysql_data_dir)
+        if not __sys__.path.exists(mysql_data_dir_path):
+            __sys__.mkdir(mysql_data_dir_path)
+
+        mysql_error_log_path = __sys__.path.join(mysql_base_dir_path, "error" + mysql_port + ".log")
+        if not __sys__.path.exists(mysql_error_log_path):
+            __sys__.mkdir(mysql_error_log_path)
+
+        mysql.write("[mysqld" + mysql_port + "]\n")
+        mysql.write("mysqld=mysqld\n")
+        mysql.write("mysqladmin=mysqladmin\n")
+        mysql.write("datadir=" + mysql_data_dir_path + "\n")
+        mysql.write("port=" + mysql_port + "\n")
+        mysql.write("log-error=" + mysql_error_log_path + "\n")
+        mysql.write("socket=/tmp/mysql_" + mysql_port + ".sock\n")
+        mysql.write("character-set-server=utf8mb4\n")
+        mysql.write("default-storage-engine=INNODB\n")
+        mysql.write("group_concat_max_len=-1\n")
+
+    mysql.close()
+    __sh_util__.copy(mysql_home_conf_path, mysql_system_conf_dir)
+    mysql_config_path = __sys__.path.join(mysql_system_conf_dir, mysql_config)
+    return mysql_config_path
+
+
 def generate_configuration(soft_home_dir, pkg_name):
     config_path = ""
     if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
@@ -306,6 +353,9 @@ def generate_configuration(soft_home_dir, pkg_name):
 
     elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
         config_path = generate_influxdb_config(soft_home_dir, pkg_name)
+
+    elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_mysql_config(soft_home_dir, pkg_name)
 
     return config_path
 
@@ -372,8 +422,8 @@ def generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_f
 
     __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
     command = "chmod +x {0} {1} {2} {3} {4} {5}".format(systemd_start_sh_path, systemd_stop_sh_path,
-                                                    systemd_restart_sh_path, repair_sh_file_path,
-                                                    systemd_service_file_path, create_user_sh_file_path)
+                                                        systemd_restart_sh_path, repair_sh_file_path,
+                                                        systemd_service_file_path, create_user_sh_file_path)
     __sh__.call(command, shell=True)
 
 
@@ -431,6 +481,73 @@ def generate_influxdb_service(soft_home_dir, user, config_path, systemd_service_
     __sh__.call(command, shell=True)
 
 
+def generate_mysql_service(soft_home_dir, user, config_path):
+    systemd_service_dir = "/etc/init.d"
+    systemd_service_file = "mysql"
+    systemd_service_file_path = __sys__.path.join(systemd_service_dir, systemd_service_file)
+    systemd_sh = open(systemd_service_file_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("basedir=${MYSQL_HOME}\n")
+    systemd_sh.write("bindir=${MYSQL_HOME}/${MysqlBin}\n")
+    systemd_sh.write("if test -x $bindir/mysqld_multi\n")
+    systemd_sh.write("then\n")
+    systemd_sh.write("  mysqld_multi=\"$bindir/mysqld_multi\";\n")
+    systemd_sh.write("else\n")
+    systemd_sh.write("  echo \"Can't execute $bindir/mysqld_multi from dir $basedir\";\n")
+    systemd_sh.write("  exit;\n")
+    systemd_sh.write("fi\n")
+    systemd_sh.write("case \"$1\" in\n")
+    systemd_sh.write("    'start' )\n")
+    systemd_sh.write("\"$mysqld_multi\" start $2\n")
+    systemd_sh.write("        ;;\n")
+    systemd_sh.write("    'stop' )\n")
+    systemd_sh.write("\"$mysqld_multi\" stop $2\n")
+    systemd_sh.write("    'report' )\n")
+    systemd_sh.write("\"$mysqld_multi\" report $2\n")
+    systemd_sh.write("    'restart' )\n")
+    systemd_sh.write("\"$mysqld_multi\" stop $2\n")
+    systemd_sh.write("\"$mysqld_multi\" start $2\n")
+    systemd_sh.write("    *)\n")
+    systemd_sh.write("        echo \"Usage: $0 {start|stop|report|restart}\" >&2\n")
+    systemd_sh.write("        ;;\n")
+    systemd_sh.write("esac")
+    systemd_sh.close()
+
+    for mysql_port in list_of_mysql_port:
+        mysql_create_user_sql_file = user + mysql_port + "-create_user.sql"
+        mysql_create_user_sql_file_path = __sys__.path.join(soft_home_dir, mysql_create_user_sql_file)
+        mysql_sql = open(mysql_create_user_sql_file_path, 'w')
+        mysql_sql.write("alter user 'root'@'localhost' identified by '" + password + "';\n")
+        mysql_sql.write(
+            "grant all privileges on *.* to 'root'@'%' identified by '" + password + "' with grant option;\n")
+        mysql_sql.write("flush privileges;\n")
+        mysql_sql.write("show grants for root;\n")
+        mysql_sql.write("select user,authentication_string,plugin,host from mysql.user;")
+        mysql_sql.close()
+
+        mysql_change_password_sh_file = user + mysql_port + "-change_password.sh"
+        mysql_change_password_sh_file_path = __sys__.path.join(soft_home_dir, mysql_change_password_sh_file)
+        mysql_sh = open(mysql_change_password_sh_file_path, 'w')
+        mysql_sh.write("#!/usr/bin/bash\n")
+        mysql_sh.write("case $1 in\n")
+        mysql_sh.write("  '-p')\n")
+        mysql_sh.write(
+            soft_home_dir + "/bin/mysql -h127.0.0.1 -P" + mysql_port + " -uroot -Dmysql -p$2 --connect-expired-password < " + mysql_create_user_sh_file_path + " && \ \n")
+        mysql_sh.write(soft_home_dir + "/bin/mysqladmin -h127.0.0.1 -P" + mysql_port + " -uroot shutdown && \ \n")
+        mysql_sh.write(soft_home_dir + "/bin/mysqld_multi start ${MYSQL_PORT[i]}\n")
+        mysql_sh.write(soft_home_dir + "/bin/mysqld_multi report\n")
+        mysql_sh.write("     ;;\n")
+        mysql_sh.write("esac")
+        mysql_sh.close()
+        command = soft_home_dir + "/bin/mysqld --defaults-file=" + config_path + " --initialize --basedir=" + soft_home_dir + " --datadir=" + mysql_data_dir_path
+        __sh__.call(command, shell=True)
+        initialize_password = input("请输入上方 mysql" + mysql_port + "实例的密码:\n")
+        command = "sh " + mysql_change_password_sh_file_path + " -p " + initialize_password
+        __sh__.call(command, shell=True)
+        command = soft_home_dir + "/bin/mysqld_multi report"
+        __sh__.call(command, shell=True)
+
+
 def generate_service(soft_home_dir, user, config_path):
     systemd_service_dir = "/usr/lib/systemd/system"
     systemd_service_file = user + ".service"
@@ -456,6 +573,9 @@ def generate_service(soft_home_dir, user, config_path):
         generate_influxdb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
                                   systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
                                   , systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_mysql_service(soft_home_dir, user, config_path)
     return True
 
 
@@ -474,15 +594,29 @@ def create_mongodb_soft_link(soft_home_dir, destination_dir):
 
 
 def create_influxdb_soft_link(soft_home_dir, destination_dir):
-    mongo_bin_source_dir = soft_home_dir + "/usr/bin"
-    list_of_binary_file = __sys__.listdir(mongo_bin_source_dir)
+    influxdb_bin_source_dir = soft_home_dir + "/usr/bin"
+    list_of_binary_file = __sys__.listdir(influxdb_bin_source_dir)
 
     if not list_of_binary_file:
         return
 
     for binary_file in list_of_binary_file:
         env_path = __sys__.path.join(destination_dir, binary_file)
-        binary_path = __sys__.path.join(mongo_bin_source_dir, binary_file)
+        binary_path = __sys__.path.join(influxdb_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
+def create_mysql_soft_link(soft_home_dir, destination_dir):
+    mysql_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(mysql_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(mysql_bin_source_dir, binary_file)
         if not __sys__.path.exists(env_path):
             __sys__.symlink(binary_path, env_path)
 
@@ -490,11 +624,13 @@ def create_influxdb_soft_link(soft_home_dir, destination_dir):
 def create_soft_link(soft_home_dir, pkg_name):
     destination_dir = "/usr/bin"
     if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
-
         create_mongodb_soft_link(soft_home_dir, destination_dir)
 
     elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
         create_influxdb_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_mysql_soft_link(soft_home_dir, destination_dir)
 
 
 def remove_mongodb_soft_link(soft_home_dir, destination_dir):
@@ -513,8 +649,23 @@ def remove_mongodb_soft_link(soft_home_dir, destination_dir):
 
 
 def remove_influxdb_soft_link(soft_home_dir, destination_dir):
-    mongo_bin_source_dir = soft_home_dir + "/usr/bin"
-    list_of_binary_file = __sys__.listdir(mongo_bin_source_dir)
+    influxdb_bin_source_dir = soft_home_dir + "/usr/bin"
+    list_of_binary_file = __sys__.listdir(influxdb_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
+def remove_mysql_soft_link(soft_home_dir, destination_dir):
+    mysql_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(mysql_bin_source_dir)
 
     if not list_of_binary_file:
         return
@@ -531,11 +682,13 @@ def remove_soft_link(soft_home_dir, pkg_name):
     destination_dir = "/usr/bin"
 
     if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
-
         remove_mongodb_soft_link(soft_home_dir, destination_dir)
 
     elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
         remove_influxdb_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
+        remove_mysql_soft_link(soft_home_dir, destination_dir)
 
 
 def create_soft_user(soft_home_dir, user):
@@ -554,10 +707,13 @@ def reload_systemd(user):
 def start_program(soft_home_dir, user):
     create_user(user)
     change_owner(soft_home_dir, user)
-    reload_systemd(user)
-    __time__.sleep(5)
-    create_soft_user(soft_home_dir, user)
-    create_soft_link(soft_home_dir, user)
+    if __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_soft_link(soft_home_dir, user)
+    else:
+        reload_systemd(user)
+        __time__.sleep(5)
+        create_soft_user(soft_home_dir, user)
+        create_soft_link(soft_home_dir, user)
 
     return True
 
@@ -567,11 +723,7 @@ def install(__soft):
     for __list_of_pkg_path in get_list_of_soft_path():
         if __regx__.compile("%s" % __soft, __regx__.IGNORECASE).search(__list_of_pkg_path):
             soft_home_dir = extractive_pkg(__list_of_pkg_path, __soft)
-
             __compile__(soft_home_dir, __soft)
-
             config_path = generate_configuration(soft_home_dir, __soft)
-
             generate_service(soft_home_dir, __soft, config_path)
-
             start_program(soft_home_dir, __soft)
