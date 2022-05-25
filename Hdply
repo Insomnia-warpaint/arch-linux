@@ -1,26 +1,158 @@
+#!/usr/bin/python3
+import argparse
 import os as __sys__
 import re as __regx__
 import shutil as __sh_util__
+import sys
 import tarfile as __tar__
 import subprocess as __sh__
 import time as __time__
 import zipfile as __zip__
 
-# install_dir = "/home/insomnia/soft"
-username = "hdkj"
-password = "Hdkj123!"
-install_dir = "/home"
-soft_dir = "soft"
+parse = argparse.ArgumentParser()
+parse.add_argument("--username", type=str, default="hdkj")
+parse.add_argument("--password", type=str, default="Hdkj123!")
+parse.add_argument("--install_dir", type=str, default="/home")
+parse.add_argument("--soft_dir", type=str, default="soft")
+parse.add_argument("--mongo_data_dir", type=str, default="mongo_data")
+parse.add_argument("--mongo_log_dir", type=str, default="mongo_logs")
+parse.add_argument("--mongo_port", type=str, default="27017")
+parse.add_argument("--influxdb_config", type=str, default="influxdb.config")
+parse.add_argument("--influxdb_meta_dir", type=str, default="meta")
+parse.add_argument("--influxdb_data_dir", type=str, default="data")
+parse.add_argument("--influxdb_wal_dir", type=str, default="wal")
+parse.add_argument("--influxdb_http_port", type=str, default="8086")
+parse.add_argument("--influxdb_bind_port", type=str, default="8088")
+parse.add_argument("--rabbitmq_port", type=str, default="15672")
+parse.add_argument("--rabbitmq_j_port", type=str, default="5672")
+parse.add_argument("--list_of_mysql_port", type=str, default="3306")
+parse.add_argument("--mysql_data_dir", type=str, default="data")
+parse.add_argument("--redis_port", type=str, default="6379")
+parse.add_argument("--elasticsearch_port", type=str, default="9200")
+parse.add_argument("--eureka_port", type=str, default="8099")
+parse.add_argument("--center_port", type=str, default="8092")
+parse.add_argument("--configure_port", type=str, default="8090")
+parse.add_argument("--configure_ftp_port", type=str, default="8091")
+parse.add_argument("--agent_port", type=str, default="8093")
+parse.add_argument("--iotstream_port", type=str, default="30330")
+parse.add_argument("--hdiot_home", type=str, default="hdiot2.0")
+parse.add_argument("--redis_ip", type=str, default="127.0.0.1")
+parse.add_argument("--mysql_ip", type=str, default="127.0.0.1")
+parse.add_argument("--influxdb_ip", type=str, default="127.0.0.1")
+parse.add_argument("--elasticsearch_ip", type=str, default="127.0.0.1")
+parse.add_argument("--rabbitmq_ip", type=str, default="127.0.0.1")
+parse.add_argument("--mongodb_ip", type=str, default="127.0.0.1")
+parse.add_argument("--uniwater_ip", type=str, default="127.0.0.1")
+parse.add_argument("--uniwater_port", type=str, default="8081")
+parse.add_argument("--wlw_app_code_of_uniwater", type=str, default="WLW")
+parse.add_argument("--install", type=str, default="")
+
+
+# username = "sxsw"
+# password = "Sxsw7474!"
+# install_dir = "/home"
+# soft_dir = "soft"
+# temp_dir = "/tmp/temp_of_pkg"
+# mongo_data_dir = "mongo_data"
+# mongo_log_dir = "mongo_logs"
+# mongo_port = "8869"
+# mongo_database = "hdiot"
+# influxdb_config = "influxdb.config"
+# influxdb_meta_dir = "meta"
+# influxdb_data_dir = "data"
+# influxdb_wal_dir = "wal"
+# influxdb_http_port = "8086"
+# influxdb_bind_port = "8088"
+# influxdb_database = "hdiot"
+# rabbitmq_port = "15672"
+# rabbitmq_j_port = "5672"
+# list_of_mysql_port = ["3306"]
+# mysql_data_dir = "data"
+# mysql_system_conf_dir = "/etc"
+# mysql_config = "my.cnf"
+# mysql_database = "hdiot"
+# redis_port = "6379"
+# elasticsearch_port = "9200"
+# elasticsearch_user_name = "elastic"
+# elasticsearch_user_password = "elastic"
+# elasticsearch_database = "hdiot"
+# eureka_port = "8099"
+# center_port = "8092"
+# configure_port = "8090"
+# configure_ftp_port = "8091"
+# agent_port = "8093"
+# iotstream_port = "30330"
+# iot_config_yml = "application.yml"
+# hdiot_home = "hdiot2.0"
+# hdiot_sql_path = __sys__.path.join(__sys__.path.dirname(__sys__.path.abspath(__file__)), hdiot_home)
+# local_ip = __sys__.popen("hostname -I | awk '{ print $1 }'").read().strip().replace("\n", "")
+# wlw_app_code_of_uniwater = "WLW"
+# redis_ip = "127.0.0.1"
+# mysql_ip = "127.0.0.1"
+# influxdb_ip = "127.0.0.1"
+# elasticsearch_ip = "127.0.0.1"
+# rabbitmq_ip = "127.0.0.1"
+# mongodb_ip = "127.0.0.1"
+# uniwater_ip = "127.0.0.1"
+# uniwater_port = "8081"
+# redis_ip = input("请输入 redis IP 地址:")
+# mysql_ip = input("请输入 mysql IP 地址:")
+# influxdb_ip = input("请输入 influxdb IP 地址:")
+# elasticsearch_ip = input("请输入 elasticsearch IP 地址:")
+# rabbitmq_ip = input("请输入 rabbitMq IP 地址:")
+# mongodb_ip = input("请输入 mongodb IP 地址:")
+# uniwater_ip = input("请输入 uniwater IP 地址:")
+
+args = parse.parse_args()
+username = args.username
+password = args.password
+install_dir = args.install_dir
+soft_dir = args.soft_dir
+mongo_data_dir = args.mongo_data_dir
+mongo_log_dir = args.mongo_log_dir
+mongo_port = args.mongo_port
+influxdb_config = args.influxdb_config
+influxdb_meta_dir = args.influxdb_meta_dir
+influxdb_data_dir = args.influxdb_data_dir
+influxdb_wal_dir = args.influxdb_wal_dir
+influxdb_http_port = args.influxdb_http_port
+influxdb_bind_port = args.influxdb_bind_port
+rabbitmq_port = args.rabbitmq_port
+rabbitmq_j_port = args.rabbitmq_j_port
+list_of_mysql_port = str(args.list_of_mysql_port).split()
+mysql_data_dir = args.mysql_data_dir
+redis_port = args.redis_port
+elasticsearch_port = args.elasticsearch_port
+eureka_port = args.eureka_port
+center_port = args.center_port
+configure_port = args.configure_port
+configure_ftp_port = args.configure_ftp_port
+agent_port = args.agent_port
+iotstream_port = args.iotstream_port
+hdiot_home = args.hdiot_home
+wlw_app_code_of_uniwater = args.wlw_app_code_of_uniwater
+redis_ip = args.redis_ip
+mysql_ip = args.mysql_ip
+influxdb_ip = args.influxdb_ip
+elasticsearch_ip = args.elasticsearch_ip
+rabbitmq_ip = args.rabbitmq_ip
+mongodb_ip = args.mongodb_ip
+uniwater_ip = args.uniwater_ip
+uniwater_port = args.uniwater_port
+
 temp_dir = "/tmp/temp_of_pkg"
-mongo_data_dir = "mongo_data"
-mongo_log_dir = "mongo_logs"
-mongo_client_port = "27017"
-influxdb_config = "influxdb.config"
-influxdb_meta_dir = "meta"
-influxdb_data_dir = "data"
-influxdb_wal_dir = "wal"
-influxdb_http_port = "8086"
-list_of_mysql_port = ["3306"]
+mysql_system_conf_dir = "/etc"
+mysql_config = "my.cnf"
+mysql_database = "hdiot"
+mongo_database = "hdiot"
+influxdb_database = "hdiot"
+elasticsearch_user_name = "elastic"
+elasticsearch_user_password = "elastic"
+elasticsearch_database = "hdiot"
+iot_config_yml = "application.yml"
+hdiot_sql = "hdiot2.0.sql"
+hdiot_sql_path = __sys__.path.join(__sys__.path.dirname(__sys__.path.abspath(__file__)), hdiot_home, hdiot_sql)
+local_ip = __sys__.popen("hostname -I | awk '{ print $1 }'").read().strip().replace("\n", "")
 
 
 def get_list_of_soft_path():
@@ -38,7 +170,7 @@ def extractive_pkg(filename, pkg_name):
         __sys__.mkdir(temp_dir)
 
     if __sys__.path.exists(soft_home_dir):
-        return soft_home_dir
+        return
 
     tar = __tar__.open(filename)
     tar.extractall(temp_dir)
@@ -49,16 +181,13 @@ def extractive_pkg(filename, pkg_name):
     for soft_dir_of_temp in list_of_temp_dir:
         soft_path = __sys__.path.join(temp_dir, soft_dir_of_temp)
         __sh_util__.move(soft_path, soft_home_dir)
-
     return soft_home_dir
 
 
 def __compile__(soft_home_dir, pkg_name):
-    print(soft_home_dir)
     if __regx__.compile("(otp|erlang)", __regx__.IGNORECASE).search(soft_home_dir):
 
         command = "cd " + soft_home_dir + " && ./configure && make && make install"
-
         __sh__.call(command, shell=True)
 
     elif __regx__.compile("(nginx)", __regx__.IGNORECASE).search(soft_home_dir):
@@ -77,7 +206,9 @@ def __compile__(soft_home_dir, pkg_name):
                                           "--prefix=" + soft_home_dir + " --pid-path=" + soft_home_dir + "/nginx.pid && " \
                                                                                                          "make && make install"
         __sh__.call(command, shell=True)
-
+    elif __regx__.compile("(redis)", __regx__.IGNORECASE).search(soft_home_dir):
+        command = "cd " + soft_home_dir + " && make && make PREFIX=" + soft_home_dir + " install"
+        __sh__.call(command, shell=True)
     return True
 
 
@@ -88,6 +219,11 @@ def create_user(user):
 
 
 def change_owner(soft_home_dir, user):
+    if __regx__.compile("(nginx|rabbitmq|otp|erlang)", __regx__.IGNORECASE).search(soft_home_dir):
+        command = "chown -R root:root " + soft_home_dir
+        __sh__.call(command, shell=True)
+        return
+
     command = "chown -R " + user + ":" + user + " " + soft_home_dir
     __sh__.call(command, shell=True)
     return True
@@ -118,7 +254,7 @@ def generate_mongodb_config(soft_home_dir, pkg_name):
     config.write("   fork: false\n")
     config.write("net:\n")
     config.write("   bindIpAll: true\n")
-    config.write("   port: " + mongo_client_port + "\n")
+    config.write("   port: " + mongo_port + "\n")
     config.write("security:\n")
     config.write("   authorization: \"enabled\"\n")
     config.close()
@@ -299,13 +435,10 @@ def generate_influxdb_config(soft_home_dir, pkg_name):
 
 
 def generate_mysql_config(soft_home_dir, pkg_name):
-    mysql_system_conf_dir = "/etc"
-    mysql_data_dir = "data"
-    mysql_config = "my.cnf"
     mysql_home_conf_path = __sys__.path.join(soft_home_dir, mysql_config)
     mysql = open(mysql_home_conf_path, "w")
     mysql.write("[mysqld]\n")
-    mysql.write("user=" + user + "\n")
+    mysql.write("user=" + pkg_name + "\n")
     mysql.write("basedir=" + soft_home_dir + "\n")
     mysql.write("\n")
     mysql.write("[mysqld_multi]\n")
@@ -314,6 +447,7 @@ def generate_mysql_config(soft_home_dir, pkg_name):
     mysql.write("log=" + soft_home_dir + "/mysqld_multi.log\n")
     mysql.write("user=root\n")
     mysql.write("pass=" + password + "\n")
+    mysql.write("\n")
 
     for mysql_port in list_of_mysql_port:
         mysql_base_dir_path = __sys__.path.join(soft_home_dir, mysql_port)
@@ -324,9 +458,10 @@ def generate_mysql_config(soft_home_dir, pkg_name):
         if not __sys__.path.exists(mysql_data_dir_path):
             __sys__.mkdir(mysql_data_dir_path)
 
-        mysql_error_log_path = __sys__.path.join(mysql_base_dir_path, "error" + mysql_port + ".log")
+        mysql_error_log_path = __sys__.path.join(mysql_base_dir_path, "error-" + mysql_port + ".log")
         if not __sys__.path.exists(mysql_error_log_path):
-            __sys__.mkdir(mysql_error_log_path)
+            mysql_error = open(mysql_error_log_path, 'w')
+            mysql_error.close()
 
         mysql.write("[mysqld" + mysql_port + "]\n")
         mysql.write("mysqld=mysqld\n")
@@ -337,7 +472,7 @@ def generate_mysql_config(soft_home_dir, pkg_name):
         mysql.write("socket=/tmp/mysql_" + mysql_port + ".sock\n")
         mysql.write("character-set-server=utf8mb4\n")
         mysql.write("default-storage-engine=INNODB\n")
-        mysql.write("group_concat_max_len=-1\n")
+        mysql.write("group_concat_max_len=20480\n")
 
     mysql.close()
     __sh_util__.copy(mysql_home_conf_path, mysql_system_conf_dir)
@@ -345,10 +480,206 @@ def generate_mysql_config(soft_home_dir, pkg_name):
     return mysql_config_path
 
 
-def generate_configuration(soft_home_dir, pkg_name):
+def generate_redis_config(soft_home_dir, pkg_name):
+    redis_config = pkg_name + ".conf"
+    redis_config_path = __sys__.path.join(soft_home_dir, redis_config)
+    config = open(redis_config_path, 'a+')
+    config.writelines("requirepass " + password + "\n")
+    config.close()
+    return redis_config_path
+
+
+def generate_elasticsearch_config(soft_home_dir, pkg_name):
+    elasticsearch_config = pkg_name + ".yml"
+    elasticsearch_config_dir = "config"
+    elasticsearch_config_path = __sys__.path.join(soft_home_dir, elasticsearch_config_dir, elasticsearch_config)
+    config = open(elasticsearch_config_path, 'w+')
+    config.write("# ======================== Elasticsearch Configuration =========================\n")
+    config.write("#\n")
+    config.write("# NOTE: Elasticsearch comes with reasonable defaults for most settings.\n")
+    config.write("#       Before you set out to tweak and tune the configuration, make sure you\n")
+    config.write("#       understand what are you trying to accomplish and the consequences.\n")
+    config.write("#\n")
+    config.write("# The primary way of configuring a node is via this file. This template lists\n")
+    config.write("# the most important settings you may want to configure for a production cluster.\n")
+    config.write("#\n")
+    config.write("# Please consult the documentation for further information on configuration options:\n")
+    config.write("# https://www.elastic.co/guide/en/elasticsearch/reference/index.html\n")
+    config.write("#\n")
+    config.write("# ---------------------------------- Cluster -----------------------------------\n")
+    config.write("#\n")
+    config.write("# Use a descriptive name for your cluster:\n")
+    config.write("#\n")
+    config.write("#cluster.name: my-application\n")
+    config.write("#\n")
+    config.write("# ------------------------------------ Node ------------------------------------\n")
+    config.write("#\n")
+    config.write("# Use a descriptive name for the node:\n")
+    config.write("#\n")
+    config.write("#node.name: node-1\n")
+    config.write("#\n")
+    config.write("# Add custom attributes to the node:\n")
+    config.write("#\n")
+    config.write("#node.attr.rack: r1\n")
+    config.write("#\n")
+    config.write("# ----------------------------------- Paths ------------------------------------\n")
+    config.write("#\n")
+    config.write("# Path to directory where to store the data (separate multiple locations by comma):\n")
+    config.write("#\n")
+    config.write("path.data: /home/elasticsearch/data\n")
+    config.write("#\n")
+    config.write("# Path to log files:\n")
+    config.write("#\n")
+    config.write("path.logs: /home/elasticsearch/logs\n")
+    config.write("#\n")
+    config.write("# ----------------------------------- Memory -----------------------------------\n")
+    config.write("#\n")
+    config.write("# Lock the memory on startup:\n")
+    config.write("#\n")
+    config.write("#bootstrap.memory_lock: true\n")
+    config.write("#\n")
+    config.write("# Make sure that the heap size is set to about half the memory available\n")
+    config.write("# on the system and that the owner of the process is allowed to use this\n")
+    config.write("# limit.\n")
+    config.write("#\n")
+    config.write("# Elasticsearch performs poorly when the system is swapping the memory.\n")
+    config.write("#\n")
+    config.write("# ---------------------------------- Network -----------------------------------\n")
+    config.write("#\n")
+    config.write("# By default Elasticsearch is only accessible on localhost. Set a different\n")
+    config.write("# address here to expose this node on the network:\n")
+    config.write("#\n")
+    config.write("#network.host: 192.168.0.1\n")
+    config.write("#\n")
+    config.write("# By default Elasticsearch listens for HTTP traffic on the first free port it\n")
+    config.write("# finds starting at 9200. Set a specific HTTP port here:\n")
+    config.write("#\n")
+    config.write("http.port: " + elasticsearch_port + "\n")
+    config.write("#\n")
+    config.write("# For more information, consult the network module documentation.\n")
+    config.write("#\n")
+    config.write("# --------------------------------- Discovery ----------------------------------\n")
+    config.write("#\n")
+    config.write("# Pass an initial list of hosts to perform discovery when this node is started:\n")
+    config.write("# The default list of hosts is [\"127.0.0.1\", \"[::1]\"]\n")
+    config.write("#\n")
+    config.write("#discovery.seed_hosts: [\"host1\", \"host2\"]\n")
+    config.write("#\n")
+    config.write("# Bootstrap the cluster using an initial set of master-eligible nodes:\n")
+    config.write("#\n")
+    config.write("#cluster.initial_master_nodes: [\"node-1\", \"node-2\"]\n")
+    config.write("#\n")
+    config.write("# For more information, consult the discovery and cluster formation module documentation.\n")
+    config.write("#\n")
+    config.write("# --------------------------------- Readiness ----------------------------------\n")
+    config.write("#\n")
+    config.write("# Enable an unauthenticated TCP readiness endpoint on localhost\n")
+    config.write("#\n")
+    config.write("#readiness.port: 9399\n")
+    config.write("#\n")
+    config.write("# ---------------------------------- Various -----------------------------------\n")
+    config.write("#\n")
+    config.write("# Allow wildcard deletion of indices:\n")
+    config.write("#\n")
+    config.write("xpack.security.enabled: false\n")
+    config.write("action.destructive_requires_name: false\n")
+    config.write("http.cors.enabled: false\n")
+    config.write("http.cors.allow-origin: \"*\"\n")
+    config.write("ingest.geoip.downloader.enabled: false\n")
+    config.write("\n")
+    config.close()
+
+    return elasticsearch_config_path
+
+
+def generate_nginx_config(soft_home_dir, pkg_name):
+    nginx_config = pkg_name + ".conf"
+    nginx_config_dir = "conf"
+
+    nginx_conf_path = __sys__.path.join(soft_home_dir, nginx_config_dir, nginx_config)
+    config = open(nginx_conf_path, "w+")
+    config.write("user  " + pkg_name + ";\n")
+    config.write("worker_processes  1;\n")
+    config.write("\n")
+    config.write("error_log  " + soft_home_dir + "/logs/error.log warn;\n")
+    config.write("error_log  " + soft_home_dir + "/logs/error.log info;\n")
+    config.write("error_log  " + soft_home_dir + "/logs/error.log notice;\n")
+    config.write("pid        " + soft_home_dir + "/nginx.pid;\n")
+    config.write("\n")
+    config.write("\n")
+    config.write("events {\n")
+    config.write("    worker_connections  1024;\n")
+    config.write("}\n")
+    config.write("\n")
+    config.write("\n")
+    config.write("http {\n")
+    config.write("    include       " + soft_home_dir + "/conf/mime.types;\n")
+    config.write("    default_type  application/octet-stream;\n")
+    config.write("\n")
+    config.write("    log_format  main  '$remote_addr - $remote_user [$time_local]  \"$request\" '\n")
+    config.write("                      '$status $body_bytes_sent \"$http_referer\"'\n")
+    config.write("                      '\"$http_user_agent\"\"$http_x_forwarded_for\"';\n")
+    config.write("\n")
+    config.write("    access_log  " + soft_home_dir + "/logs/access.log  main;\n")
+    config.write("\n")
+    config.write("    sendfile        on;\n")
+    config.write("    #tcp_nopush     on;\n")
+    config.write("\n")
+    config.write("    keepalive_timeout  65;\n")
+    config.write("    underscores_in_headers on;\n")
+    config.write("    #gzip  on;\n")
+    config.write("\n")
+    config.write("    include " + soft_home_dir + "/conf.d/*.conf;\n")
+    config.write("#用于tomcat反向代理,解决nginx 504错误 \n")
+    config.write("    proxy_connect_timeout 300;\n")
+    config.write("    proxy_send_timeout 300;\n")
+    config.write("    proxy_read_timeout 300;\n")
+    config.write("    proxy_buffer_size 16k;\n")
+    config.write("    proxy_buffers 4 64k;\n")
+    config.write("    proxy_busy_buffers_size 128k;\n")
+    config.write("    proxy_temp_file_write_size 128k;\n")
+    config.write("}\n")
+    config.close()
+
+    nginx_conf_d_dir = "conf.d"
+    nginx_conf_d_dir_path = __sys__.path.join(soft_home_dir, nginx_conf_d_dir)
+
+    if not __sys__.path.exists(nginx_conf_d_dir_path):
+        __sys__.mkdir(nginx_conf_d_dir_path)
+
+    iot_web_conf = "iot-web.conf"
+    iot_web_conf_path = __sys__.path.join(nginx_conf_d_dir_path, iot_web_conf)
+    config = open(iot_web_conf_path, "w+")
+    config.write("server{\n")
+    config.write("    listen  80;\n")
+    config.write("    server_name localhost;\n")
+    config.write("    client_max_body_size 100M;\n")
+    config.write("    location / {\n")
+    config.write("    #页面目录;\n")
+    config.write("            root   " + __sys__.path.join(install_dir, hdiot_home) + "/hdiot-web;\n")
+    config.write("            #root   html;\n")
+    config.write("            index  index.html index.htm;\n")
+    config.write("        }\n")
+    config.write("   \n")
+    config.write("       #hdiot-configure 地址;\n")
+    config.write("       #location /hdiot/v1.0/configure {\n")
+    config.write("       #    proxy_pass   http://127.0.0.1:" + configure_port + ";\n")
+    config.write("       #}\n")
+    config.write("       #hdiot2-configure 地址;\n")
+    config.write("        location /hdiot/2.0 {\n")
+    config.write("            proxy_pass   http://127.0.0.1:" + configure_port + ";\n")
+    config.write("        }\n")
+    config.write("        location /export {\n")
+    config.write("	    proxy_pass  http://127.0.0.1:" + configure_port + "/hdiot/2.0/commonCtrl/export/excel;\n")
+    config.write("    	}\n")
+    config.write("    }\n")
+    config.close()
+    return nginx_conf_path
+
+
+def generate_configuration_for_env(soft_home_dir, pkg_name):
     config_path = ""
     if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
-
         config_path = generate_mongodb_config(soft_home_dir, pkg_name)
 
     elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
@@ -356,6 +687,15 @@ def generate_configuration(soft_home_dir, pkg_name):
 
     elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
         config_path = generate_mysql_config(soft_home_dir, pkg_name)
+
+    elif __regx__.compile("(redis)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_redis_config(soft_home_dir, pkg_name)
+
+    elif __regx__.compile("(elasticsearch|elastic)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_elasticsearch_config(soft_home_dir, pkg_name)
+
+    elif __regx__.compile("(nginx)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_nginx_config(soft_home_dir, pkg_name)
 
     return config_path
 
@@ -365,7 +705,7 @@ def generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_f
                              systemd_service_dir, systemd_service_file):
     create_user_sh = open(create_user_sh_file_path, 'w')
     create_user_sh.write("#!/usr/bin/bash\n")
-    create_user_sh.write(soft_home_dir + "/bin/mongo 127.0.0.1:" + mongo_client_port + "<< EOF\n")
+    create_user_sh.write(soft_home_dir + "/bin/mongo 127.0.0.1:" + mongo_port + " << EOF\n")
     create_user_sh.write("use admin;\n")
     create_user_sh.write("db.createUser({\n")
     create_user_sh.write("   user: \"" + username + "\",\n")
@@ -381,7 +721,7 @@ def generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_f
     repair_sh = open(repair_sh_file_path, 'w')
     repair_sh.write("#!/usr/bin/bash\n")
     repair_sh.write("chown -R " + user + ":" + user + " " + soft_home_dir)
-    repair_sh.write("chown -R " + user + ":" + user + " /tmp/mongodb-" + mongo_client_port + ".sock")
+    repair_sh.write("chown -R " + user + ":" + user + " /tmp/mongodb-" + mongo_port + ".sock")
     repair_sh.close()
 
     mongo_data_dir_path = __sys__.path.join(soft_home_dir, mongo_data_dir)
@@ -428,8 +768,8 @@ def generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_f
 
 
 def generate_influxdb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
-                              systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
-                              , systemd_service_dir, systemd_service_file):
+                              systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                              systemd_service_dir, systemd_service_file):
     create_user_sh = open(create_user_sh_file_path, 'w')
     create_user_sh.write("#!/usr/bin/bash\n")
     create_user_sh.write(soft_home_dir + "/usr/bin/influx -host '127.0.0.1' -port '" + influxdb_http_port + "'<< EOF\n")
@@ -487,8 +827,8 @@ def generate_mysql_service(soft_home_dir, user, config_path):
     systemd_service_file_path = __sys__.path.join(systemd_service_dir, systemd_service_file)
     systemd_sh = open(systemd_service_file_path, 'w')
     systemd_sh.write("#!/usr/bin/bash\n")
-    systemd_sh.write("basedir=${MYSQL_HOME}\n")
-    systemd_sh.write("bindir=${MYSQL_HOME}/${MysqlBin}\n")
+    systemd_sh.write("basedir=" + soft_home_dir + "\n")
+    systemd_sh.write("bindir=" + soft_home_dir + "/bin\n")
     systemd_sh.write("if test -x $bindir/mysqld_multi\n")
     systemd_sh.write("then\n")
     systemd_sh.write("  mysqld_multi=\"$bindir/mysqld_multi\";\n")
@@ -498,15 +838,18 @@ def generate_mysql_service(soft_home_dir, user, config_path):
     systemd_sh.write("fi\n")
     systemd_sh.write("case \"$1\" in\n")
     systemd_sh.write("    'start' )\n")
-    systemd_sh.write("\"$mysqld_multi\" start $2\n")
+    systemd_sh.write("      \"$mysqld_multi\" start $2\n")
     systemd_sh.write("        ;;\n")
     systemd_sh.write("    'stop' )\n")
-    systemd_sh.write("\"$mysqld_multi\" stop $2\n")
+    systemd_sh.write("      \"$mysqld_multi\" stop $2\n")
+    systemd_sh.write("        ;;\n")
     systemd_sh.write("    'report' )\n")
-    systemd_sh.write("\"$mysqld_multi\" report $2\n")
+    systemd_sh.write("      \"$mysqld_multi\" report $2\n")
+    systemd_sh.write("        ;;\n")
     systemd_sh.write("    'restart' )\n")
-    systemd_sh.write("\"$mysqld_multi\" stop $2\n")
-    systemd_sh.write("\"$mysqld_multi\" start $2\n")
+    systemd_sh.write("      \"$mysqld_multi\" stop $2\n")
+    systemd_sh.write("      \"$mysqld_multi\" start $2\n")
+    systemd_sh.write("        ;;\n")
     systemd_sh.write("    *)\n")
     systemd_sh.write("        echo \"Usage: $0 {start|stop|report|restart}\" >&2\n")
     systemd_sh.write("        ;;\n")
@@ -522,7 +865,9 @@ def generate_mysql_service(soft_home_dir, user, config_path):
             "grant all privileges on *.* to 'root'@'%' identified by '" + password + "' with grant option;\n")
         mysql_sql.write("flush privileges;\n")
         mysql_sql.write("show grants for root;\n")
-        mysql_sql.write("select user,authentication_string,plugin,host from mysql.user;")
+        mysql_sql.write("select user,authentication_string,plugin,host from mysql.user;\n")
+        mysql_sql.write("create database hdiot;\n")
+        mysql_sql.write("use hdiot;\n")
         mysql_sql.close()
 
         mysql_change_password_sh_file = user + mysql_port + "-change_password.sh"
@@ -532,23 +877,210 @@ def generate_mysql_service(soft_home_dir, user, config_path):
         mysql_sh.write("case $1 in\n")
         mysql_sh.write("  '-p')\n")
         mysql_sh.write(
-            soft_home_dir + "/bin/mysql -h127.0.0.1 -P" + mysql_port + " -uroot -Dmysql -p$2 --connect-expired-password < " + mysql_create_user_sh_file_path + " && \ \n")
+            soft_home_dir + "/bin/mysql -h127.0.0.1 -P" + mysql_port + " -uroot -Dmysql -p$2 --connect-expired-password < " + mysql_create_user_sql_file_path + " && \ \n")
         mysql_sh.write(soft_home_dir + "/bin/mysqladmin -h127.0.0.1 -P" + mysql_port + " -uroot shutdown && \ \n")
-        mysql_sh.write(soft_home_dir + "/bin/mysqld_multi start ${MYSQL_PORT[i]}\n")
+        mysql_sh.write(soft_home_dir + "/bin/mysqld_multi start " + mysql_port + "\n")
         mysql_sh.write(soft_home_dir + "/bin/mysqld_multi report\n")
         mysql_sh.write("     ;;\n")
         mysql_sh.write("esac")
         mysql_sh.close()
-        command = soft_home_dir + "/bin/mysqld --defaults-file=" + config_path + " --initialize --basedir=" + soft_home_dir + " --datadir=" + mysql_data_dir_path
-        __sh__.call(command, shell=True)
-        initialize_password = input("请输入上方 mysql" + mysql_port + "实例的密码:\n")
-        command = "sh " + mysql_change_password_sh_file_path + " -p " + initialize_password
-        __sh__.call(command, shell=True)
-        command = soft_home_dir + "/bin/mysqld_multi report"
+
+        command = "chmod +x {0} {1}".format(mysql_change_password_sh_file_path, mysql_create_user_sql_file_path)
         __sh__.call(command, shell=True)
 
+        create_user(user)
+        change_owner(soft_home_dir, user)
 
-def generate_service(soft_home_dir, user, config_path):
+
+def generate_redis_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                           systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                           systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/bin/redis-server " + config_path + " &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 cat `" + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                systemd_restart_sh_path, systemd_service_file_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_elasticsearch_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                   systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path,
+                                   create_user_sh_file_path,
+                                   systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/bin/elasticsearch &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=" + user + "\n")
+    service.write("Group=" + user + "\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                systemd_restart_sh_path, systemd_service_file_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_nginx_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                           systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                           systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/sbin/nginx &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write(soft_home_dir + "/sbin/nginx -s reload")
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write(soft_home_dir + "/sbin/nginx -s stop")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + soft_home_dir + "/sbin/nginx\n")
+    service.write("ExecStop=" + soft_home_dir + "/sbin/nginx -s stop\n")
+    service.write("ExecReload=" + soft_home_dir + "/sbin/nginx -s reload\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                systemd_restart_sh_path, systemd_service_file_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_rabbitmq_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                              systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                              systemd_service_dir, systemd_service_file):
+    create_user_sh = open(create_user_sh_file_path, 'w')
+    create_user_sh.write("#!/usr/bin/bash\n")
+
+    create_user_sh.write(soft_home_dir + "/sbin/rabbitmqctl add_user " + username + " " + password + "\n")
+    create_user_sh.write(soft_home_dir + "/sbin/rabbitmqctl set_user_tags " + username + " administrator\n")
+    create_user_sh.write(
+        soft_home_dir + "/sbin/rabbitmqctl set_permissions -p \"/\" " + username + " \".*\" \".*\" \".*\"\n")
+    create_user_sh.write(soft_home_dir + "/sbin/rabbitmqctl list_users\n")
+    create_user_sh.close()
+
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("nohup " + soft_home_dir + "/sbin/rabbitmq-server &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=root\n")
+    service.write("Group=root\n")
+    service.write("Type=forking\n")
+    service.write("ExecStartPre=" + soft_home_dir + "/sbin/rabbitmq-plugins enable rabbitmq_management\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3} {4}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                    systemd_restart_sh_path, systemd_service_file_path,
+                                                    create_user_sh_file_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_service_for_env(soft_home_dir, user, config_path):
     systemd_service_dir = "/usr/lib/systemd/system"
     systemd_service_file = user + ".service"
     systemd_service_file_path = __sys__.path.join(soft_home_dir, systemd_service_file)
@@ -566,16 +1098,40 @@ def generate_service(soft_home_dir, user, config_path):
     if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
 
         generate_mongodb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
-                                 systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
-                                 , systemd_service_dir, systemd_service_file)
+                                 systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                                 systemd_service_dir, systemd_service_file)
 
     elif __regx__.compile("(influxdb|influx)", __regx__.IGNORECASE).search(soft_home_dir):
         generate_influxdb_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
-                                  systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
-                                  , systemd_service_dir, systemd_service_file)
+                                  systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path,
+                                  create_user_sh_file_path,
+                                  systemd_service_dir, systemd_service_file)
 
     elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
         generate_mysql_service(soft_home_dir, user, config_path)
+
+    elif __regx__.compile("(redis)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_redis_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                               systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                               systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(elasticsearch)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_elasticsearch_service(soft_home_dir, user, config_path, systemd_service_file_path,
+                                       systemd_start_sh_path,
+                                       systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path,
+                                       create_user_sh_file_path,
+                                       systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(nginx)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_nginx_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                               systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path,
+                               systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(rabbitmq)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_rabbitmq_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                  systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path,
+                                  create_user_sh_file_path,
+                                  systemd_service_dir, systemd_service_file)
     return True
 
 
@@ -621,6 +1177,62 @@ def create_mysql_soft_link(soft_home_dir, destination_dir):
             __sys__.symlink(binary_path, env_path)
 
 
+def create_redis_soft_link(soft_home_dir, destination_dir):
+    redis_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(redis_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(redis_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
+def create_elasticsearch_soft_link(soft_home_dir, destination_dir):
+    elasticsearch_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(elasticsearch_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(elasticsearch_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
+def create_nginx_soft_link(soft_home_dir, destination_dir):
+    nginx_bin_source_dir = soft_home_dir + "/sbin"
+    list_of_binary_file = __sys__.listdir(nginx_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(nginx_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
+def create_rabbitmq_soft_link(soft_home_dir, destination_dir):
+    rabbitmq_bin_source_dir = soft_home_dir + "/sbin"
+    list_of_binary_file = __sys__.listdir(rabbitmq_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+        binary_path = __sys__.path.join(rabbitmq_bin_source_dir, binary_file)
+        if not __sys__.path.exists(env_path):
+            __sys__.symlink(binary_path, env_path)
+
+
 def create_soft_link(soft_home_dir, pkg_name):
     destination_dir = "/usr/bin"
     if __regx__.compile("(mognodb|mongo)", __regx__.IGNORECASE).search(soft_home_dir):
@@ -631,6 +1243,18 @@ def create_soft_link(soft_home_dir, pkg_name):
 
     elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
         create_mysql_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(redis)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_redis_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(elasticsearch|elastic)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_elasticsearch_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(nginx)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_nginx_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(rabbitmq)", __regx__.IGNORECASE).search(soft_home_dir):
+        create_rabbitmq_soft_link(soft_home_dir, destination_dir)
 
 
 def remove_mongodb_soft_link(soft_home_dir, destination_dir):
@@ -678,6 +1302,66 @@ def remove_mysql_soft_link(soft_home_dir, destination_dir):
             __sh__.call(command, shell=True)
 
 
+def remove_redis_soft_link(soft_home_dir, destination_dir):
+    redis_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(redis_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
+def remove_elasticsearch_soft_link(soft_home_dir, destination_dir):
+    elasticsearch_bin_source_dir = soft_home_dir + "/bin"
+    list_of_binary_file = __sys__.listdir(elasticsearch_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
+def remove_nginx_soft_link(soft_home_dir, destination_dir):
+    nginx_bin_source_dir = soft_home_dir + "/sbin"
+    list_of_binary_file = __sys__.listdir(nginx_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
+def remove_rabbitmq_soft_link(soft_home_dir, destination_dir):
+    rabbitmq_bin_source_dir = soft_home_dir + "/sbin"
+    list_of_binary_file = __sys__.listdir(rabbitmq_bin_source_dir)
+
+    if not list_of_binary_file:
+        return
+
+    for binary_file in list_of_binary_file:
+        env_path = __sys__.path.join(destination_dir, binary_file)
+
+        if __sys__.path.exists(env_path):
+            command = "unlink " + env_path
+            __sh__.call(command, shell=True)
+
+
 def remove_soft_link(soft_home_dir, pkg_name):
     destination_dir = "/usr/bin"
 
@@ -690,8 +1374,53 @@ def remove_soft_link(soft_home_dir, pkg_name):
     elif __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
         remove_mysql_soft_link(soft_home_dir, destination_dir)
 
+    elif __regx__.compile("(redis)", __regx__.IGNORECASE).search(soft_home_dir):
+        remove_redis_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(nginx)", __regx__.IGNORECASE).search(soft_home_dir):
+        remove_nginx_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(rabbitmq)", __regx__.IGNORECASE).search(soft_home_dir):
+        remove_rabbitmq_soft_link(soft_home_dir, destination_dir)
+
+    elif __regx__.compile("(elasticsearch|elastic)", __regx__.IGNORECASE).search(soft_home_dir):
+        remove_elasticsearch_soft_link(soft_home_dir, destination_dir)
+
+
+def create_mysql_user(soft_home_dir, user):
+    for mysql_port in list_of_mysql_port:
+        mysql_create_user_sql_file = user + mysql_port + "-create_user.sql"
+        mysql_create_user_sql_file_path = __sys__.path.join(soft_home_dir, mysql_create_user_sql_file)
+        mysql_base_dir_path = __sys__.path.join(soft_home_dir, mysql_port)
+        mysql_data_dir_path = __sys__.path.join(mysql_base_dir_path, mysql_data_dir)
+        mysql_config_path = __sys__.path.join(mysql_system_conf_dir, mysql_config)
+        command = soft_home_dir + "/bin/mysqld --defaults-file=" + mysql_config_path + " --initialize --basedir=" + soft_home_dir + " --datadir=" + mysql_data_dir_path
+        print(command)
+        __sh__.call(command, shell=True)
+
+        command = soft_home_dir + "/bin/mysqld_multi start "
+        __sh__.call(command, shell=True)
+        print("----------------------------------------------------------------------")
+        print("| 1. 输入上方 mysql " + mysql_port + " 实例的密码")
+        print("| 2. 登录成功后执行命令:")
+        print("|    2.1) source " + mysql_create_user_sql_file_path)
+        if __sys__.path.exists(hdiot_sql_path):
+            print("|    2.2) source " + hdiot_sql_path)
+        print("|    2.2) exit")
+        print("---------------------------------------------------------------------")
+        command = soft_home_dir + "/bin/mysql -h127.0.0.1 -uroot  -p"
+        print(command)
+        __sh__.call(command, shell=True)
+
+        create_soft_link(soft_home_dir, user)
+        command = soft_home_dir + "/bin/mysqld_multi stop && " + soft_home_dir + "/bin/mysqld_multi start && " + soft_home_dir + "/bin/mysqld_multi report "
+        __sh__.call(command, shell=True)
+
 
 def create_soft_user(soft_home_dir, user):
+    if __regx__.compile("(redis|elasticsearch|elastic|nginx|otp|erlang)", __regx__.IGNORECASE).search(soft_home_dir):
+        return
+
     create_user_sh_file = user + "-create_user.sh"
     create_user_sh_file_path = __sys__.path.join(soft_home_dir, create_user_sh_file)
     command = "sh " + create_user_sh_file_path
@@ -699,31 +1428,920 @@ def create_soft_user(soft_home_dir, user):
 
 
 def reload_systemd(user):
+    if __regx__.compile("(otp|erlang)", __regx__.IGNORECASE).search(user):
+        return
+
     systemd_service_file = user + ".service"
     command = "systemctl daemon-reload && systemctl start " + systemd_service_file
     __sh__.call(command, shell=True)
 
 
-def start_program(soft_home_dir, user):
-    create_user(user)
-    change_owner(soft_home_dir, user)
+def start_program_for_env(soft_home_dir, user):
     if __regx__.compile("(mysql|mysql57)", __regx__.IGNORECASE).search(soft_home_dir):
-        create_soft_link(soft_home_dir, user)
+        create_user(user)
+        change_owner(soft_home_dir, user)
+        create_mysql_user(soft_home_dir, user)
+
     else:
+        create_user(user)
+        change_owner(soft_home_dir, user)
         reload_systemd(user)
         __time__.sleep(5)
         create_soft_user(soft_home_dir, user)
         create_soft_link(soft_home_dir, user)
 
-    return True
+
+def host_name_of_filling(local_ip):
+    eureka_host_name = "hdiot-eureka.com"
+    command = "cat /etc/hosts"
+    ret_info = __sys__.popen(command)
+    if __regx__.compile("(%s)" % eureka_host_name, __regx__.IGNORECASE).search(ret_info.read()):
+        command = "echo '" + local_ip + "    " + eureka_host_name + "' >> /etc/hosts"
+        __sh__.call(command, shell=True)
 
 
-def install(__soft):
+
+def generate_agent_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                           systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                           , systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write(
+        "nohup java -Xms512m -Xmx1024m -Duser.timezonne=Asia/Shanghai -Dfile.encoding=utf-8 -Dspring.config.location=" + config_path + " -jar " + soft_home_dir + "/hdiot-agent-1.0.0.jar &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=root\n")
+    service.write("Group=root\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} ".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                             systemd_restart_sh_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_center_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                            systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                            , systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write(
+        "nohup java -Xms512m -Xmx1024m -Duser.timezonne=Asia/Shanghai -Dfile.encoding=utf-8 -Dspring.config.location=" + config_path + " -jar " + soft_home_dir + "/hdiot-center-1.0.0.jar &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=root\n")
+    service.write("Group=root\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} ".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                             systemd_restart_sh_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_configure_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                               systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                               , systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write(
+        "nohup java -Xms512m -Xmx1024m -Duser.timezonne=Asia/Shanghai -Dfile.encoding=utf-8 -Dspring.config.location=" + config_path + " -jar " + soft_home_dir + "/hdiot-configure-1.0.0.jar &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=root\n")
+    service.write("Group=root\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} ".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                             systemd_restart_sh_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_iotstream_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                               systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                               , systemd_service_dir, systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("cd " + soft_home_dir + "\n")
+    systemd_sh.write("./iotstream --config=" + config_path + " &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=root\n")
+    service.write("Group=root\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} {3}".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                                systemd_restart_sh_path, soft_home_dir + "/iotstream")
+    __sh__.call(command, shell=True)
+
+
+def generate_eureka_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                            systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, systemd_service_dir,
+                            systemd_service_file):
+    systemd_sh = open(systemd_start_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write(
+        "nohup java -Xms512m -Xmx1024m -Duser.timezonne=Asia/Shanghai -Dfile.encoding=utf-8 -jar " + soft_home_dir + "/hdiot-eureka-1.0.0.jar &\n")
+    systemd_sh.write("PID=$!\n")
+    systemd_sh.write("echo $PID > " + pid_file_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_restart_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("source " + systemd_stop_sh_path + " && source " + systemd_start_sh_path)
+    systemd_sh.close()
+
+    systemd_sh = open(systemd_stop_sh_path, 'w')
+    systemd_sh.write("#!/usr/bin/bash\n")
+    systemd_sh.write("kill -9 `cat " + pid_file_path + "`")
+    systemd_sh.close()
+
+    service = open(systemd_service_file_path, 'w')
+    service.write("[Unit]\n")
+    service.write("Description=" + user + "-service\n")
+    service.write("After=network.target\n")
+    service.write("\n")
+    service.write("[Service]\n")
+    service.write("User=root\n")
+    service.write("Group=root\n")
+    service.write("Type=forking\n")
+    service.write("ExecStart=" + systemd_start_sh_path + "\n")
+    service.write("ExecStop=" + systemd_stop_sh_path + "\n")
+    service.write("ExecReload=" + systemd_restart_sh_path + "\n")
+    service.write("PIDFile=" + pid_file_path + "\n")
+    service.write("Restart=on-failure\n")
+    service.write("\n")
+    service.write("[Install]\n")
+    service.write("WantedBy=multi-user.target\n")
+    service.write("Alias=" + systemd_service_file + "\n")
+    service.close()
+    __sh_util__.copy(systemd_service_file_path, systemd_service_dir)
+    command = "chmod +x {0} {1} {2} ".format(systemd_start_sh_path, systemd_stop_sh_path,
+                                             systemd_restart_sh_path)
+    __sh__.call(command, shell=True)
+
+
+def generate_service_for_iot(soft_home_dir, user, config_path):
+    systemd_service_dir = "/usr/lib/systemd/system"
+    systemd_service_file = user + ".service"
+    systemd_service_file_path = __sys__.path.join(soft_home_dir, systemd_service_file)
+    systemd_start_sh_file = user + "-systemd-start.sh"
+    systemd_start_sh_path = __sys__.path.join(soft_home_dir, systemd_start_sh_file)
+    systemd_restart_sh_file = user + "-systemd-restart.sh"
+    systemd_restart_sh_path = __sys__.path.join(soft_home_dir, systemd_restart_sh_file)
+    systemd_stop_sh_file = user + "-systemd-stop.sh"
+    systemd_stop_sh_path = __sys__.path.join(soft_home_dir, systemd_stop_sh_file)
+    pid_file = user + ".pid"
+    pid_file_path = __sys__.path.join(soft_home_dir, pid_file)
+    create_user_sh_file = user + "-create_user.sh"
+    create_user_sh_file_path = __sys__.path.join(soft_home_dir, create_user_sh_file)
+    if __regx__.compile("(eureka|hdiot-eureka)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_eureka_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, systemd_service_dir,
+                                systemd_service_file)
+
+    elif __regx__.compile("(center|hdiot-center)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_center_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                                , systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(agent|hdiot-agent)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_agent_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                               systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path, create_user_sh_file_path
+                               , systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(configure|hdiot-configure)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_configure_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                   systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path,
+                                   create_user_sh_file_path
+                                   , systemd_service_dir, systemd_service_file)
+
+    elif __regx__.compile("(iotstream|hdiot-iotstream)", __regx__.IGNORECASE).search(soft_home_dir):
+        generate_iotstream_service(soft_home_dir, user, config_path, systemd_service_file_path, systemd_start_sh_path,
+                                   systemd_stop_sh_path, systemd_restart_sh_path, pid_file_path,
+                                   create_user_sh_file_path
+                                   , systemd_service_dir, systemd_service_file)
+
+
+def generate_configure_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip, elasticsearch_ip,
+                                     rabbitmq_ip, mongodb_ip):
+    config_path = __sys__.path.join(soft_home_dir, iot_config_yml)
+    config = open(config_path, "w+")
+    config.write("info:\n")
+    config.write("  build:\n")
+    config.write("    artifact: '@project.artifactId@'\n")
+    config.write("    name: '@project.name@'\n")
+    config.write("    description: '@project.description@'\n")
+    config.write("    version: '@project.version@'\n")
+    config.write("\n")
+    config.write("server:\n")
+    config.write("  port: " + configure_port + "\n")
+    config.write("#  servlet:\n")
+    config.write("#    context-path: /hdiot/2.0\n")
+    config.write("\n")
+    config.write("spring:\n")
+    config.write("  application:\n")
+    config.write("    name: hdiot2_configure\n")
+    config.write("  redis:\n")
+    config.write("    host: " + redis_ip + "\n")
+    config.write("    port: " + redis_port + "\n")
+    config.write("    database: 9\n")
+    config.write("    password: " + password + "\n")
+    config.write("  datasource:\n")
+    config.write("    druid:\n")
+    config.write("      #MySQL\n")
+    config.write("      driver-class-name: com.mysql.jdbc.Driver\n")
+    config.write(
+        "      url: jdbc:mysql://" + mysql_ip + ":" + list_of_mysql_port[
+            0] + "/" + mysql_database + "?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8\n")
+    config.write("      username: root\n")
+    config.write("      password: " + password + "\n")
+    config.write("      initial-size: 10\n")
+    config.write("      max-active: 100\n")
+    config.write("      min-idle: 10\n")
+    config.write("      max-wait: 6000\n")
+    config.write("      pool-prepared-statements: true\n")
+    config.write("      max-pool-prepared-statement-per-connection-size: 20\n")
+    config.write("      time-between-eviction-runs-millis: 60000\n")
+    config.write("      min-evictable-idle-time-millis: 300000\n")
+    config.write("      #Oracle需要打开注释\n")
+    config.write("      #validation-query: SELECT 1 FROM DUAL\n")
+    config.write("      test-while-idle: true\n")
+    config.write("      test-on-borrow: false\n")
+    config.write("      test-on-return: false\n")
+    config.write("      stat-view-servlet:\n")
+    config.write("        enabled: false\n")
+    config.write("      web-stat-filter:\n")
+    config.write("        enabled: false #默认值为true，统计web关联的监控信息如session/url等，建议修改为false\n")
+    config.write("        session-stat-enable: false #该功能模块代码不完善，特定场景下会诱发异常，非特别需求，建议修改为false\n")
+    config.write("      filter:\n")
+    config.write("        stat:\n")
+    config.write("          enabled: false #默认值为true，监控sql\慢sql等功能，我们建议修改为false，如果需要打开监控页面或者将慢sql输出到日志中，则修改为true。\n")
+    config.write("        wall:\n")
+    config.write("          enabled: false #默认值为false，sql防火墙，支持过滤sql，如禁止使用delete *等操作。\n")
+    config.write("        slf4j:\n")
+    config.write("          enabled: false #指定使用slf4j日志组件，支持选择将各种操作过程输出到日志中。\n")
+    config.write("        log4j2:\n")
+    config.write("          enabled: false #指定使用log4j2日志组件，支持选择将各种操作过程输出到日志中。\n")
+    config.write("        log4j:\n")
+    config.write("          enabled: false #指定使用log4j日志组件，支持选择将各种操作过程输出到日志中。\n")
+    config.write("        commons-log:\n")
+    config.write("          enabled: false #指定使用commons-log日志组件，支持选择将各种操作过程输出到日志中。\n")
+    config.write("  data:\n")
+    config.write("    influx:\n")
+    config.write("      url: http://" + influxdb_ip + ":" + influxdb_http_port + "\n")
+    config.write("      user: " + username + "\n")
+    config.write("      password: " + password + "\n")
+    config.write("      database: hdiot\n")
+    config.write("    elasticsearch:\n")
+    config.write("      #是否启用\n")
+    config.write("      enable: true\n")
+    config.write("      host: " + elasticsearch_ip + "\n")
+    config.write("      port: " + elasticsearch_port + "\n")
+    config.write("      userName: " + elasticsearch_user_name + "\n")
+    config.write("      passWord: " + elasticsearch_user_password + "\n")
+    config.write("  servlet:\n")
+    config.write("    multipart:\n")
+    config.write("      max-file-size: 100MB\n")
+    config.write("      max-request-size: 100MB\n")
+    config.write("  rabbitmq:\n")
+    config.write("    host: ${hdiot.rabbitMq[0].host}\n")
+    config.write("    port: ${hdiot.rabbitMq[0].amqpPort}\n")
+    config.write("    username: ${hdiot.rabbitMq[0].user}\n")
+    config.write("    password: ${hdiot.rabbitMq[0].password}\n")
+    config.write("    virtual-host: /\n")
+    config.write("    connection-timeout: 15000\n")
+    config.write("    listener:\n")
+    config.write("      type: simple\n")
+    config.write("      simple:\n")
+    config.write("        acknowledge-mode: auto\n")
+    config.write("        concurrency: 5\n")
+    config.write("        max-concurrency: 10\n")
+    config.write("        auto-startup: false\n")
+    config.write("  elasticsearch:\n")
+    config.write("    rest:\n")
+    config.write("      uris: " + elasticsearch_ip + ":" + elasticsearch_port + "\n")
+    config.write("      username: ${spring.data.elasticsearch.userName}\n")
+    config.write("      password: ${spring.data.elasticsearch.passWord}\n")
+    config.write("\n")
+    config.write("ftp:\n")
+    config.write("  server:\n")
+    config.write("    port: " + configure_ftp_port + "\n")
+    config.write("    username: hdiot-ftp\n")
+    config.write("    password: Hdkj123!\n")
+    config.write("\n")
+    config.write("hdiot:\n")
+    config.write("\n")
+    config.write("  url:\n")
+    config.write("    #请求包含下列列表即放行\n")
+    config.write("    whiteList: export\n")
+    config.write("  uniplat:\n")
+    config.write("    url: http://" + local_ip + ":" + uniwater_port + "\n")
+    config.write("    accessToken: \n")
+    config.write("    clientId:\n")
+    config.write("    clientSecret:\n")
+    config.write("    app-code: " + wlw_app_code_of_uniwater + "\n")
+    config.write("  #hdiot-admin 服务地址\n")
+    config.write("  admin:\n")
+    config.write("    url:\n")
+    config.write("\n")
+    config.write("  #配置mq服务地址以及 管理用户名，密码\n")
+    config.write("  rabbitMq:\n")
+    config.write("    - host: " + rabbitmq_ip + "\n")
+    config.write("      user: " + username + "\n")
+    config.write("      password: " + password + "\n")
+    config.write("      port: " + rabbitmq_port + "\n")
+    config.write("      amqpPort: " + rabbitmq_j_port + "\n")
+    config.write("  statistics:\n")
+    config.write("    # 待统计速率的队列\n")
+    config.write("    mqTopics: HDIOT2.decode;HDIOT2.origin;HDIOT2.track\n")
+    config.write("management:\n")
+    config.write("  security:\n")
+    config.write("    enabled: false # 默认为true，改为false以便可以看到routes\n")
+    config.write("  endpoints:\n")
+    config.write("    web:\n")
+    config.write("      exposure:\n")
+    config.write("        include: '*'\n")
+    config.write("  endpoint:\n")
+    config.write("    health:\n")
+    config.write("      show-details: always\n")
+    config.write("  health:\n")
+    config.write("    db:\n")
+    config.write("      enabled: true\n")
+    config.write("    rabbit:\n")
+    config.write("      enabled: false\n")
+    config.write("    redis:\n")
+    config.write("      enabled: false\n")
+    config.write("    elasticsearch:\n")
+    config.write("      enabled: false\n")
+    config.write("eureka:\n")
+    config.write("  instance:\n")
+    config.write("    lease-expiration-duration-in-seconds: 30 #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除\n")
+    config.write("    lease-renewal-interval-in-seconds: 10 #服务刷新时间配置，每隔这个时间会主动心跳一次\n")
+    config.write("  client:\n")
+    config.write("    service-url:\n")
+    config.write("      defaultZone: http://hdiot:Hdkj123!@hdiot-eureka.com:" + eureka_port + "/eureka\n")
+    config.write("    register-with-eureka: true\n")
+    config.write("    healthcheck:\n")
+    config.write("      enabled: true # 启用健康检查,注意:需要引用spring boot actuator\n")
+    config.write("\n")
+    config.write("mybatis-plus:\n")
+    config.write("  mapper-locations: classpath:/mapper/**/*.xml\n")
+    config.write("  #实体扫描，多个package用逗号或者分号分隔\n")
+    config.write("  typeAliasesPackage: com.hdkj.hdiot.configure.entity\n")
+    config.write("  global-config:\n")
+    config.write("    #数据库相关配置\n")
+    config.write("    db-config:\n")
+    config.write(
+        "      #主键类型  AUTO:\"数据库ID自增\", INPUT:\"用户输入ID\", ID_WORKER:\"全局唯一ID (数字类型唯一ID)\", UUID:\"全局唯一ID UUID\";\n")
+    config.write("      id-type: UUID\n")
+    config.write("      #字段策略 IGNORED:\"忽略判断\",NOT_NULL:\"非 NULL 判断\"),NOT_EMPTY:\"非空判断\"\n")
+    config.write("      field-strategy: NOT_NULL\n")
+    config.write("      #驼峰下划线转换\n")
+    config.write("      column-underline: true\n")
+    config.write("      #db-type: mysql\n")
+    config.write("      logic-delete-value: 1 # 逻辑已删除值(默认为 1)\n")
+    config.write("      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)\n")
+    config.write("    banner: false\n")
+    config.write("    sql-parser-cache: true\n")
+    config.write("  #原生配置\n")
+    config.write("  configuration:\n")
+    config.write("    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl\n")
+    config.write("    map-underscore-to-camel-case: true\n")
+    config.write("    cache-enabled: false\n")
+    config.write("    call-setters-on-nulls: true\n")
+    config.write("    jdbc-type-for-null: 'null'\n")
+    config.close()
+    return config_path
+
+
+def generate_center_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip, elasticsearch_ip,
+                                  rabbitmq_ip, mongodb_ip):
+    config_path = __sys__.path.join(soft_home_dir, iot_config_yml)
+    config = open(config_path, "w+")
+    config.write("info:\n")
+    config.write("    build:\n")
+    config.write("        artifact: '@project.artifactId@'\n")
+    config.write("        name: '@project.name@'\n")
+    config.write("        description: '@project.description@'\n")
+    config.write("        version: '@project.version@'\n")
+    config.write("\n")
+    config.write("server:\n")
+    config.write("  port: " + center_port + "\n")
+    config.write("\n")
+    config.write("spring:\n")
+    config.write("    application:\n")
+    config.write("        name: hdiot2_center\n")
+    config.write("        instance_id: SINGULARITY\n")
+    config.write("    data:\n")
+    config.write("        mongodb:\n")
+    config.write("            host: " + mongodb_ip + "\n")
+    config.write("            port: " + mongo_port + "\n")
+    config.write("            database: " + mongo_database + "\n")
+    config.write("            authentication-database: admin\n")
+    config.write("            username: " + username + "\n")
+    config.write("            password: " + password + "\n")
+    config.write("        influx:\n")
+    config.write("            url: http://" + influxdb_ip + ":" + influxdb_http_port + "\n")
+    config.write("            database: " + influxdb_database + "\n")
+    config.write("            user: " + username + "\n")
+    config.write("            password: " + password + "\n")
+    config.write("    datasource:\n")
+    config.write("        druid:\n")
+    config.write("        #MySQL\n")
+    config.write("           driver-class-name: com.mysql.jdbc.Driver\n")
+    config.write(
+        "           url: jdbc:mysql://" + mysql_ip + ":" + list_of_mysql_port[
+            0] + "/" + mysql_database + "?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8\n")
+    config.write("           username: root\n")
+    config.write("           password: " + password + "\n")
+    config.write("           initial-size: 10\n")
+    config.write("           max-active: 100\n")
+    config.write("           min-idle: 10\n")
+    config.write("           max-wait: 6000\n")
+    config.write("           pool-prepared-statements: true\n")
+    config.write("           max-pool-prepared-statement-per-connection-size: 20\n")
+    config.write("           time-between-eviction-runs-millis: 60000\n")
+    config.write("           min-evictable-idle-time-millis: 300000\n")
+    config.write("\n")
+    config.write("#mybatis\n")
+    config.write("mybatis-plus:\n")
+    config.write("  mapper-locations: classpath:/mapper/**/*.xml\n")
+    config.write("  #实体扫描，多个package用逗号或者分号分隔\n")
+    config.write("  typeAliasesPackage: com.hdkj.hdiot.center.entity\n")
+    config.write("  global-config:\n")
+    config.write("    #数据库相关配置\n")
+    config.write("    db-config:\n")
+    config.write(
+        "      #主键类型  AUTO:\"数据库ID自增\", INPUT:\"用户输入ID\", ID_WORKER:\"全局唯一ID (数字类型唯一ID)\", UUID:\"全局唯一ID UUID\";\n")
+    config.write("      id-type: UUID\n")
+    config.write("      #字段策略 IGNORED:\"忽略判断\",NOT_NULL:\"非 NULL 判断\"),NOT_EMPTY:\"非空判断\"\n")
+    config.write("      field-strategy: NOT_NULL\n")
+    config.write("      #驼峰下划线转换\n")
+    config.write("      column-underline: true\n")
+    config.write("      #db-type: mysql\n")
+    config.write("      logic-delete-value: 1 # 逻辑已删除值(默认为 1)\n")
+    config.write("      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)\n")
+    config.write("    banner: false\n")
+    config.write("    sql-parser-cache: true\n")
+    config.write("  #原生配置\n")
+    config.write("  configuration:\n")
+    config.write("#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl\n")
+    config.write("    map-underscore-to-camel-case: true\n")
+    config.write("    cache-enabled: false\n")
+    config.write("    call-setters-on-nulls: true\n")
+    config.write("    jdbc-type-for-null: 'null'\n")
+    config.write("\n")
+    config.write("management:\n")
+    config.write("  security:\n")
+    config.write("    enabled: false # 默认为true，改为false以便可以看到routes\n")
+    config.write("  endpoints:\n")
+    config.write("    web:\n")
+    config.write("      exposure:\n")
+    config.write("        include: '*'\n")
+    config.write("  endpoint:\n")
+    config.write("    health:\n")
+    config.write("      show-details: always\n")
+    config.write("\n")
+    config.write("\n")
+    config.write("debug:\n")
+    config.write("  always-localhsot-agent : true\n")
+    config.write("    \n")
+    config.write("eureka:\n")
+    config.write("  instance:\n")
+    config.write("    instance-id: ${spring.application.instance_id}\n")
+    config.write("    #    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}\n")
+    config.write("    lease-expiration-duration-in-seconds: 30 #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除\n")
+    config.write("    lease-renewal-interval-in-seconds: 10 #服务刷新时间配置，每隔这个时间会主动心跳一次\n")
+    config.write("  client:\n")
+    config.write("    serviceUrl:\n")
+    config.write("      defaultZone: http://hdiot:Hdkj123!@hdiot-eureka.com:" + eureka_port + "/eureka\n")
+    config.write("    register-with-eureka: true\n")
+    config.write("    healthcheck:\n")
+    config.write("      enabled: true # 启用健康检查,注意:需要引用spring boot actuator\n")
+    config.write("    filter-only-up-instances: false\n")
+    config.write("      \n")
+    config.write("rabbitmq:\n")
+    config.write("  host: " + rabbitmq_ip + "\n")
+    config.write("  user: " + username + "\n")
+    config.write("  pass: " + password + "\n")
+    config.write("  mport: " + rabbitmq_j_port + "\n")
+    config.write("  \n")
+    return config_path
+
+
+def generate_agent_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip, elasticsearch_ip,
+                                 rabbitmq_ip, mongodb_ip):
+    config_path = __sys__.path.join(soft_home_dir, iot_config_yml)
+    config = open(config_path, "w+")
+    config.write("info:\n")
+    config.write("  build:\n")
+    config.write("    artifact: '@project.artifactId@'\n")
+    config.write("    name: '@project.name@'\n")
+    config.write("    description: '@project.description@'\n")
+    config.write("    version: '@project.version@'\n")
+    config.write("\n")
+    config.write("server:\n")
+    config.write("  port: " + agent_port + "\n")
+    config.write("\n")
+    config.write("spring:\n")
+    config.write("  application:\n")
+    config.write("    { name: hdiot2_agent,instance_id: " + local_ip + " }\n")
+    config.write("  datasource:\n")
+    config.write("    druid:\n")
+    config.write("      #MySQL\n")
+    config.write("      driver-class-name: com.mysql.jdbc.Driver\n")
+    config.write(
+        "      url: jdbc:mysql://" + mysql_ip + ":" + list_of_mysql_port[
+            0] + "/" + mysql_database + "?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8\n")
+    config.write("      username: root\n")
+    config.write("      password: " + password + "\n")
+    config.write("      initial-size: 10\n")
+    config.write("      max-active: 100\n")
+    config.write("      min-idle: 10\n")
+    config.write("      max-wait: 6000\n")
+    config.write("      pool-prepared-statements: true\n")
+    config.write("      max-pool-prepared-statement-per-connection-size: 20\n")
+    config.write("      time-between-eviction-runs-millis: 60000\n")
+    config.write("      min-evictable-idle-time-millis: 300000\n")
+    config.write("\n")
+    config.write("mybatis-plus:\n")
+    config.write("  mapper-locations: classpath:/mapper/**/*.xml\n")
+    config.write("\n")
+    config.write("rabbitmq:\n")
+    config.write("  host: " + rabbitmq_ip + "\n")
+    config.write("  user: Hdkj\n")
+    config.write("  pass: " + password + "\n")
+    config.write("  mport: " + rabbitmq_j_port + "\n")
+    config.write("\n")
+    config.write("ftp:\n")
+    config.write("  enable: 1\n")
+    config.write("\n")
+    config.write("metrics:\n")
+    config.write("  on: true\n")
+    config.write("  cron: '55 * * * * ?'\n")
+    config.write("\n")
+    config.write("management:\n")
+    config.write("  security:\n")
+    config.write("    enabled: false # 默认为true，改为false以便可以看到routes\n")
+    config.write("  endpoints:\n")
+    config.write("    web:\n")
+    config.write("      exposure:\n")
+    config.write("        include: '*'\n")
+    config.write("  endpoint:\n")
+    config.write("    health:\n")
+    config.write("      show-details: always\n")
+    config.write("\n")
+    config.write("eureka:\n")
+    config.write("  instance:\n")
+    config.write("    # instance-id: ${spring.cloud.client.ip-address}\n")
+    config.write("    instance-id: ${spring.application.instance_id}\n")
+    config.write("    #    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}\n")
+    config.write("    lease-expiration-duration-in-seconds: 30 #服务过期时间配置,超过这个时间没有接收到心跳EurekaServer就会将这个实例剔除\n")
+    config.write("    lease-renewal-interval-in-seconds: 10 #服务刷新时间配置，每隔这个时间会主动心跳一次\n")
+    config.write("  client:\n")
+    config.write("    serviceUrl:\n")
+    config.write("      defaultZone: http://hdiot:Hdkj123!@hdiot-eureka.com:" + eureka_port + "/eureka\n")
+    config.write("    register-with-eureka: true\n")
+    config.write("    healthcheck:\n")
+    config.write("      enabled: true # 启用健康检查,注意:需要引用spring boot actuator\n")
+    config.write("    filter-only-up-instances: false\n")
+    config.write("\n")
+    return config_path
+
+
+def generate_iotstream_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip,
+                                     elasticsearch_ip, rabbitmq_ip, mongodb_ip):
+    config_path = __sys__.path.join(soft_home_dir, iot_config_yml)
+    config = open(config_path, "w+")
+    config.write("log:\n")
+    config.write("  level: info\n")
+    config.write("  #  path: ./logs\n")
+    config.write("  size: 20\n")
+    config.write("  backups: 20\n")
+    config.write("  panic: ./logs/panic.log\n")
+    config.write("#  age: 7\n")
+    config.write("#  filename: default\n")
+    config.write("\n")
+    config.write("\n")
+    config.write("application:\n")
+    config.write("  name: HDIOT2_DATA\n")
+    config.write("  instance_id: TRAFIICER_C1\n")
+    config.write("  admin_server:\n")
+    config.write("    rest:\n")
+    config.write("      addr: :" + iotstream_port + "\n")
+    config.write("\n")
+    config.write("data:\n")
+    config.write("  influx:\n")
+    config.write("    url: http://" + influxdb_ip + ":" + influxdb_http_port + "\n")
+    config.write("    database: " + influxdb_database + "\n")
+    config.write("    user: " + username + "\n")
+    config.write("    password: " + password + "\n")
+    config.write("  xorm:\n")
+    config.write("    url: root:" + password + "!@tcp(" + mysql_ip + ":" + list_of_mysql_port[
+        0] + ")/" + mysql_database + "?charset=utf8\n")
+    config.write("    prefix: hd_\n")
+    config.write("    mode: mysql\n")
+    config.write("  elastic:\n")
+    config.write("    addr: [ http://" + elasticsearch_ip + ":9200 ]\n")
+    config.write("    user: " + elasticsearch_user_name + "\n")
+    config.write("    password: " + elasticsearch_user_password + "\n")
+    config.write("  redis:\n")
+    config.write("    addr: redis://:" + password + "!@" + redis_ip + ":" + redis_port + "/9\n")
+    config.write("\n")
+    config.write("amqp:\n")
+    config.write("  rabbitmq:\n")
+    config.write("    url: amqp://" + username + ":" + password + "@" + rabbitmq_ip + ":" + rabbitmq_j_port + "\n")
+    # config.write("\n")
+    # config.write("#input:\n")
+    # config.write("#  rabbit_mq:\n")
+    # config.write("#    url: amqp://hdkj:Hdkj123!@192.168.100.78:5672\n")
+    # config.write("#    queue: 0d5e94ca-19db-4df4-88c0-161d3cd5848a.unistream\n")
+    # config.write("#  mongo:\n")
+    # config.write("#    url: mongodb://hdkj:Hdkj123!@192.168.100.125:20001\n")
+    # config.write("#    db: hdiot\n")
+    # config.write("#    start: 2022-01-07T00:00:00.000Z\n")
+    # config.write("#    end: 2022-01-08T00:00:00.000Z\n")
+    config.write("\n")
+    config.write("store:\n")
+    config.write("  type: es\n")
+    config.write("  database: " + elasticsearch_database + "\n")
+    config.write("  pass_unregistered_sensor: false\n")
+    config.write("################### 危险项目 重启删除 保存数据 ###################\n")
+    config.write("  drop_on_start: false\n")
+    config.write("#############################################################\n")
+    config.write("track:\n")
+    config.write("  disable: true\n")
+    config.write("  batch: 64\n")
+    config.write("\n")
+    config.write("mover:\n")
+    config.write("  query: true\n")
+    config.write("  timeout: 240\n")
+    config.write("  refresh: 120\n")
+    config.write("\n")
+    config.write("output:\n")
+    config.write("  disable: false\n")
+    config.write("\n")
+    config.write("components:\n")
+    config.write("  object_model:\n")
+    config.write("    disable: false\n")
+    config.write("    subscriber:\n")
+    config.write("      disable: false\n")
+    config.write("      amqp: amqp://" + username + ":" + password + "@" + rabbitmq_ip + ":" + rabbitmq_j_port + "\n")
+    config.write("    history_store:\n")
+    config.write("      disable: false\n")
+    config.write("      database: hdiot2\n")
+    config.write("      measurement: raw\n")
+    config.write("      retention_policy: default\n")
+    config.write("      retention_policy_setting: DURATION 0s REPLICATION 1 DEFAULT\n")
+    config.write("  communication:\n")
+    config.write("    disable: false\n")
+    config.write("    subscriber:\n")
+    config.write("      disable: false\n")
+    config.write("      amqp: amqp://" + username + ":" + password + "@" + rabbitmq_ip + ":5672\n")
+    config.write("    history_store:\n")
+    config.write("      disable: false\n")
+    config.write("      database: hdiot2\n")
+    config.write("      measurement: rtu_data_chan\n")
+    config.write("      retention_policy: communication\n")
+    config.write("      retention_policy_setting: DURATION 30d REPLICATION 1\n")
+    config.write("\n")
+    config.write("register:\n")
+    config.write("  eureka:\n")
+    config.write("    urls: [ http://hdiot:Hdkj123!@hdiot-eureka.com:" + eureka_port + "/eureka ]\n")
+    config.write("\n")
+    return config_path
+
+
+def generate_configuration_for_iot(soft_home_dir, __soft, local_ip):
+    config_path = ""
+    if __regx__.compile("(eureka|hdiot-eureka)", __regx__.IGNORECASE).search(soft_home_dir):
+        return
+
+    elif __regx__.compile("(center|hdiot-center)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_center_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip,
+                                                    elasticsearch_ip, rabbitmq_ip, mongodb_ip)
+
+    elif __regx__.compile("(agent|hdiot-agent)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_agent_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip,
+                                                   elasticsearch_ip,
+                                                   rabbitmq_ip, mongodb_ip)
+
+    elif __regx__.compile("(configure|hdiot-configure)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_configure_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip,
+                                                       elasticsearch_ip, rabbitmq_ip, mongodb_ip)
+
+    elif __regx__.compile("(iotstream|hdiot-iotstream)", __regx__.IGNORECASE).search(soft_home_dir):
+        config_path = generate_iotstream_configuration(soft_home_dir, __soft, local_ip, redis_ip, mysql_ip, influxdb_ip,
+                                                       elasticsearch_ip, rabbitmq_ip, mongodb_ip)
+
+    return config_path
+
+
+def start_program_for_iot(soft_home_dir, __soft):
+    systemd_shell_path = __sys__.path.join(soft_home_dir, __soft)
+    command = "cd " + soft_home_dir + " &&  sh " + systemd_shell_path + "-systemd-start.sh"
+    __sh__.call(command, shell=True)
+    __time__.sleep(10)
+    command = "systemctl daemon-reload && systemctl start " + __soft + ".service"
+    __sh__.call(command, shell=True)
+
+
+def install(__soft, __pkg_type):
     __list_of_pkg_path = []
+
     for __list_of_pkg_path in get_list_of_soft_path():
-        if __regx__.compile("%s" % __soft, __regx__.IGNORECASE).search(__list_of_pkg_path):
-            soft_home_dir = extractive_pkg(__list_of_pkg_path, __soft)
-            __compile__(soft_home_dir, __soft)
-            config_path = generate_configuration(soft_home_dir, __soft)
-            generate_service(soft_home_dir, __soft, config_path)
-            start_program(soft_home_dir, __soft)
+        if __pkg_type == "tar.gz|tar.xz":
+            if __regx__.compile("%s" % __soft, __regx__.IGNORECASE).search(__list_of_pkg_path):
+                soft_home_dir = extractive_pkg(__list_of_pkg_path, __soft)
+                if soft_home_dir is None:
+                    print("soft has be installed, please try others...")
+                    return
+                __compile__(soft_home_dir, __soft)
+                config_path = generate_configuration_for_env(soft_home_dir, __soft)
+                generate_service_for_env(soft_home_dir, __soft, config_path)
+                start_program_for_env(soft_home_dir, __soft)
+        else:
+            host_name_of_filling(local_ip)
+            hdiot_home_path = __sys__.path.join(install_dir, hdiot_home)
+            if not __sys__.path.exists(hdiot_home_path):
+                __sys__.mkdir(hdiot_home_path)
+
+            if not __regx__.compile("^hdiot-", __regx__.IGNORECASE).search(__soft):
+                __soft = "hdiot-" + __soft
+
+            soft_home_dir = __sys__.path.join(hdiot_home_path, __soft)
+
+            if not __sys__.path.exists(soft_home_dir):
+                __sys__.mkdir(soft_home_dir)
+
+            if __pkg_type == "jar" or __pkg_type == "executable":
+                if __regx__.compile("%s" % __soft, __regx__.IGNORECASE).search(__list_of_pkg_path):
+                    __sh_util__.copy(__list_of_pkg_path, soft_home_dir)
+                    config_path = generate_configuration_for_iot(soft_home_dir, __soft, local_ip)
+                    generate_service_for_iot(soft_home_dir, __soft, config_path)
+                    start_program_for_iot(soft_home_dir, __soft)
+            elif __pkg_type == "directory":
+                __sh_util__.copyfile(__list_of_pkg_path, soft_home_dir)
+
+
+
+
+__pkg_type_list = ["jar", "executable", "directory", "tar.gz|tar.xz"]
+
+
+
+if args.install is None:
+    print("install args is None")
+    sys.exit()
+else:
+    __install_soft_str = args.install
+    __install_list = str(__install_soft_str).split()
+    print()
+    for soft__ in __install_list:
+        if soft__ == "hdiot2.0":
+            install("eureka", __pkg_type_list[0])
+            install("center", __pkg_type_list[0])
+            install("configure", __pkg_type_list[0])
+            install("web", __pkg_type_list[2])
+            install("iotstream", __pkg_type_list[1])
+            install("agent", __pkg_type_list[0])
+            sys.exit()
+        else:
+            if soft__ == "redis":
+                install("redis", __pkg_type_list[3])
+            if soft__ == "influxdb":
+                install("influxdb", __pkg_type_list[3])
+            elif soft__ == "mongodb":
+                install("mongodb", __pkg_type_list[3])
+            elif soft__ == "elasticsearch":
+                install("elasticsearch", __pkg_type_list[3])
+            elif soft__ == "nginx":
+                install("nginx", __pkg_type_list[3])
+            elif soft__ == "mysql":
+                install("mysql", __pkg_type_list[3])
+            elif soft__ == "rabbitmq":
+                install("otp", __pkg_type_list[3])
+                install("rabbitmq", __pkg_type_list[3])
+            elif soft__ == "eureka":
+                install("eureka", __pkg_type_list[0])
+            elif soft__ == "center":
+                install("center", __pkg_type_list[0])
+            elif soft__ == "configure":
+                install("configure", __pkg_type_list[0])
+            elif soft__ == "web":
+                install("web", __pkg_type_list[2])
+            elif soft__ == "agent":
+                install("agent", __pkg_type_list[0])
+            elif soft__ == "iotstream":
+                install("iotstream", __pkg_type_list[1])
