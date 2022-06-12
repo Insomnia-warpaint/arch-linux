@@ -357,6 +357,7 @@ def redmine_resolve():
     # 构建DataFrame
     DataFrame = building_struct(DataFrame)
     resolve_to_file(DataFrame)
+    input("press any key to exit...")
 
 
 if __name__ == '__main__':
