@@ -5,7 +5,6 @@ import platform as __platform__
 from datetime import datetime as __datetime__
 from dateutil.relativedelta import relativedelta as __relativedelta__
 
-
 """
 status:读取[状态]列
 create_time:读取[创建时间]列
@@ -16,7 +15,6 @@ FMT_TIM:时间格式化规则
 DEFAULT_EXCEL_PATH:默认Redmine文件的路径
 default_sheet_name:读取excel默认sheet名称
 """
-
 CHOOSE_SET = {"1"}
 status = "状态"
 create_time = "创建于"
@@ -36,7 +34,6 @@ WINDOWS_SEPARATOR = "\\"
 DEFAULT_EXCEL_PATH = __os__.path.join(CURRENT_DIRECTORY_NAME, DEFAULT_EXCEL_NAME)
 excel_path = DEFAULT_EXCEL_PATH
 default_sheet_name = "Sheet1"
-
 
 """获取用户输入的Redmine文件路径和读取的sheet名称"""
 def initialize_variable():
@@ -100,7 +97,6 @@ def statistics_month_of_crt(DataFrame):
 def done_state(DateFrame):
     df = redmine_state(DateFrame).isin(finish_status)
     return df
-
 
 
 """获取总记录数"""
@@ -167,17 +163,16 @@ def max_month_of_updt(DataFrame):
     return mm
 
 
-
 """获取当月创建,当月完成的工单数量, 返回数据字典"""
 def perfect_works(DataFrame):
     d = {}
     for m in statistics_month_of_crt(DataFrame):
         k = m
         # 完成状态为 finish_status 并且 创建日期为当月 and 完成日期为当月的工单数量
-        v = len(DataFrame[(done_state(DataFrame)) & (updt_tim_of_month(DataFrame) == m) & (crt_tim_of_month(DataFrame) == m)])
+        v = len(DataFrame[
+                    (done_state(DataFrame)) & (updt_tim_of_month(DataFrame) == m) & (crt_tim_of_month(DataFrame) == m)])
         d.update({k: v})
     return d
-
 
 
 """
@@ -198,7 +193,7 @@ def transform_works(DataFrame):
             ink = nm
             # 获取工单状态为完成状态,创建月份为当月并且最后更新月份为其他月份的记录数
             inv = len(DataFrame[(done_state(DataFrame)) & (updt_tim_of_month(DataFrame) == nm) & (
-                        crt_tim_of_month(DataFrame) == n)])
+                    crt_tim_of_month(DataFrame) == n)])
             interval_direct.update({ink: inv})
             # 下一个月份++
             nm = next_month(nm)
@@ -240,7 +235,6 @@ def running_works(toto_work, finish_work):
             v = int(tv) - int(fv)
         d.update({k: v})
     return d
-
 
 
 """
@@ -363,7 +357,6 @@ def redmine_resolve():
     # 构建DataFrame
     DataFrame = building_struct(DataFrame)
     resolve_to_file(DataFrame)
-
 
 
 if __name__ == '__main__':
