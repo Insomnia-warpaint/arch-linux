@@ -16,42 +16,17 @@ endif
 "
 
 call plug#begin('~/.vim/plugged')
-
-"Markdown 插件
-"Plug 'iamcco/markdown-preview.vim',{'do': { -> mkdp#util#install() },'for': ['markdown', 'vim-plug']}
-
-" 文件管理插件 可以预览目录
 Plug 'scrooloose/nerdtree'
-" 语法提示插件
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'skywind3000/asyncrun.vim'
-"Plug 'jayli/vim-easycomplete'
-"Plug 'SirVer/ultisnips'
-"Plug 'honza/vim-snippets'
 " icon
 Plug 'ryanoasis/vim-devicons'
-" debug
-"Plug 'puremourning/vimspector'
-"Plug 'rhysd/open-pdf.vim'
-" 状态栏
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-"Plug 'rafalbromirski/vim-airlineish'
-"Plug 'edkolev/promptline.vim'
-"Plug 'tpope/vim-fugitive'
-"Plug 'webastien/vim-ctags'
-" 主题插件
 Plug 'morhetz/gruvbox'
-"Plug 'jiangmiao/auto-pairs' " 符号补全
-"Plug 'cdelledonne/vim-cmake'
-
 call plug#end()
 
 "
 set clipboard+=unnamedplus
 let g:vimspector_enable_mappings = 'HUMAN'
-let g:vimspector_base_dir=expand('$HOME/.vim/vimspector-config')
-let g:mapleader = ","
+let g:mapleader = '\'
 "colorscheme gruvbox
 let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
@@ -119,11 +94,11 @@ au bufreadpost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 "
 "noremap
 
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-inoremap jk <esc>
+"inoremap <up> <nop>
+"inoremap <down> <nop>
+"inoremap <left> <nop>
+"inoremap <right> <nop>
+"inoremap jk <esc>
 "inoremap \" \"\"<esc>i
 "inoremap < <><esc>i
 "inoremap ( ()<esc>i
@@ -142,13 +117,13 @@ noremap <F3> :set hls!<CR>
 "noremap <DOWN> gj
 "noremap k gk
 "noremap j gj
-nnoremap mk :MarkdownPreview<CR>
+"nnoremap mk :MarkdownPreview<CR>
 " JSON Format
-nnoremap <Leader>jf :%!jq .<CR>
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
+"nnoremap <Leader>jf :%!jq .<CR>
+"nnoremap <up> <nop>
+"nnoremap <down> <nop>
+"nnoremap <left> <nop>
+"nnoremap <right> <nop>
 
 "j k 操作屏幕行，gj gk 操作文本行
 
@@ -164,14 +139,13 @@ nnoremap K <Nop>
 
 
 " cnoremap 命令模式映射
-cnoremap <C-p> <Up> 
-cnoremap <C-n> <Down>
+"cnoremap <C-p> <Up> 
+"cnoremap <C-n> <Down>
 
 
 
 
 "
-let g:mapleader = '\'
 "let g:promptline_powerline_symbols = 1
 "let g:Powerline_symbols= 'unicode'
 
