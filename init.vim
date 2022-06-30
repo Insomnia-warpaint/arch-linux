@@ -1,38 +1,14 @@
-"
-if empty(glob('~/.config/nvim/autoload/plug.vim'))&&has('nvim')
-
-	silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-
-elseif empty(glob('~/.vim/autoload/plug.vim'))
-
-	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-
-endif
-
-"
-
-call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" icon
-Plug 'ryanoasis/vim-devicons'
-Plug 'morhetz/gruvbox'
-call plug#end()
-
+lua require('plugins')
 "
 set clipboard+=unnamedplus
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:mapleader = '\'
-"colorscheme gruvbox
+colorscheme gruvbox
 let g:gruvbox_italic=1
 " let g:gruvbox_termcolors=16
 "
 set showcmd
-"set virtualedit=all
+set virtualedit=all
 set linebreak
 set guioptions+=b " 底部显示滑块
 set fileformats=unix,dos,mac
@@ -48,7 +24,7 @@ set incsearch "设置自动匹配单词的位置
 set backspace=2
 set ignorecase "查找时忽略大小写
 set nohlsearch "查找匹配到的所有单词不高亮显示，只高亮光标所在单词。
-"set hlsearch
+set hlsearch
 set laststatus=2 "永久显示状态栏
 set noswapfile    " 不生成.swap文件
 set cursorline
@@ -59,7 +35,7 @@ set display=truncate "如果末行被截短，显示 @@@ 而不是隐藏整行
 set nrformats-=octal
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,gb18030,cp936,latin1
-set guifont=fantasque\ sans\ mono\ nerd\ font\ 12
+"set guifont=fantasque\ sans\ mono\ nerd\ font\ 12
 set history=200
 set splitright
 set splitbelow
@@ -98,101 +74,28 @@ au bufreadpost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 "inoremap <down> <nop>
 "inoremap <left> <nop>
 "inoremap <right> <nop>
-"inoremap jk <esc>
-"inoremap \" \"\"<esc>i
-"inoremap < <><esc>i
-"inoremap ( ()<esc>i
-"inoremap [ []<esc>i
-"inoremap <A-k> <c-p>
-"inoremap <A-j> <c-n>
-
-"
-"
+inoremap jk <esc>
 
 "noremap h ^
 noremap <F2> :set number!<CR>
 noremap <F3> :set hls!<CR>
-"noremap L $
-"noremap <UP> gk
-"noremap <DOWN> gj
-"noremap k gk
-"noremap j gj
-"nnoremap mk :MarkdownPreview<CR>
-" JSON Format
-"nnoremap <Leader>jf :%!jq .<CR>
 "nnoremap <up> <nop>
 "nnoremap <down> <nop>
 "nnoremap <left> <nop>
 "nnoremap <right> <nop>
 
 "j k 操作屏幕行，gj gk 操作文本行
-
 nnoremap rs :source %<CR>
 nnoremap <C-s> :w<CR>
-nnoremap tt :NERDTreeToggle<CR>
-let NERDTreeWinPos=1
-"nnoremap J <C-f>
-"nnoremap K <C-b>
+nnoremap tt :NvimTreeToggle<CR>
 nnoremap J <Nop>
 nnoremap K <Nop>
-"nnoremap mg J
 
 
 " cnoremap 命令模式映射
-"cnoremap <C-p> <Up> 
-"cnoremap <C-n> <Down>
+cnoremap <C-p> <Up> 
+cnoremap <C-n> <Down>
 
-
-
-
-"
-"let g:promptline_powerline_symbols = 1
-"let g:Powerline_symbols= 'unicode'
-
-
-"
-"let g:airline_powerline_fonts = 1
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#left_sep = ''
-"let g:airline#extensions#tabline#left_alt_sep = ''
-"let g:airline#extensions#branch#enabled = 1
-"let g:airline_theme = 'airlineish'
-"let g:airline_theme = 'gruvbox'
-
-"if !exists('g:airline_symbols')
-"let g:airline_symbols = {}
-"endif
-
-"let g:airline_symbols.linenr = ' '
-"let g:airline_symbols.maxlinenr = ' '
-"let g:airline_left_sep = ''
-"let g:airline_left_alt_sep = ''
-"let g:airline_right_sep = ''
-"let g:airline_right_alt_sep = ''
-"let g:airline_symbols.branch = ''
-"let g:airline_symbols.readonly = ''
-"let g:airline_symbols.linenr = '☰'
-"let g:airline_symbols.maxlinenr = ''
-"let g:airline_symbols.dirty= '⚡'
-"let g:airline_section_b = '%{fugitive#head()}'
-"let g:airline_section_x = '%{&filetype}'
-"let g:airline_section_d = ""
-"let g:airline_section_z  = airline#section#create(['%p%% ',"-",' %l ',"-",' %c '])
-"let g:airline_section_error  = ''
-"let g:airline_section_warning = ''
-
-"nmap <leader>1 <Plug>AirlineSelectTab1
-"nmap <leader>2 <Plug>AirlineSelectTab2
-"nmap <leader>3 <Plug>AirlineSelectTab3
-"nmap <leader>4 <Plug>AirlineSelectTab4
-"nmap <leader>5 <Plug>AirlineSelectTab5
-"nmap <leader>6 <Plug>AirlineSelectTab6
-"nmap <leader>7 <Plug>AirlineSelectTab7
-"nmap <leader>8 <Plug>AirlineSelectTab8
-"nmap <leader>9 <Plug>AirlineSelectTab9
-"nmap <leader>0 <Plug>AirlineSelectTab0
-"nmap <leader>p <Plug>AirlineSelectPrevTab
-"nmap <leader>n <Plug>AirlineSelectNextTab
 
 nmap <leader>1 :tabn 1 <CR>
 nmap <leader>2 :tabn 2 <CR>
@@ -225,6 +128,7 @@ function! AutoAppendHeader()
 		call append(line('$'),'')
 		call append(line('$'),'#include <stdio.h>')
 		call append(line('$'),'#include <stdbool.h>')
+		call append(line('$'),'#include <stdlib.h>')
 		call append(line('$'),'')
 
 	elseif 'h' == tolower(suffix)
